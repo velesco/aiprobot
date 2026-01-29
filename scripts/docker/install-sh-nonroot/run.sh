@@ -1,16 +1,16 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-INSTALL_URL="${CLAWDBOT_INSTALL_URL:-https://molt.bot/install.sh}"
-DEFAULT_PACKAGE="moltbot"
-if [[ -z "${CLAWDBOT_INSTALL_PACKAGE:-}" && "$INSTALL_URL" == *"clawd.bot"* ]]; then
-  DEFAULT_PACKAGE="clawdbot"
+INSTALL_URL="${AIPRO_INSTALL_URL:-https://aipro.ro/install.sh}"
+DEFAULT_PACKAGE="aipro"
+if [[ -z "${AIPRO_INSTALL_PACKAGE:-}" && "$INSTALL_URL" == *"clawd.bot"* ]]; then
+  DEFAULT_PACKAGE="aipro"
 fi
-PACKAGE_NAME="${CLAWDBOT_INSTALL_PACKAGE:-$DEFAULT_PACKAGE}"
-if [[ "$PACKAGE_NAME" == "moltbot" ]]; then
-  ALT_PACKAGE_NAME="clawdbot"
+PACKAGE_NAME="${AIPRO_INSTALL_PACKAGE:-$DEFAULT_PACKAGE}"
+if [[ "$PACKAGE_NAME" == "aipro" ]]; then
+  ALT_PACKAGE_NAME="aipro"
 else
-  ALT_PACKAGE_NAME="moltbot"
+  ALT_PACKAGE_NAME="aipro"
 fi
 
 echo "==> Pre-flight: ensure git absent"
@@ -28,7 +28,7 @@ export PATH="$HOME/.npm-global/bin:$PATH"
 echo "==> Verify git installed"
 command -v git >/dev/null
 
-EXPECTED_VERSION="${CLAWDBOT_INSTALL_EXPECT_VERSION:-}"
+EXPECTED_VERSION="${AIPRO_INSTALL_EXPECT_VERSION:-}"
 if [[ -n "$EXPECTED_VERSION" ]]; then
   LATEST_VERSION="$EXPECTED_VERSION"
 else

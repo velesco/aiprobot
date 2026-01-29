@@ -1,6 +1,6 @@
-import MoltbotKit
+import AIProKit
 import Testing
-@testable import Moltbot
+@testable import AIPro
 
 @Suite struct IOSGatewayChatTransportTests {
     @Test func requestsFailFastWhenGatewayNotConnected() async {

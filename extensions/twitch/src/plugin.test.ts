@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import type { MoltbotConfig } from "clawdbot/plugin-sdk";
+import type { AIProConfig } from "aipro/plugin-sdk";
 import { twitchPlugin } from "./plugin.js";
 
 describe("twitchPlugin.status.buildAccountSnapshot", () => {
@@ -27,7 +27,7 @@ describe("twitchPlugin.status.buildAccountSnapshot", () => {
           },
         },
       },
-    } as MoltbotConfig;
+    } as AIProConfig;
 
     const snapshot = await twitchPlugin.status?.buildAccountSnapshot?.({
       account: secondary,

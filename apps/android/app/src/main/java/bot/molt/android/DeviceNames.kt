@@ -1,4 +1,4 @@
-package bot.molt.android
+package ro.aipro.android
 
 import android.content.Context
 import android.os.Build

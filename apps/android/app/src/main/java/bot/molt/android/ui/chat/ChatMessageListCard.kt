@@ -1,4 +1,4 @@
-package bot.molt.android.ui.chat
+package ro.aipro.android.ui.chat
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -20,8 +20,8 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.unit.dp
-import bot.molt.android.chat.ChatMessage
-import bot.molt.android.chat.ChatPendingToolCall
+import ro.aipro.android.chat.ChatMessage
+import ro.aipro.android.chat.ChatPendingToolCall
 
 @Composable
 fun ChatMessageListCard(

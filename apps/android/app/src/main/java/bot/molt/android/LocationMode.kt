@@ -1,4 +1,4 @@
-package bot.molt.android
+package ro.aipro.android
 
 enum class LocationMode(val rawValue: String) {
   Off("off"),

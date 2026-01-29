@@ -1,4 +1,4 @@
-package bot.molt.android.ui.chat
+package ro.aipro.android.ui.chat
 
 import android.graphics.BitmapFactory
 import android.util.Base64
@@ -31,10 +31,10 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.unit.dp
 import androidx.compose.foundation.Image
-import bot.molt.android.chat.ChatMessage
-import bot.molt.android.chat.ChatMessageContent
-import bot.molt.android.chat.ChatPendingToolCall
-import bot.molt.android.tools.ToolDisplayRegistry
+import ro.aipro.android.chat.ChatMessage
+import ro.aipro.android.chat.ChatMessageContent
+import ro.aipro.android.chat.ChatPendingToolCall
+import ro.aipro.android.tools.ToolDisplayRegistry
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import androidx.compose.ui.platform.LocalContext

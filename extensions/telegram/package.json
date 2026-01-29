@@ -1,9 +1,9 @@
 {
-  "name": "@moltbot/telegram",
+  "name": "@aipro/telegram",
   "version": "2026.1.27-beta.1",
   "type": "module",
-  "description": "Moltbot Telegram channel plugin",
-  "moltbot": {
+  "description": "AIPro Telegram channel plugin",
+  "aipro": {
     "extensions": [
       "./index.ts"
     ]

@@ -24,10 +24,10 @@ async function withTempHome<T>(fn: (home: string) => Promise<T>): Promise<T> {
     },
     {
       env: {
-        CLAWDBOT_AGENT_DIR: (home) => path.join(home, ".clawdbot", "agent"),
-        PI_CODING_AGENT_DIR: (home) => path.join(home, ".clawdbot", "agent"),
+        AIPRO_AGENT_DIR: (home) => path.join(home, ".aipro", "agent"),
+        PI_CODING_AGENT_DIR: (home) => path.join(home, ".aipro", "agent"),
       },
-      prefix: "moltbot-rawbody-",
+      prefix: "aipro-rawbody-",
     },
   );
 }

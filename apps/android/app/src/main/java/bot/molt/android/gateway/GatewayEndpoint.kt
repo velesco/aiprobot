@@ -1,4 +1,4 @@
-package bot.molt.android.gateway
+package ro.aipro.android.gateway
 
 data class GatewayEndpoint(
   val stableId: String,

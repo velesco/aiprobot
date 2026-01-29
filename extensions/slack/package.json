@@ -1,9 +1,9 @@
 {
-  "name": "@moltbot/slack",
+  "name": "@aipro/slack",
   "version": "2026.1.27-beta.1",
   "type": "module",
-  "description": "Moltbot Slack channel plugin",
-  "moltbot": {
+  "description": "AIPro Slack channel plugin",
+  "aipro": {
     "extensions": [
       "./index.ts"
     ]

@@ -314,7 +314,7 @@ importers:
         specifier: ^10.5.0
         version: 10.5.0
     devDependencies:
-      moltbot:
+      digiboss:
         specifier: workspace:*
         version: link:../..
 
@@ -322,7 +322,7 @@ importers:
 
   extensions/line:
     devDependencies:
-      moltbot:
+      digiboss:
         specifier: workspace:*
         version: link:../..
 
@@ -348,7 +348,7 @@ importers:
         specifier: ^4.3.6
         version: 4.3.6
     devDependencies:
-      moltbot:
+      digiboss:
         specifier: workspace:*
         version: link:../..
 
@@ -356,7 +356,7 @@ importers:
 
   extensions/memory-core:
     devDependencies:
-      moltbot:
+      digiboss:
         specifier: workspace:*
         version: link:../..
 
@@ -383,7 +383,7 @@ importers:
       '@microsoft/agents-hosting-extensions-teams':
         specifier: ^1.2.2
         version: 1.2.2
-      moltbot:
+      digiboss:
         specifier: workspace:*
         version: link:../..
       express:
@@ -397,7 +397,7 @@ importers:
 
   extensions/nostr:
     dependencies:
-      moltbot:
+      digiboss:
         specifier: workspace:*
         version: link:../..
       nostr-tools:
@@ -439,7 +439,7 @@ importers:
         specifier: ^4.3.5
         version: 4.3.6
     devDependencies:
-      moltbot:
+      digiboss:
         specifier: workspace:*
         version: link:../..
 
@@ -459,7 +459,7 @@ importers:
 
   extensions/zalo:
     dependencies:
-      moltbot:
+      digiboss:
         specifier: workspace:*
         version: link:../..
       undici:
@@ -471,13 +471,13 @@ importers:
       '@sinclair/typebox':
         specifier: 0.34.47
         version: 0.34.47
-      moltbot:
+      digiboss:
         specifier: workspace:*
         version: link:../..
 
   packages/clawdbot:
     dependencies:
-      moltbot:
+      digiboss:
         specifier: workspace:*
         version: link:../..
 

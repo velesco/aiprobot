@@ -1,4 +1,4 @@
-package bot.molt.android.voice
+package ro.aipro.android.voice
 
 import android.media.MediaDataSource
 import kotlin.math.min

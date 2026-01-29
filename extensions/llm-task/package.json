@@ -1,9 +1,9 @@
 {
-  "name": "@moltbot/llm-task",
+  "name": "@aipro/llm-task",
   "version": "2026.1.27-beta.1",
   "type": "module",
-  "description": "Moltbot JSON-only LLM task plugin",
-  "moltbot": {
+  "description": "AIPro JSON-only LLM task plugin",
+  "aipro": {
     "extensions": [
       "./index.ts"
     ]

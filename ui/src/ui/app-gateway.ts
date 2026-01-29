@@ -23,7 +23,7 @@ import {
   parseExecApprovalResolved,
   removeExecApproval,
 } from "./controllers/exec-approval";
-import type { MoltbotApp } from "./app";
+import type { AIProApp } from "./app";
 import type { ExecApprovalRequest } from "./controllers/exec-approval";
 import { loadAssistantIdentity } from "./controllers/assistant-identity";
 import { loadSessions } from "./controllers/sessions";
@@ -122,7 +122,7 @@ export function connectGateway(host: GatewayHost) {
     url: host.settings.gatewayUrl,
     token: host.settings.token.trim() ? host.settings.token : undefined,
     password: host.password.trim() ? host.password : undefined,
-    clientName: "moltbot-control-ui",
+    clientName: "aipro-control-ui",
     mode: "webchat",
     onHello: (hello) => {
       host.connected = true;
@@ -135,10 +135,10 @@ export function connectGateway(host: GatewayHost) {
       (host as unknown as { chatStream: string | null }).chatStream = null;
       (host as unknown as { chatStreamStartedAt: number | null }).chatStreamStartedAt = null;
       resetToolStream(host as unknown as Parameters<typeof resetToolStream>[0]);
-      void loadAssistantIdentity(host as unknown as MoltbotApp);
-      void loadAgents(host as unknown as MoltbotApp);
-      void loadNodes(host as unknown as MoltbotApp, { quiet: true });
-      void loadDevices(host as unknown as MoltbotApp, { quiet: true });
+      void loadAssistantIdentity(host as unknown as AIProApp);
+      void loadAgents(host as unknown as AIProApp);
+      void loadNodes(host as unknown as AIProApp, { quiet: true });
+      void loadDevices(host as unknown as AIProApp, { quiet: true });
       void refreshActiveTab(host as unknown as Parameters<typeof refreshActiveTab>[0]);
     },
     onClose: ({ code, reason }) => {
@@ -190,7 +190,7 @@ function handleGatewayEventUnsafe(host: GatewayHost, evt: GatewayEventFrame) {
         payload.sessionKey,
       );
     }
-    const state = handleChatEvent(host as unknown as MoltbotApp, payload);
+    const state = handleChatEvent(host as unknown as AIProApp, payload);
     if (state === "final" || state === "error" || state === "aborted") {
       resetToolStream(host as unknown as Parameters<typeof resetToolStream>[0]);
       void flushChatQueueForEvent(
@@ -199,11 +199,11 @@ function handleGatewayEventUnsafe(host: GatewayHost, evt: GatewayEventFrame) {
       if (host.refreshSessionsAfterChat) {
         host.refreshSessionsAfterChat = false;
         if (state === "final") {
-          void loadSessions(host as unknown as MoltbotApp, { activeMinutes: 0 });
+          void loadSessions(host as unknown as AIProApp, { activeMinutes: 0 });
         }
       }
     }
-    if (state === "final") void loadChatHistory(host as unknown as MoltbotApp);
+    if (state === "final") void loadChatHistory(host as unknown as AIProApp);
     return;
   }
 
@@ -222,7 +222,7 @@ function handleGatewayEventUnsafe(host: GatewayHost, evt: GatewayEventFrame) {
   }
 
   if (evt.event === "device.pair.requested" || evt.event === "device.pair.resolved") {
-    void loadDevices(host as unknown as MoltbotApp, { quiet: true });
+    void loadDevices(host as unknown as AIProApp, { quiet: true });
   }
 
   if (evt.event === "exec.approval.requested") {

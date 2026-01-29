@@ -1,4 +1,4 @@
-package bot.molt.android.node
+package ro.aipro.android.node
 
 import kotlinx.serialization.json.jsonObject
 import kotlinx.serialization.json.jsonPrimitive

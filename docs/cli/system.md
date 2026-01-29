@@ -1,12 +1,12 @@
 ---
-summary: "CLI reference for `moltbot system` (system events, heartbeat, presence)"
+summary: "CLI reference for `aipro system` (system events, heartbeat, presence)"
 read_when:
   - You want to enqueue a system event without creating a cron job
   - You need to enable or disable heartbeats
   - You want to inspect system presence entries
 ---
 
-# `moltbot system`
+# `aipro system`
 
 System-level helpers for the Gateway: enqueue system events, control heartbeats,
 and view presence.
@@ -14,10 +14,10 @@ and view presence.
 ## Common commands
 
 ```bash
-moltbot system event --text "Check for urgent follow-ups" --mode now
-moltbot system heartbeat enable
-moltbot system heartbeat last
-moltbot system presence
+aipro system event --text "Check for urgent follow-ups" --mode now
+aipro system heartbeat enable
+aipro system heartbeat last
+aipro system presence
 ```
 
 ## `system event`

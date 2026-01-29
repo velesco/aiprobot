@@ -1,9 +1,9 @@
 {
-  "name": "@moltbot/imessage",
+  "name": "@aipro/imessage",
   "version": "2026.1.27-beta.1",
   "type": "module",
-  "description": "Moltbot iMessage channel plugin",
-  "moltbot": {
+  "description": "AIPro iMessage channel plugin",
+  "aipro": {
     "extensions": [
       "./index.ts"
     ]

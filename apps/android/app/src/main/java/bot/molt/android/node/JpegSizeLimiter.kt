@@ -1,4 +1,4 @@
-package bot.molt.android.node
+package ro.aipro.android.node
 
 import kotlin.math.max
 import kotlin.math.min

@@ -4,9 +4,9 @@ set -euo pipefail
 ROOT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 COMPOSE_FILE="$ROOT_DIR/docker-compose.yml"
 EXTRA_COMPOSE_FILE="$ROOT_DIR/docker-compose.extra.yml"
-IMAGE_NAME="${CLAWDBOT_IMAGE:-moltbot:local}"
-EXTRA_MOUNTS="${CLAWDBOT_EXTRA_MOUNTS:-}"
-HOME_VOLUME_NAME="${CLAWDBOT_HOME_VOLUME:-}"
+IMAGE_NAME="${AIPRO_IMAGE:-aipro:local}"
+EXTRA_MOUNTS="${AIPRO_EXTRA_MOUNTS:-}"
+HOME_VOLUME_NAME="${AIPRO_HOME_VOLUME:-}"
 
 require_cmd() {
   if ! command -v "$1" >/dev/null 2>&1; then
@@ -21,29 +21,29 @@ if ! docker compose version >/dev/null 2>&1; then
   exit 1
 fi
 
-mkdir -p "${CLAWDBOT_CONFIG_DIR:-$HOME/.clawdbot}"
-mkdir -p "${CLAWDBOT_WORKSPACE_DIR:-$HOME/clawd}"
+mkdir -p "${AIPRO_CONFIG_DIR:-$HOME/.aipro}"
+mkdir -p "${AIPRO_WORKSPACE_DIR:-$HOME/clawd}"
 
-export CLAWDBOT_CONFIG_DIR="${CLAWDBOT_CONFIG_DIR:-$HOME/.clawdbot}"
-export CLAWDBOT_WORKSPACE_DIR="${CLAWDBOT_WORKSPACE_DIR:-$HOME/clawd}"
-export CLAWDBOT_GATEWAY_PORT="${CLAWDBOT_GATEWAY_PORT:-18789}"
-export CLAWDBOT_BRIDGE_PORT="${CLAWDBOT_BRIDGE_PORT:-18790}"
-export CLAWDBOT_GATEWAY_BIND="${CLAWDBOT_GATEWAY_BIND:-lan}"
-export CLAWDBOT_IMAGE="$IMAGE_NAME"
-export CLAWDBOT_DOCKER_APT_PACKAGES="${CLAWDBOT_DOCKER_APT_PACKAGES:-}"
+export AIPRO_CONFIG_DIR="${AIPRO_CONFIG_DIR:-$HOME/.aipro}"
+export AIPRO_WORKSPACE_DIR="${AIPRO_WORKSPACE_DIR:-$HOME/clawd}"
+export AIPRO_GATEWAY_PORT="${AIPRO_GATEWAY_PORT:-18789}"
+export AIPRO_BRIDGE_PORT="${AIPRO_BRIDGE_PORT:-18790}"
+export AIPRO_GATEWAY_BIND="${AIPRO_GATEWAY_BIND:-lan}"
+export AIPRO_IMAGE="$IMAGE_NAME"
+export AIPRO_DOCKER_APT_PACKAGES="${AIPRO_DOCKER_APT_PACKAGES:-}"
 
-if [[ -z "${CLAWDBOT_GATEWAY_TOKEN:-}" ]]; then
+if [[ -z "${AIPRO_GATEWAY_TOKEN:-}" ]]; then
   if command -v openssl >/dev/null 2>&1; then
-    CLAWDBOT_GATEWAY_TOKEN="$(openssl rand -hex 32)"
+    AIPRO_GATEWAY_TOKEN="$(openssl rand -hex 32)"
   else
-    CLAWDBOT_GATEWAY_TOKEN="$(python3 - <<'PY'
+    AIPRO_GATEWAY_TOKEN="$(python3 - <<'PY'
 import secrets
 print(secrets.token_hex(32))
 PY
 )"
   fi
 fi
-export CLAWDBOT_GATEWAY_TOKEN
+export AIPRO_GATEWAY_TOKEN
 
 COMPOSE_FILES=("$COMPOSE_FILE")
 COMPOSE_ARGS=()
@@ -56,14 +56,14 @@ write_extra_compose() {
 
   cat >"$EXTRA_COMPOSE_FILE" <<'YAML'
 services:
-  moltbot-gateway:
+  aipro-gateway:
     volumes:
 YAML
 
   if [[ -n "$home_volume" ]]; then
     printf '      - %s:/home/node\n' "$home_volume" >>"$EXTRA_COMPOSE_FILE"
-    printf '      - %s:/home/node/.clawdbot\n' "$CLAWDBOT_CONFIG_DIR" >>"$EXTRA_COMPOSE_FILE"
-    printf '      - %s:/home/node/clawd\n' "$CLAWDBOT_WORKSPACE_DIR" >>"$EXTRA_COMPOSE_FILE"
+    printf '      - %s:/home/node/.aipro\n' "$AIPRO_CONFIG_DIR" >>"$EXTRA_COMPOSE_FILE"
+    printf '      - %s:/home/node/clawd\n' "$AIPRO_WORKSPACE_DIR" >>"$EXTRA_COMPOSE_FILE"
   fi
 
   for mount in "${mounts[@]}"; do
@@ -71,14 +71,14 @@ YAML
   done
 
   cat >>"$EXTRA_COMPOSE_FILE" <<'YAML'
-  moltbot-cli:
+  aipro-cli:
     volumes:
 YAML
 
   if [[ -n "$home_volume" ]]; then
     printf '      - %s:/home/node\n' "$home_volume" >>"$EXTRA_COMPOSE_FILE"
-    printf '      - %s:/home/node/.clawdbot\n' "$CLAWDBOT_CONFIG_DIR" >>"$EXTRA_COMPOSE_FILE"
-    printf '      - %s:/home/node/clawd\n' "$CLAWDBOT_WORKSPACE_DIR" >>"$EXTRA_COMPOSE_FILE"
+    printf '      - %s:/home/node/.aipro\n' "$AIPRO_CONFIG_DIR" >>"$EXTRA_COMPOSE_FILE"
+    printf '      - %s:/home/node/clawd\n' "$AIPRO_WORKSPACE_DIR" >>"$EXTRA_COMPOSE_FILE"
   fi
 
   for mount in "${mounts[@]}"; do
@@ -154,20 +154,20 @@ upsert_env() {
 }
 
 upsert_env "$ENV_FILE" \
-  CLAWDBOT_CONFIG_DIR \
-  CLAWDBOT_WORKSPACE_DIR \
-  CLAWDBOT_GATEWAY_PORT \
-  CLAWDBOT_BRIDGE_PORT \
-  CLAWDBOT_GATEWAY_BIND \
-  CLAWDBOT_GATEWAY_TOKEN \
-  CLAWDBOT_IMAGE \
-  CLAWDBOT_EXTRA_MOUNTS \
-  CLAWDBOT_HOME_VOLUME \
-  CLAWDBOT_DOCKER_APT_PACKAGES
+  AIPRO_CONFIG_DIR \
+  AIPRO_WORKSPACE_DIR \
+  AIPRO_GATEWAY_PORT \
+  AIPRO_BRIDGE_PORT \
+  AIPRO_GATEWAY_BIND \
+  AIPRO_GATEWAY_TOKEN \
+  AIPRO_IMAGE \
+  AIPRO_EXTRA_MOUNTS \
+  AIPRO_HOME_VOLUME \
+  AIPRO_DOCKER_APT_PACKAGES
 
 echo "==> Building Docker image: $IMAGE_NAME"
 docker build \
-  --build-arg "CLAWDBOT_DOCKER_APT_PACKAGES=${CLAWDBOT_DOCKER_APT_PACKAGES}" \
+  --build-arg "AIPRO_DOCKER_APT_PACKAGES=${AIPRO_DOCKER_APT_PACKAGES}" \
   -t "$IMAGE_NAME" \
   -f "$ROOT_DIR/Dockerfile" \
   "$ROOT_DIR"
@@ -177,33 +177,33 @@ echo "==> Onboarding (interactive)"
 echo "When prompted:"
 echo "  - Gateway bind: lan"
 echo "  - Gateway auth: token"
-echo "  - Gateway token: $CLAWDBOT_GATEWAY_TOKEN"
+echo "  - Gateway token: $AIPRO_GATEWAY_TOKEN"
 echo "  - Tailscale exposure: Off"
 echo "  - Install Gateway daemon: No"
 echo ""
-docker compose "${COMPOSE_ARGS[@]}" run --rm moltbot-cli onboard --no-install-daemon
+docker compose "${COMPOSE_ARGS[@]}" run --rm aipro-cli onboard --no-install-daemon
 
 echo ""
 echo "==> Provider setup (optional)"
 echo "WhatsApp (QR):"
-echo "  ${COMPOSE_HINT} run --rm moltbot-cli providers login"
+echo "  ${COMPOSE_HINT} run --rm aipro-cli providers login"
 echo "Telegram (bot token):"
-echo "  ${COMPOSE_HINT} run --rm moltbot-cli providers add --provider telegram --token <token>"
+echo "  ${COMPOSE_HINT} run --rm aipro-cli providers add --provider telegram --token <token>"
 echo "Discord (bot token):"
-echo "  ${COMPOSE_HINT} run --rm moltbot-cli providers add --provider discord --token <token>"
-echo "Docs: https://docs.molt.bot/providers"
+echo "  ${COMPOSE_HINT} run --rm aipro-cli providers add --provider discord --token <token>"
+echo "Docs: https://docs.aipro.ro/providers"
 
 echo ""
 echo "==> Starting gateway"
-docker compose "${COMPOSE_ARGS[@]}" up -d moltbot-gateway
+docker compose "${COMPOSE_ARGS[@]}" up -d aipro-gateway
 
 echo ""
 echo "Gateway running with host port mapping."
 echo "Access from tailnet devices via the host's tailnet IP."
-echo "Config: $CLAWDBOT_CONFIG_DIR"
-echo "Workspace: $CLAWDBOT_WORKSPACE_DIR"
-echo "Token: $CLAWDBOT_GATEWAY_TOKEN"
+echo "Config: $AIPRO_CONFIG_DIR"
+echo "Workspace: $AIPRO_WORKSPACE_DIR"
+echo "Token: $AIPRO_GATEWAY_TOKEN"
 echo ""
 echo "Commands:"
-echo "  ${COMPOSE_HINT} logs -f moltbot-gateway"
-echo "  ${COMPOSE_HINT} exec moltbot-gateway node dist/index.js health --token \"$CLAWDBOT_GATEWAY_TOKEN\""
+echo "  ${COMPOSE_HINT} logs -f aipro-gateway"
+echo "  ${COMPOSE_HINT} exec aipro-gateway node dist/index.js health --token \"$AIPRO_GATEWAY_TOKEN\""

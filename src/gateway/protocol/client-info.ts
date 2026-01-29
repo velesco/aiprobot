@@ -1,16 +1,16 @@
 export const GATEWAY_CLIENT_IDS = {
   WEBCHAT_UI: "webchat-ui",
-  CONTROL_UI: "moltbot-control-ui",
+  CONTROL_UI: "aipro-control-ui",
   WEBCHAT: "webchat",
   CLI: "cli",
   GATEWAY_CLIENT: "gateway-client",
-  MACOS_APP: "moltbot-macos",
-  IOS_APP: "moltbot-ios",
-  ANDROID_APP: "moltbot-android",
+  MACOS_APP: "aipro-macos",
+  IOS_APP: "aipro-ios",
+  ANDROID_APP: "aipro-android",
   NODE_HOST: "node-host",
   TEST: "test",
   FINGERPRINT: "fingerprint",
-  PROBE: "moltbot-probe",
+  PROBE: "aipro-probe",
 } as const;
 
 export type GatewayClientId = (typeof GATEWAY_CLIENT_IDS)[keyof typeof GATEWAY_CLIENT_IDS];

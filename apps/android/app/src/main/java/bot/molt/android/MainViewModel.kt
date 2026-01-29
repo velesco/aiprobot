@@ -1,13 +1,13 @@
-package bot.molt.android
+package ro.aipro.android
 
 import android.app.Application
 import androidx.lifecycle.AndroidViewModel
-import bot.molt.android.gateway.GatewayEndpoint
-import bot.molt.android.chat.OutgoingAttachment
-import bot.molt.android.node.CameraCaptureManager
-import bot.molt.android.node.CanvasController
-import bot.molt.android.node.ScreenRecordManager
-import bot.molt.android.node.SmsManager
+import ro.aipro.android.gateway.GatewayEndpoint
+import ro.aipro.android.chat.OutgoingAttachment
+import ro.aipro.android.node.CameraCaptureManager
+import ro.aipro.android.node.CanvasController
+import ro.aipro.android.node.ScreenRecordManager
+import ro.aipro.android.node.SmsManager
 import kotlinx.coroutines.flow.StateFlow
 
 class MainViewModel(app: Application) : AndroidViewModel(app) {

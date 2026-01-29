@@ -1,4 +1,4 @@
-package bot.molt.android.voice
+package ro.aipro.android.voice
 
 object VoiceWakeCommandExtractor {
   fun extractCommand(text: String, triggerWords: List<String>): String? {

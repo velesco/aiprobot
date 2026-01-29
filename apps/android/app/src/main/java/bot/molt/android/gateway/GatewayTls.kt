@@ -1,4 +1,4 @@
-package bot.molt.android.gateway
+package ro.aipro.android.gateway
 
 import android.annotation.SuppressLint
 import java.security.MessageDigest

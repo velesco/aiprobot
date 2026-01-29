@@ -1,6 +1,6 @@
-package bot.molt.android.gateway
+package ro.aipro.android.gateway
 
-import bot.molt.android.SecurePrefs
+import ro.aipro.android.SecurePrefs
 
 class DeviceAuthStore(private val prefs: SecurePrefs) {
   fun loadToken(deviceId: String, role: String): String? {

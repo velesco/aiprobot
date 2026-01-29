@@ -1,9 +1,9 @@
 {
-  "name": "@moltbot/diagnostics-otel",
+  "name": "@aipro/diagnostics-otel",
   "version": "2026.1.27-beta.1",
   "type": "module",
-  "description": "Moltbot diagnostics OpenTelemetry exporter",
-  "moltbot": {
+  "description": "AIPro diagnostics OpenTelemetry exporter",
+  "aipro": {
     "extensions": [
       "./index.ts"
     ]

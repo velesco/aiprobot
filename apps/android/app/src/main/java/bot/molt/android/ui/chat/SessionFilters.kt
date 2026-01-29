@@ -1,6 +1,6 @@
-package bot.molt.android.ui.chat
+package ro.aipro.android.ui.chat
 
-import bot.molt.android.chat.ChatSessionEntry
+import ro.aipro.android.chat.ChatSessionEntry
 
 private const val RECENT_WINDOW_MS = 24 * 60 * 60 * 1000L
 

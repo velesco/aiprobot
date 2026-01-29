@@ -1,9 +1,9 @@
 {
-  "name": "@moltbot/discord",
+  "name": "@aipro/discord",
   "version": "2026.1.27-beta.1",
   "type": "module",
-  "description": "Moltbot Discord channel plugin",
-  "moltbot": {
+  "description": "AIPro Discord channel plugin",
+  "aipro": {
     "extensions": [
       "./index.ts"
     ]

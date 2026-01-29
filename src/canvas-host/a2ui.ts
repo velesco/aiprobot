@@ -3,12 +3,11 @@ import type { IncomingMessage, ServerResponse } from "node:http";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
 
-import { LEGACY_CANVAS_HANDLER_NAME } from "../compat/legacy-names.js";
 import { detectMime } from "../media/mime.js";
 
-export const A2UI_PATH = "/__moltbot__/a2ui";
-export const CANVAS_HOST_PATH = "/__moltbot__/canvas";
-export const CANVAS_WS_PATH = "/__moltbot/ws";
+export const A2UI_PATH = "/__aipro__/a2ui";
+export const CANVAS_HOST_PATH = "/__aipro__/canvas";
+export const CANVAS_WS_PATH = "/__aipro/ws";
 
 let cachedA2uiRootReal: string | null | undefined;
 let resolvingA2uiRoot: Promise<string | null> | null = null;
@@ -92,15 +91,14 @@ async function resolveA2uiFilePath(rootReal: string, urlPath: string) {
 }
 
 export function injectCanvasLiveReload(html: string): string {
-  const legacyHandlerName = LEGACY_CANVAS_HANDLER_NAME;
   const snippet = `
 <script>
 (() => {
   // Cross-platform action bridge helper.
   // Works on:
-  // - iOS: window.webkit.messageHandlers.(current|legacy)CanvasA2UIAction.postMessage(...)
-  // - Android: window.(current|legacy)CanvasA2UIAction.postMessage(...)
-  const handlerNames = ["moltbotCanvasA2UIAction", "${legacyHandlerName}"];
+  // - iOS: window.webkit.messageHandlers.aiproCanvasA2UIAction.postMessage(...)
+  // - Android: window.aiproCanvasA2UIAction.postMessage(...)
+  const handlerNames = ["aiproCanvasA2UIAction"];
   function postToNode(payload) {
     try {
       const raw = typeof payload === "string" ? payload : JSON.stringify(payload);
@@ -127,13 +125,13 @@ export function injectCanvasLiveReload(html: string): string {
     const action = { ...userAction, id };
     return postToNode({ userAction: action });
   }
-  globalThis.Moltbot = globalThis.Moltbot ?? {};
-  globalThis.Moltbot.postMessage = postToNode;
-  globalThis.Moltbot.sendUserAction = sendUserAction;
-  globalThis.moltbotPostMessage = postToNode;
-  globalThis.moltbotSendUserAction = sendUserAction;
-  globalThis.clawdbotPostMessage = postToNode;
-  globalThis.clawdbotSendUserAction = sendUserAction;
+  globalThis.AIPro = globalThis.AIPro ?? {};
+  globalThis.AIPro.postMessage = postToNode;
+  globalThis.AIPro.sendUserAction = sendUserAction;
+  globalThis.aiproPostMessage = postToNode;
+  globalThis.aiproSendUserAction = sendUserAction;
+  globalThis.aiproPostMessage = postToNode;
+  globalThis.aiproSendUserAction = sendUserAction;
 
   try {
     const proto = location.protocol === "https:" ? "wss" : "ws";

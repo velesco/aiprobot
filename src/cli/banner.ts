@@ -39,7 +39,7 @@ export function formatCliBannerLine(version: string, options: BannerOptions = {}
   const tagline = pickTagline(options);
   const rich = options.richTty ?? isRich();
   const cliName = resolveCliName(options.argv ?? process.argv, options.env);
-  const title = cliName === "moltbot" ? "🦞 Moltbot" : "🦞 Moltbot";
+  const title = cliName === "aipro" ? "🦞 AIPro" : "🦞 AIPro";
   const prefix = "🦞 ";
   const columns = options.columns ?? process.stdout.columns ?? 120;
   const plainFullLine = `${title} ${version} (${commitLabel}) — ${tagline}`;
@@ -65,12 +65,10 @@ export function formatCliBannerLine(version: string, options: BannerOptions = {}
 }
 
 const LOBSTER_ASCII = [
-  "▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄",
-  "██░▄▀▄░██░▄▄▄░██░████▄▄░▄▄██░▄▄▀██░▄▄▄░█▄▄░▄▄██",
-  "██░█░█░██░███░██░██████░████░▄▄▀██░███░███░████",
-  "██░███░██░▀▀▀░██░▀▀░███░████░▀▀░██░▀▀▀░███░████",
-  "▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀",
-  "               🦞 FRESH DAILY 🦞               ",
+  "    ╔═╗╦╔═╗╦═╗╔═╗    ",
+  "    ╠═╣║╠═╝╠╦╝║ ║    ",
+  "    ╩ ╩╩╩  ╩╚═╚═╝    ",
+  "  🦞 FRESH DAILY 🦞  ",
   " ",
 ];
 
@@ -79,9 +77,8 @@ export function formatCliBannerArt(options: BannerOptions = {}): string {
   if (!rich) return LOBSTER_ASCII.join("\n");
 
   const colorChar = (ch: string) => {
-    if (ch === "█") return theme.accentBright(ch);
-    if (ch === "░") return theme.accentDim(ch);
-    if (ch === "▀") return theme.accent(ch);
+    if ("╔╗╚╝═║╠╣╦╩".includes(ch)) return theme.accentBright(ch);
+    if ("╬".includes(ch)) return theme.accentDim(ch);
     return theme.muted(ch);
   };
 

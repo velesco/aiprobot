@@ -1,4 +1,4 @@
-import MoltbotKit
+import AIProKit
 import SwiftUI
 
 struct ScreenTab: View {

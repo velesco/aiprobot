@@ -1,4 +1,4 @@
-import type { RuntimeEnv } from "clawdbot/plugin-sdk";
+import type { RuntimeEnv } from "aipro/plugin-sdk";
 
 import { extractMessageText } from "./utils.js";
 

@@ -1,6 +1,6 @@
 @file:Suppress("DEPRECATION")
 
-package bot.molt.android
+package ro.aipro.android
 
 import android.content.Context
 import androidx.core.content.edit
@@ -31,7 +31,7 @@ class SecurePrefs(context: Context) {
   private val prefs =
     EncryptedSharedPreferences.create(
       context,
-      "moltbot.node.secure",
+      "aipro.node.secure",
       masterKey,
       EncryptedSharedPreferences.PrefKeyEncryptionScheme.AES256_SIV,
       EncryptedSharedPreferences.PrefValueEncryptionScheme.AES256_GCM,

@@ -1,4 +1,4 @@
-package bot.molt.android.chat
+package ro.aipro.android.chat
 
 data class ChatMessage(
   val id: String,

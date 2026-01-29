@@ -1,4 +1,4 @@
-package bot.molt.android.ui.chat
+package ro.aipro.android.ui.chat
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -38,7 +38,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
-import bot.molt.android.chat.ChatSessionEntry
+import ro.aipro.android.chat.ChatSessionEntry
 
 @Composable
 fun ChatComposer(

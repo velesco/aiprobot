@@ -1,4 +1,4 @@
-package bot.molt.android.tools
+package ro.aipro.android.tools
 
 import android.content.Context
 import kotlinx.serialization.Serializable

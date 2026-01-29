@@ -1,11 +1,11 @@
 ---
-summary: "CLI reference for `moltbot webhooks` (webhook helpers + Gmail Pub/Sub)"
+summary: "CLI reference for `aipro webhooks` (webhook helpers + Gmail Pub/Sub)"
 read_when:
-  - You want to wire Gmail Pub/Sub events into Moltbot
+  - You want to wire Gmail Pub/Sub events into AIPro
   - You want webhook helper commands
 ---
 
-# `moltbot webhooks`
+# `aipro webhooks`
 
 Webhook helpers and integrations (Gmail Pub/Sub, webhook helpers).
 
@@ -16,8 +16,8 @@ Related:
 ## Gmail
 
 ```bash
-moltbot webhooks gmail setup --account you@example.com
-moltbot webhooks gmail run
+aipro webhooks gmail setup --account you@example.com
+aipro webhooks gmail run
 ```
 
 See [Gmail Pub/Sub documentation](/automation/gmail-pubsub) for details.

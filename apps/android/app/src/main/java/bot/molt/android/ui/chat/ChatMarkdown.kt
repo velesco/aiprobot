@@ -1,4 +1,4 @@
-package bot.molt.android.ui.chat
+package ro.aipro.android.ui.chat
 
 import android.graphics.BitmapFactory
 import android.util.Base64

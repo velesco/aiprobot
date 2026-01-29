@@ -1,9 +1,9 @@
 {
-  "name": "@moltbot/zalo",
+  "name": "@aipro/zalo",
   "version": "2026.1.27-beta.1",
   "type": "module",
-  "description": "Moltbot Zalo channel plugin",
-  "moltbot": {
+  "description": "AIPro Zalo channel plugin",
+  "aipro": {
     "extensions": [
       "./index.ts"
     ],
@@ -21,13 +21,13 @@
       "quickstartAllowFrom": true
     },
     "install": {
-      "npmSpec": "@moltbot/zalo",
+      "npmSpec": "@aipro/zalo",
       "localPath": "extensions/zalo",
       "defaultChoice": "npm"
     }
   },
   "dependencies": {
-    "moltbot": "workspace:*",
+    "aipro": "workspace:*",
     "undici": "7.19.0"
   }
 }

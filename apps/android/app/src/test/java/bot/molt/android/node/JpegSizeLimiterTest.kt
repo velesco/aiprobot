@@ -1,4 +1,4 @@
-package bot.molt.android.node
+package ro.aipro.android.node
 
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertTrue

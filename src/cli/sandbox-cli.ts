@@ -15,30 +15,30 @@ type CommandOptions = Record<string, unknown>;
 
 const SANDBOX_EXAMPLES = {
   main: [
-    ["moltbot sandbox list", "List all sandbox containers."],
-    ["moltbot sandbox list --browser", "List only browser containers."],
-    ["moltbot sandbox recreate --all", "Recreate all containers."],
-    ["moltbot sandbox recreate --session main", "Recreate a specific session."],
-    ["moltbot sandbox recreate --agent mybot", "Recreate agent containers."],
-    ["moltbot sandbox explain", "Explain effective sandbox config."],
+    ["aipro sandbox list", "List all sandbox containers."],
+    ["aipro sandbox list --browser", "List only browser containers."],
+    ["aipro sandbox recreate --all", "Recreate all containers."],
+    ["aipro sandbox recreate --session main", "Recreate a specific session."],
+    ["aipro sandbox recreate --agent mybot", "Recreate agent containers."],
+    ["aipro sandbox explain", "Explain effective sandbox config."],
   ],
   list: [
-    ["moltbot sandbox list", "List all sandbox containers."],
-    ["moltbot sandbox list --browser", "List only browser containers."],
-    ["moltbot sandbox list --json", "JSON output."],
+    ["aipro sandbox list", "List all sandbox containers."],
+    ["aipro sandbox list --browser", "List only browser containers."],
+    ["aipro sandbox list --json", "JSON output."],
   ],
   recreate: [
-    ["moltbot sandbox recreate --all", "Recreate all containers."],
-    ["moltbot sandbox recreate --session main", "Recreate a specific session."],
-    ["moltbot sandbox recreate --agent mybot", "Recreate a specific agent (includes sub-agents)."],
-    ["moltbot sandbox recreate --browser --all", "Recreate only browser containers."],
-    ["moltbot sandbox recreate --all --force", "Skip confirmation."],
+    ["aipro sandbox recreate --all", "Recreate all containers."],
+    ["aipro sandbox recreate --session main", "Recreate a specific session."],
+    ["aipro sandbox recreate --agent mybot", "Recreate a specific agent (includes sub-agents)."],
+    ["aipro sandbox recreate --browser --all", "Recreate only browser containers."],
+    ["aipro sandbox recreate --all --force", "Skip confirmation."],
   ],
   explain: [
-    ["moltbot sandbox explain", "Show effective sandbox config."],
-    ["moltbot sandbox explain --session agent:main:main", "Explain a specific session."],
-    ["moltbot sandbox explain --agent work", "Explain an agent sandbox."],
-    ["moltbot sandbox explain --json", "JSON output."],
+    ["aipro sandbox explain", "Show effective sandbox config."],
+    ["aipro sandbox explain --session agent:main:main", "Explain a specific session."],
+    ["aipro sandbox explain --agent work", "Explain an agent sandbox."],
+    ["aipro sandbox explain --json", "JSON output."],
   ],
 } as const;
 
@@ -68,7 +68,7 @@ export function registerSandboxCli(program: Command) {
     .addHelpText(
       "after",
       () =>
-        `\n${theme.muted("Docs:")} ${formatDocsLink("/cli/sandbox", "docs.molt.bot/cli/sandbox")}\n`,
+        `\n${theme.muted("Docs:")} ${formatDocsLink("/cli/sandbox", "docs.aipro.ro/cli/sandbox")}\n`,
     )
     .action(() => {
       sandbox.help({ error: true });

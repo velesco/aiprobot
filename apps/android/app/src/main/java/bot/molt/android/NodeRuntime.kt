@@ -1,4 +1,4 @@
-package bot.molt.android
+package ro.aipro.android
 
 import android.Manifest
 import android.content.Context
@@ -7,35 +7,35 @@ import android.location.LocationManager
 import android.os.Build
 import android.os.SystemClock
 import androidx.core.content.ContextCompat
-import bot.molt.android.chat.ChatController
-import bot.molt.android.chat.ChatMessage
-import bot.molt.android.chat.ChatPendingToolCall
-import bot.molt.android.chat.ChatSessionEntry
-import bot.molt.android.chat.OutgoingAttachment
-import bot.molt.android.gateway.DeviceAuthStore
-import bot.molt.android.gateway.DeviceIdentityStore
-import bot.molt.android.gateway.GatewayClientInfo
-import bot.molt.android.gateway.GatewayConnectOptions
-import bot.molt.android.gateway.GatewayDiscovery
-import bot.molt.android.gateway.GatewayEndpoint
-import bot.molt.android.gateway.GatewaySession
-import bot.molt.android.gateway.GatewayTlsParams
-import bot.molt.android.node.CameraCaptureManager
-import bot.molt.android.node.LocationCaptureManager
-import bot.molt.android.BuildConfig
-import bot.molt.android.node.CanvasController
-import bot.molt.android.node.ScreenRecordManager
-import bot.molt.android.node.SmsManager
-import bot.molt.android.protocol.MoltbotCapability
-import bot.molt.android.protocol.MoltbotCameraCommand
-import bot.molt.android.protocol.MoltbotCanvasA2UIAction
-import bot.molt.android.protocol.MoltbotCanvasA2UICommand
-import bot.molt.android.protocol.MoltbotCanvasCommand
-import bot.molt.android.protocol.MoltbotScreenCommand
-import bot.molt.android.protocol.MoltbotLocationCommand
-import bot.molt.android.protocol.MoltbotSmsCommand
-import bot.molt.android.voice.TalkModeManager
-import bot.molt.android.voice.VoiceWakeManager
+import ro.aipro.android.chat.ChatController
+import ro.aipro.android.chat.ChatMessage
+import ro.aipro.android.chat.ChatPendingToolCall
+import ro.aipro.android.chat.ChatSessionEntry
+import ro.aipro.android.chat.OutgoingAttachment
+import ro.aipro.android.gateway.DeviceAuthStore
+import ro.aipro.android.gateway.DeviceIdentityStore
+import ro.aipro.android.gateway.GatewayClientInfo
+import ro.aipro.android.gateway.GatewayConnectOptions
+import ro.aipro.android.gateway.GatewayDiscovery
+import ro.aipro.android.gateway.GatewayEndpoint
+import ro.aipro.android.gateway.GatewaySession
+import ro.aipro.android.gateway.GatewayTlsParams
+import ro.aipro.android.node.CameraCaptureManager
+import ro.aipro.android.node.LocationCaptureManager
+import ro.aipro.android.BuildConfig
+import ro.aipro.android.node.CanvasController
+import ro.aipro.android.node.ScreenRecordManager
+import ro.aipro.android.node.SmsManager
+import ro.aipro.android.protocol.AIProCapability
+import ro.aipro.android.protocol.AIProCameraCommand
+import ro.aipro.android.protocol.AIProCanvasA2UIAction
+import ro.aipro.android.protocol.AIProCanvasA2UICommand
+import ro.aipro.android.protocol.AIProCanvasCommand
+import ro.aipro.android.protocol.AIProScreenCommand
+import ro.aipro.android.protocol.AIProLocationCommand
+import ro.aipro.android.protocol.AIProSmsCommand
+import ro.aipro.android.voice.TalkModeManager
+import ro.aipro.android.voice.VoiceWakeManager
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
@@ -451,38 +451,38 @@ class NodeRuntime(context: Context) {
 
   private fun buildInvokeCommands(): List<String> =
     buildList {
-      add(MoltbotCanvasCommand.Present.rawValue)
-      add(MoltbotCanvasCommand.Hide.rawValue)
-      add(MoltbotCanvasCommand.Navigate.rawValue)
-      add(MoltbotCanvasCommand.Eval.rawValue)
-      add(MoltbotCanvasCommand.Snapshot.rawValue)
-      add(MoltbotCanvasA2UICommand.Push.rawValue)
-      add(MoltbotCanvasA2UICommand.PushJSONL.rawValue)
-      add(MoltbotCanvasA2UICommand.Reset.rawValue)
-      add(MoltbotScreenCommand.Record.rawValue)
+      add(AIProCanvasCommand.Present.rawValue)
+      add(AIProCanvasCommand.Hide.rawValue)
+      add(AIProCanvasCommand.Navigate.rawValue)
+      add(AIProCanvasCommand.Eval.rawValue)
+      add(AIProCanvasCommand.Snapshot.rawValue)
+      add(AIProCanvasA2UICommand.Push.rawValue)
+      add(AIProCanvasA2UICommand.PushJSONL.rawValue)
+      add(AIProCanvasA2UICommand.Reset.rawValue)
+      add(AIProScreenCommand.Record.rawValue)
       if (cameraEnabled.value) {
-        add(MoltbotCameraCommand.Snap.rawValue)
-        add(MoltbotCameraCommand.Clip.rawValue)
+        add(AIProCameraCommand.Snap.rawValue)
+        add(AIProCameraCommand.Clip.rawValue)
       }
       if (locationMode.value != LocationMode.Off) {
-        add(MoltbotLocationCommand.Get.rawValue)
+        add(AIProLocationCommand.Get.rawValue)
       }
       if (sms.canSendSms()) {
-        add(MoltbotSmsCommand.Send.rawValue)
+        add(AIProSmsCommand.Send.rawValue)
       }
     }
 
   private fun buildCapabilities(): List<String> =
     buildList {
-      add(MoltbotCapability.Canvas.rawValue)
-      add(MoltbotCapability.Screen.rawValue)
-      if (cameraEnabled.value) add(MoltbotCapability.Camera.rawValue)
-      if (sms.canSendSms()) add(MoltbotCapability.Sms.rawValue)
+      add(AIProCapability.Canvas.rawValue)
+      add(AIProCapability.Screen.rawValue)
+      if (cameraEnabled.value) add(AIProCapability.Camera.rawValue)
+      if (sms.canSendSms()) add(AIProCapability.Sms.rawValue)
       if (voiceWakeMode.value != VoiceWakeMode.Off && hasRecordAudioPermission()) {
-        add(MoltbotCapability.VoiceWake.rawValue)
+        add(AIProCapability.VoiceWake.rawValue)
       }
       if (locationMode.value != LocationMode.Off) {
-        add(MoltbotCapability.Location.rawValue)
+        add(AIProCapability.Location.rawValue)
       }
     }
 
@@ -506,7 +506,7 @@ class NodeRuntime(context: Context) {
     val version = resolvedVersionName()
     val release = Build.VERSION.RELEASE?.trim().orEmpty()
     val releaseLabel = if (release.isEmpty()) "unknown" else release
-    return "MoltbotAndroid/$version (Android $releaseLabel; SDK ${Build.VERSION.SDK_INT})"
+    return "AIProAndroid/$version (Android $releaseLabel; SDK ${Build.VERSION.SDK_INT})"
   }
 
   private fun buildClientInfo(clientId: String, clientMode: String): GatewayClientInfo {
@@ -529,7 +529,7 @@ class NodeRuntime(context: Context) {
       caps = buildCapabilities(),
       commands = buildInvokeCommands(),
       permissions = emptyMap(),
-      client = buildClientInfo(clientId = "moltbot-android", clientMode = "node"),
+      client = buildClientInfo(clientId = "aipro-android", clientMode = "node"),
       userAgent = buildUserAgent(),
     )
   }
@@ -541,7 +541,7 @@ class NodeRuntime(context: Context) {
       caps = emptyList(),
       commands = emptyList(),
       permissions = emptyMap(),
-      client = buildClientInfo(clientId = "moltbot-control-ui", clientMode = "ui"),
+      client = buildClientInfo(clientId = "aipro-control-ui", clientMode = "ui"),
       userAgent = buildUserAgent(),
     )
   }
@@ -665,7 +665,7 @@ class NodeRuntime(context: Context) {
       val actionId = (userActionObj["id"] as? JsonPrimitive)?.content?.trim().orEmpty().ifEmpty {
         java.util.UUID.randomUUID().toString()
       }
-      val name = MoltbotCanvasA2UIAction.extractActionName(userActionObj) ?: return@launch
+      val name = AIProCanvasA2UIAction.extractActionName(userActionObj) ?: return@launch
 
       val surfaceId =
         (userActionObj["surfaceId"] as? JsonPrimitive)?.content?.trim().orEmpty().ifEmpty { "main" }
@@ -675,7 +675,7 @@ class NodeRuntime(context: Context) {
 
       val sessionKey = resolveMainSessionKey()
       val message =
-        MoltbotCanvasA2UIAction.formatAgentMessage(
+        AIProCanvasA2UIAction.formatAgentMessage(
           actionName = name,
           sessionKey = sessionKey,
           surfaceId = surfaceId,
@@ -709,7 +709,7 @@ class NodeRuntime(context: Context) {
 
       try {
         canvas.eval(
-          MoltbotCanvasA2UIAction.jsDispatchA2UIActionStatus(
+          AIProCanvasA2UIAction.jsDispatchA2UIActionStatus(
             actionId = actionId,
             ok = connected && error == null,
             error = error,
@@ -827,10 +827,10 @@ class NodeRuntime(context: Context) {
 
   private suspend fun handleInvoke(command: String, paramsJson: String?): GatewaySession.InvokeResult {
     if (
-      command.startsWith(MoltbotCanvasCommand.NamespacePrefix) ||
-        command.startsWith(MoltbotCanvasA2UICommand.NamespacePrefix) ||
-        command.startsWith(MoltbotCameraCommand.NamespacePrefix) ||
-        command.startsWith(MoltbotScreenCommand.NamespacePrefix)
+      command.startsWith(AIProCanvasCommand.NamespacePrefix) ||
+        command.startsWith(AIProCanvasA2UICommand.NamespacePrefix) ||
+        command.startsWith(AIProCameraCommand.NamespacePrefix) ||
+        command.startsWith(AIProScreenCommand.NamespacePrefix)
       ) {
       if (!isForeground.value) {
         return GatewaySession.InvokeResult.error(
@@ -839,13 +839,13 @@ class NodeRuntime(context: Context) {
         )
       }
     }
-    if (command.startsWith(MoltbotCameraCommand.NamespacePrefix) && !cameraEnabled.value) {
+    if (command.startsWith(AIProCameraCommand.NamespacePrefix) && !cameraEnabled.value) {
       return GatewaySession.InvokeResult.error(
         code = "CAMERA_DISABLED",
         message = "CAMERA_DISABLED: enable Camera in Settings",
       )
     }
-    if (command.startsWith(MoltbotLocationCommand.NamespacePrefix) &&
+    if (command.startsWith(AIProLocationCommand.NamespacePrefix) &&
       locationMode.value == LocationMode.Off
     ) {
       return GatewaySession.InvokeResult.error(
@@ -855,18 +855,18 @@ class NodeRuntime(context: Context) {
     }
 
     return when (command) {
-      MoltbotCanvasCommand.Present.rawValue -> {
+      AIProCanvasCommand.Present.rawValue -> {
         val url = CanvasController.parseNavigateUrl(paramsJson)
         canvas.navigate(url)
         GatewaySession.InvokeResult.ok(null)
       }
-      MoltbotCanvasCommand.Hide.rawValue -> GatewaySession.InvokeResult.ok(null)
-      MoltbotCanvasCommand.Navigate.rawValue -> {
+      AIProCanvasCommand.Hide.rawValue -> GatewaySession.InvokeResult.ok(null)
+      AIProCanvasCommand.Navigate.rawValue -> {
         val url = CanvasController.parseNavigateUrl(paramsJson)
         canvas.navigate(url)
         GatewaySession.InvokeResult.ok(null)
       }
-      MoltbotCanvasCommand.Eval.rawValue -> {
+      AIProCanvasCommand.Eval.rawValue -> {
         val js =
           CanvasController.parseEvalJs(paramsJson)
             ?: return GatewaySession.InvokeResult.error(
@@ -884,7 +884,7 @@ class NodeRuntime(context: Context) {
           }
         GatewaySession.InvokeResult.ok("""{"result":${result.toJsonString()}}""")
       }
-      MoltbotCanvasCommand.Snapshot.rawValue -> {
+      AIProCanvasCommand.Snapshot.rawValue -> {
         val snapshotParams = CanvasController.parseSnapshotParams(paramsJson)
         val base64 =
           try {
@@ -901,7 +901,7 @@ class NodeRuntime(context: Context) {
           }
         GatewaySession.InvokeResult.ok("""{"format":"${snapshotParams.format.rawValue}","base64":"$base64"}""")
       }
-      MoltbotCanvasA2UICommand.Reset.rawValue -> {
+      AIProCanvasA2UICommand.Reset.rawValue -> {
         val a2uiUrl = resolveA2uiHostUrl()
           ?: return GatewaySession.InvokeResult.error(
             code = "A2UI_HOST_NOT_CONFIGURED",
@@ -917,7 +917,7 @@ class NodeRuntime(context: Context) {
         val res = canvas.eval(a2uiResetJS)
         GatewaySession.InvokeResult.ok(res)
       }
-      MoltbotCanvasA2UICommand.Push.rawValue, MoltbotCanvasA2UICommand.PushJSONL.rawValue -> {
+      AIProCanvasA2UICommand.Push.rawValue, AIProCanvasA2UICommand.PushJSONL.rawValue -> {
         val messages =
           try {
             decodeA2uiMessages(command, paramsJson)
@@ -940,7 +940,7 @@ class NodeRuntime(context: Context) {
         val res = canvas.eval(js)
         GatewaySession.InvokeResult.ok(res)
       }
-      MoltbotCameraCommand.Snap.rawValue -> {
+      AIProCameraCommand.Snap.rawValue -> {
         showCameraHud(message = "Taking photo…", kind = CameraHudKind.Photo)
         triggerCameraFlash()
         val res =
@@ -954,7 +954,7 @@ class NodeRuntime(context: Context) {
         showCameraHud(message = "Photo captured", kind = CameraHudKind.Success, autoHideMs = 1600)
         GatewaySession.InvokeResult.ok(res.payloadJson)
       }
-      MoltbotCameraCommand.Clip.rawValue -> {
+      AIProCameraCommand.Clip.rawValue -> {
         val includeAudio = paramsJson?.contains("\"includeAudio\":true") != false
         if (includeAudio) externalAudioCaptureActive.value = true
         try {
@@ -973,7 +973,7 @@ class NodeRuntime(context: Context) {
           if (includeAudio) externalAudioCaptureActive.value = false
         }
       }
-      MoltbotLocationCommand.Get.rawValue -> {
+      AIProLocationCommand.Get.rawValue -> {
         val mode = locationMode.value
         if (!isForeground.value && mode != LocationMode.Always) {
           return GatewaySession.InvokeResult.error(
@@ -1026,7 +1026,7 @@ class NodeRuntime(context: Context) {
           GatewaySession.InvokeResult.error(code = "LOCATION_UNAVAILABLE", message = message)
         }
       }
-      MoltbotScreenCommand.Record.rawValue -> {
+      AIProScreenCommand.Record.rawValue -> {
         // Status pill mirrors screen recording state so it stays visible without overlay stacking.
         _screenRecordActive.value = true
         try {
@@ -1042,7 +1042,7 @@ class NodeRuntime(context: Context) {
           _screenRecordActive.value = false
         }
       }
-      MoltbotSmsCommand.Send.rawValue -> {
+      AIProSmsCommand.Send.rawValue -> {
         val res = sms.send(paramsJson)
         if (res.ok) {
           GatewaySession.InvokeResult.ok(res.payloadJson)
@@ -1115,7 +1115,7 @@ class NodeRuntime(context: Context) {
     val raw = if (nodeRaw.isNotBlank()) nodeRaw else operatorRaw
     if (raw.isBlank()) return null
     val base = raw.trimEnd('/')
-    return "${base}/__moltbot__/a2ui/?platform=android"
+    return "${base}/__aipro__/a2ui/?platform=android"
   }
 
   private suspend fun ensureA2uiReady(a2uiUrl: String): Boolean {
@@ -1150,7 +1150,7 @@ class NodeRuntime(context: Context) {
     val jsonlField = (obj["jsonl"] as? JsonPrimitive)?.content?.trim().orEmpty()
     val hasMessagesArray = obj["messages"] is JsonArray
 
-    if (command == MoltbotCanvasA2UICommand.PushJSONL.rawValue || (!hasMessagesArray && jsonlField.isNotBlank())) {
+    if (command == AIProCanvasA2UICommand.PushJSONL.rawValue || (!hasMessagesArray && jsonlField.isNotBlank())) {
       val jsonl = jsonlField
       if (jsonl.isBlank()) throw IllegalArgumentException("INVALID_REQUEST: jsonl required")
       val messages =
@@ -1207,7 +1207,7 @@ private const val a2uiReadyCheckJS: String =
   """
   (() => {
     try {
-      return !!globalThis.clawdbotA2UI && typeof globalThis.clawdbotA2UI.applyMessages === 'function';
+      return !!globalThis.aiproA2UI && typeof globalThis.aiproA2UI.applyMessages === 'function';
     } catch (_) {
       return false;
     }
@@ -1218,8 +1218,8 @@ private const val a2uiResetJS: String =
   """
   (() => {
     try {
-      if (!globalThis.clawdbotA2UI) return { ok: false, error: "missing moltbotA2UI" };
-      return globalThis.clawdbotA2UI.reset();
+      if (!globalThis.aiproA2UI) return { ok: false, error: "missing aiproA2UI" };
+      return globalThis.aiproA2UI.reset();
     } catch (e) {
       return { ok: false, error: String(e?.message ?? e) };
     }
@@ -1230,9 +1230,9 @@ private fun a2uiApplyMessagesJS(messagesJson: String): String {
   return """
     (() => {
       try {
-        if (!globalThis.clawdbotA2UI) return { ok: false, error: "missing moltbotA2UI" };
+        if (!globalThis.aiproA2UI) return { ok: false, error: "missing aiproA2UI" };
         const messages = $messagesJson;
-        return globalThis.clawdbotA2UI.applyMessages(messages);
+        return globalThis.aiproA2UI.applyMessages(messages);
       } catch (e) {
         return { ok: false, error: String(e?.message ?? e) };
       }

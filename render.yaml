@@ -1,6 +1,6 @@
 services:
   - type: web
-    name: moltbot
+    name: aipro
     runtime: docker
     plan: starter
     healthCheckPath: /health
@@ -9,13 +9,13 @@ services:
         value: "8080"
       - key: SETUP_PASSWORD
         sync: false
-      - key: CLAWDBOT_STATE_DIR
-        value: /data/.clawdbot
-      - key: CLAWDBOT_WORKSPACE_DIR
+      - key: AIPRO_STATE_DIR
+        value: /data/.aipro
+      - key: AIPRO_WORKSPACE_DIR
         value: /data/workspace
-      - key: CLAWDBOT_GATEWAY_TOKEN
+      - key: AIPRO_GATEWAY_TOKEN
         generateValue: true
     disk:
-      name: moltbot-data
+      name: aipro-data
       mountPath: /data
       sizeGB: 1

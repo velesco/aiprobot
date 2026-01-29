@@ -1,4 +1,4 @@
-package bot.molt.android
+package ro.aipro.android
 
 import android.app.Notification
 import android.content.Intent

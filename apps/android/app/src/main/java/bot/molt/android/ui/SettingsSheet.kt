@@ -1,4 +1,4 @@
-package bot.molt.android.ui
+package ro.aipro.android.ui
 
 import android.Manifest
 import android.content.Context
@@ -58,12 +58,12 @@ import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.core.content.ContextCompat
-import bot.molt.android.BuildConfig
-import bot.molt.android.LocationMode
-import bot.molt.android.MainViewModel
-import bot.molt.android.NodeForegroundService
-import bot.molt.android.VoiceWakeMode
-import bot.molt.android.WakeWords
+import ro.aipro.android.BuildConfig
+import ro.aipro.android.LocationMode
+import ro.aipro.android.MainViewModel
+import ro.aipro.android.NodeForegroundService
+import ro.aipro.android.VoiceWakeMode
+import ro.aipro.android.WakeWords
 
 @Composable
 fun SettingsSheet(viewModel: MainViewModel) {
@@ -457,7 +457,7 @@ fun SettingsSheet(viewModel: MainViewModel) {
         Column(verticalArrangement = Arrangement.spacedBy(6.dp), modifier = Modifier.fillMaxWidth()) {
           ListItem(
             headlineContent = { Text("Foreground Only") },
-            supportingContent = { Text("Listens only while Moltbot is open.") },
+            supportingContent = { Text("Listens only while AIPro is open.") },
             trailingContent = {
               RadioButton(
                 selected = voiceWakeMode == VoiceWakeMode.Foreground,
@@ -603,7 +603,7 @@ fun SettingsSheet(viewModel: MainViewModel) {
         )
         ListItem(
           headlineContent = { Text("While Using") },
-          supportingContent = { Text("Only while Moltbot is open.") },
+          supportingContent = { Text("Only while AIPro is open.") },
           trailingContent = {
             RadioButton(
               selected = locationMode == LocationMode.WhileUsing,
@@ -650,7 +650,7 @@ fun SettingsSheet(viewModel: MainViewModel) {
     item {
       ListItem(
         headlineContent = { Text("Prevent Sleep") },
-        supportingContent = { Text("Keeps the screen awake while Moltbot is open.") },
+        supportingContent = { Text("Keeps the screen awake while AIPro is open.") },
         trailingContent = { Switch(checked = preventSleep, onCheckedChange = viewModel::setPreventSleep) },
       )
     }

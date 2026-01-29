@@ -1,6 +1,6 @@
 import { createRequire } from "node:module";
 
-declare const __CLAWDBOT_VERSION__: string | undefined;
+declare const __AIPRO_VERSION__: string | undefined;
 
 function readVersionFromPackageJson(): string | null {
   try {
@@ -12,11 +12,11 @@ function readVersionFromPackageJson(): string | null {
   }
 }
 
-// Single source of truth for the current moltbot version.
+// Single source of truth for the current aipro version.
 // - Embedded/bundled builds: injected define or env var.
 // - Dev/npm builds: package.json.
 export const VERSION =
-  (typeof __CLAWDBOT_VERSION__ === "string" && __CLAWDBOT_VERSION__) ||
-  process.env.CLAWDBOT_BUNDLED_VERSION ||
+  (typeof __AIPRO_VERSION__ === "string" && __AIPRO_VERSION__) ||
+  process.env.AIPRO_BUNDLED_VERSION ||
   readVersionFromPackageJson() ||
   "0.0.0";

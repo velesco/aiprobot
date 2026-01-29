@@ -1,4 +1,4 @@
-package bot.molt.android.node
+package ro.aipro.android.node
 
 import android.Manifest
 import android.content.Context
@@ -11,7 +11,7 @@ import kotlinx.serialization.json.JsonObject
 import kotlinx.serialization.json.JsonPrimitive
 import kotlinx.serialization.json.jsonObject
 import kotlinx.serialization.encodeToString
-import bot.molt.android.PermissionRequester
+import ro.aipro.android.PermissionRequester
 
 /**
  * Sends SMS messages via the Android SMS API.

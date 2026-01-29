@@ -1,6 +1,6 @@
-package bot.molt.android.chat
+package ro.aipro.android.chat
 
-import bot.molt.android.gateway.GatewaySession
+import ro.aipro.android.gateway.GatewaySession
 import java.util.UUID
 import java.util.concurrent.ConcurrentHashMap
 import kotlinx.coroutines.CoroutineScope

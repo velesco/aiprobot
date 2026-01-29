@@ -1,3 +1,3 @@
-package bot.molt.android.gateway
+package ro.aipro.android.gateway
 
 const val GATEWAY_PROTOCOL_VERSION = 3

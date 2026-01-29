@@ -19,21 +19,21 @@ ui/test-results/
 # Bun build artifacts
 *.bun-build
 apps/macos/.build/
-apps/shared/MoltbotKit/.build/
+apps/shared/DigibossKit/.build/
 **/ModuleCache/
 bin/
-bin/clawdbot-mac
+bin/digiboss-mac
 bin/docs-list
 apps/macos/.build-local/
 apps/macos/.swiftpm/
-apps/shared/MoltbotKit/.swiftpm/
+apps/shared/DigibossKit/.swiftpm/
 Core/
 apps/ios/*.xcodeproj/
 apps/ios/*.xcworkspace/
 apps/ios/.swiftpm/
 vendor/
-apps/ios/Clawdbot.xcodeproj/
-apps/ios/Clawdbot.xcodeproj/**
+apps/ios/Digiboss.xcodeproj/
+apps/ios/Digiboss.xcodeproj/**
 apps/macos/.build/**
 **/*.bun-build
 apps/ios/*.xcfilelist

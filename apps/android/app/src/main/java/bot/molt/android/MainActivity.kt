@@ -1,4 +1,4 @@
-package bot.molt.android
+package ro.aipro.android
 
 import android.Manifest
 import android.content.pm.ApplicationInfo
@@ -18,8 +18,8 @@ import androidx.core.view.WindowInsetsControllerCompat
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
-import bot.molt.android.ui.RootScreen
-import bot.molt.android.ui.MoltbotTheme
+import ro.aipro.android.ui.RootScreen
+import ro.aipro.android.ui.AIProTheme
 import kotlinx.coroutines.launch
 
 class MainActivity : ComponentActivity() {
@@ -56,7 +56,7 @@ class MainActivity : ComponentActivity() {
     }
 
     setContent {
-      MoltbotTheme {
+      AIProTheme {
         Surface(modifier = Modifier) {
           RootScreen(viewModel = viewModel)
         }

@@ -8,17 +8,17 @@ plugins {
 }
 
 android {
-  namespace = "bot.molt.android"
+  namespace = "ro.digiboss.android"
   compileSdk = 36
 
   sourceSets {
     getByName("main") {
-      assets.srcDir(file("../../shared/MoltbotKit/Sources/MoltbotKit/Resources"))
+      assets.srcDir(file("../../shared/DigibossKit/Sources/DigibossKit/Resources"))
     }
   }
 
   defaultConfig {
-    applicationId = "bot.molt.android"
+    applicationId = "ro.digiboss.android"
     minSdk = 31
     targetSdk = 36
     versionCode = 202601260
@@ -65,7 +65,7 @@ androidComponents {
         val versionName = output.versionName.orNull ?: "0"
         val buildType = variant.buildType
 
-        val outputFileName = "moltbot-${versionName}-${buildType}.apk"
+        val outputFileName = "digiboss-${versionName}-${buildType}.apk"
         output.outputFileName = outputFileName
       }
   }

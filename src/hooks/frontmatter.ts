@@ -1,10 +1,9 @@
 import JSON5 from "json5";
 
-import { LEGACY_MANIFEST_KEY } from "../compat/legacy-names.js";
 import { parseFrontmatterBlock } from "../markdown/frontmatter.js";
 import { parseBooleanValue } from "../utils/boolean.js";
 import type {
-  MoltbotHookMetadata,
+  AIProHookMetadata,
   HookEntry,
   HookInstallSpec,
   HookInvocationPolicy,
@@ -63,17 +62,15 @@ function parseFrontmatterBool(value: string | undefined, fallback: boolean): boo
   return parsed === undefined ? fallback : parsed;
 }
 
-export function resolveMoltbotMetadata(
+export function resolveAIProMetadata(
   frontmatter: ParsedHookFrontmatter,
-): MoltbotHookMetadata | undefined {
+): AIProHookMetadata | undefined {
   const raw = getFrontmatterValue(frontmatter, "metadata");
   if (!raw) return undefined;
   try {
-    const parsed = JSON5.parse(raw) as { moltbot?: unknown } & Partial<
-      Record<typeof LEGACY_MANIFEST_KEY, unknown>
-    >;
+    const parsed = JSON5.parse(raw) as { aipro?: unknown };
     if (!parsed || typeof parsed !== "object") return undefined;
-    const metadataRaw = parsed.moltbot ?? parsed[LEGACY_MANIFEST_KEY];
+    const metadataRaw = parsed.aipro;
     if (!metadataRaw || typeof metadataRaw !== "object") return undefined;
     const metadataObj = metadataRaw as Record<string, unknown>;
     const requiresRaw =

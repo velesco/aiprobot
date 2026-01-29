@@ -1,4 +1,4 @@
-package bot.molt.android
+package ro.aipro.android
 
 object WakeWords {
   const val maxWords: Int = 32

@@ -223,25 +223,25 @@ describe("buildServiceEnvironment", () => {
     } else {
       expect(env.PATH).toContain("/usr/bin");
     }
-    expect(env.CLAWDBOT_GATEWAY_PORT).toBe("18789");
-    expect(env.CLAWDBOT_GATEWAY_TOKEN).toBe("secret");
-    expect(env.CLAWDBOT_SERVICE_MARKER).toBe("moltbot");
-    expect(env.CLAWDBOT_SERVICE_KIND).toBe("gateway");
-    expect(typeof env.CLAWDBOT_SERVICE_VERSION).toBe("string");
-    expect(env.CLAWDBOT_SYSTEMD_UNIT).toBe("moltbot-gateway.service");
+    expect(env.AIPRO_GATEWAY_PORT).toBe("18789");
+    expect(env.AIPRO_GATEWAY_TOKEN).toBe("secret");
+    expect(env.AIPRO_SERVICE_MARKER).toBe("aipro");
+    expect(env.AIPRO_SERVICE_KIND).toBe("gateway");
+    expect(typeof env.AIPRO_SERVICE_VERSION).toBe("string");
+    expect(env.AIPRO_SYSTEMD_UNIT).toBe("aipro-gateway.service");
     if (process.platform === "darwin") {
-      expect(env.CLAWDBOT_LAUNCHD_LABEL).toBe("bot.molt.gateway");
+      expect(env.AIPRO_LAUNCHD_LABEL).toBe("ro.aipro.gateway");
     }
   });
 
   it("uses profile-specific unit and label", () => {
     const env = buildServiceEnvironment({
-      env: { HOME: "/home/user", CLAWDBOT_PROFILE: "work" },
+      env: { HOME: "/home/user", AIPRO_PROFILE: "work" },
       port: 18789,
     });
-    expect(env.CLAWDBOT_SYSTEMD_UNIT).toBe("moltbot-gateway-work.service");
+    expect(env.AIPRO_SYSTEMD_UNIT).toBe("aipro-gateway-work.service");
     if (process.platform === "darwin") {
-      expect(env.CLAWDBOT_LAUNCHD_LABEL).toBe("bot.molt.work");
+      expect(env.AIPRO_LAUNCHD_LABEL).toBe("ro.aipro.work");
     }
   });
 });
