@@ -31,7 +31,7 @@ import type {
 } from "./types";
 import type { ChatQueueItem, CronFormState } from "./ui-types";
 import { refreshChatAvatar } from "./app-chat";
-import { renderChat } from "./views/chat";
+import { renderChatWithConversations } from "./views/chat-with-conversations";
 import { renderConfig } from "./views/config";
 import { renderChannels } from "./views/channels";
 import { renderCron } from "./views/cron";
@@ -174,23 +174,6 @@ export function renderApp(state: AppViewState) {
             </div>
           `;
         })}
-        <div class="nav-group nav-group--links">
-          <div class="nav-label nav-label--static">
-            <span class="nav-label__text">Resources</span>
-          </div>
-          <div class="nav-group__items">
-            <a
-              class="nav-item nav-item--external"
-              href="https://docs.aipro.ro"
-              target="_blank"
-              rel="noreferrer"
-              title="Docs (opens in new tab)"
-            >
-              <span class="nav-item__icon" aria-hidden="true">${icons.book}</span>
-              <span class="nav-item__text">Docs</span>
-            </a>
-          </div>
-        </div>
       </aside>
       <main class="content ${isChat ? "content--chat" : ""}">
         <section class="content-header">
@@ -427,7 +410,7 @@ export function renderApp(state: AppViewState) {
           : nothing}
 
         ${state.tab === "chat"
-          ? renderChat({
+          ? renderChatWithConversations({
               sessionKey: state.sessionKey,
               onSessionKeyChange: (next) => {
                 state.sessionKey = next;
@@ -497,6 +480,24 @@ export function renderApp(state: AppViewState) {
               onSplitRatioChange: (ratio: number) => state.handleSplitRatioChange(ratio),
               assistantName: state.assistantName,
               assistantAvatar: state.assistantAvatar,
+              // Conversation list props (WhatsApp-like UI)
+              conversationSearchQuery: state.conversationSearchQuery,
+              conversationChannelFilter: state.conversationChannelFilter,
+              conversationsLoading: state.sessionsLoading,
+              onConversationSearchChange: (query) => {
+                state.conversationSearchQuery = query;
+              },
+              onConversationChannelFilterChange: (channel) => {
+                state.conversationChannelFilter = channel;
+              },
+              onConversationsRefresh: () => {
+                void loadSessions(state, { activeMinutes: 0 });
+              },
+              // Resizable sidebar
+              conversationSidebarWidth: state.conversationSidebarWidth,
+              onConversationSidebarWidthChange: (width) => {
+                state.conversationSidebarWidth = width;
+              },
             })
           : nothing}
 

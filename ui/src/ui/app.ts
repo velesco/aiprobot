@@ -204,6 +204,11 @@ export class AIProApp extends LitElement {
   @state() sessionsIncludeGlobal = true;
   @state() sessionsIncludeUnknown = false;
 
+  // Conversation list state (WhatsApp-like UI)
+  @state() conversationSearchQuery = "";
+  @state() conversationChannelFilter: string | null = null;
+  @state() conversationSidebarWidth = 320;
+
   @state() cronLoading = false;
   @state() cronJobs: CronJob[] = [];
   @state() cronStatus: CronStatus | null = null;

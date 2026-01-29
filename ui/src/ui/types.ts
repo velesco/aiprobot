@@ -363,6 +363,12 @@ export type GatewaySessionRow = {
   model?: string;
   modelProvider?: string;
   contextTokens?: number;
+  // WhatsApp-like UI fields
+  lastMessage?: string;
+  lastMessageRole?: "user" | "assistant" | "system";
+  unreadCount?: number;
+  isOnline?: boolean;
+  isTyping?: boolean;
 };
 
 export type SessionsListResult = {
