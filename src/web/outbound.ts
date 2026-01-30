@@ -7,6 +7,7 @@ import { toWhatsappJid } from "../utils.js";
 import { loadConfig } from "../config/config.js";
 import { resolveMarkdownTableMode } from "../config/markdown-tables.js";
 import { convertMarkdownTables } from "../markdown/tables.js";
+import { convertMarkdownToWhatsApp } from "../markdown/whatsapp.js";
 import { type ActiveWebSendOptions, requireActiveWebListener } from "./active-listener.js";
 import { loadWebMedia } from "./media.js";
 
@@ -35,6 +36,7 @@ export async function sendMessageWhatsApp(
     accountId: resolvedAccountId ?? options.accountId,
   });
   text = convertMarkdownTables(text ?? "", tableMode);
+  text = convertMarkdownToWhatsApp(text);
   const logger = getChildLogger({
     module: "web-outbound",
     correlationId,
