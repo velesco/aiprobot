@@ -1,0 +1,51 @@
+{
+  "routing": {
+    "enabled": true,
+    "strategy": "hybrid",
+    "thresholds": {
+      "contextTokensForHybrid": 10000,
+      "maxContextForDirectClaude": 50000
+    }
+  },
+  "models": {
+    "context": {
+      "provider": "gemini",
+      "model": "gemini-2.5-pro-preview-06-05",
+      "fallback": "gemini-2.0-flash",
+      "maxInputTokens": 2000000,
+      "temperature": 0.1
+    },
+    "reasoning": {
+      "provider": "anthropic",
+      "model": "claude-opus-4-5-20250514",
+      "fallback": "claude-sonnet-4-20250514",
+      "maxInputTokens": 200000,
+      "temperature": 0.7
+    }
+  },
+  "compression": {
+    "targetTokens": 4000,
+    "maxPoints": 15,
+    "preserveKeys": ["nume", "CUI", "date", "sume", "decizii", "contacte"]
+  },
+  "costs": {
+    "gemini-2.5-pro": {
+      "input": 1.25,
+      "output": 10.0
+    },
+    "gemini-3-pro": {
+      "input": 2.0,
+      "output": 12.0
+    },
+    "claude-opus-4-5": {
+      "input": 15.0,
+      "output": 75.0
+    }
+  },
+  "logging": {
+    "enabled": true,
+    "logPath": "/home/node/aipro/logs/model-router.log",
+    "logCosts": true,
+    "logLatency": true
+  }
+}

@@ -118,5 +118,16 @@ export function deriveSessionMetaPatch(params: {
   const mergedOrigin = mergeOrigin(params.existing?.origin, origin);
   if (mergedOrigin) patch.origin = mergedOrigin;
 
+  // For DM sessions, persist the sender's display name (e.g., WhatsApp pushName)
+  // Only set if not already set and we have a SenderName that differs from the phone/id
+  if (!groupPatch && !params.existing?.displayName) {
+    const chatType = normalizeChatType(params.ctx.ChatType);
+    const senderName = params.ctx.SenderName?.trim();
+    const from = params.ctx.From?.trim();
+    if (chatType === "direct" && senderName && senderName !== from) {
+      patch.displayName = senderName;
+    }
+  }
+
   return Object.keys(patch).length > 0 ? patch : null;
 }

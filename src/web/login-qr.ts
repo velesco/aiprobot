@@ -202,6 +202,86 @@ export async function startWebLoginWithQr(
   };
 }
 
+/**
+ * Start WhatsApp login with phone number pairing code (no QR needed)
+ * User enters the returned code in WhatsApp → Linked Devices → Link with phone number
+ */
+export async function startWebLoginWithPhone(opts: {
+  phoneNumber: string;
+  verbose?: boolean;
+  force?: boolean;
+  accountId?: string;
+  runtime?: RuntimeEnv;
+}): Promise<{ pairingCode?: string; message: string }> {
+  const runtime = opts.runtime ?? defaultRuntime;
+  const cfg = loadConfig();
+  const account = resolveWhatsAppAccount({ cfg, accountId: opts.accountId });
+  const hasWeb = await webAuthExists(account.authDir);
+  const selfId = readWebSelfId(account.authDir);
+  if (hasWeb && !opts.force) {
+    const who = selfId.e164 ?? selfId.jid ?? "unknown";
+    return {
+      message: `WhatsApp is already linked (${who}). Use force=true to relink.`,
+    };
+  }
+
+  // Clean phone number - remove +, spaces, dashes, parentheses
+  const cleanPhone = opts.phoneNumber.replace(/[\s\-\(\)\+]/g, "");
+  if (!/^\d{10,15}$/.test(cleanPhone)) {
+    return {
+      message:
+        "Invalid phone number. Use format: 40712345678 (country code + number, no + or spaces)",
+    };
+  }
+
+  await resetActiveLogin(account.accountId);
+
+  let sock: WaSocket;
+  try {
+    sock = await createWaSocket(false, Boolean(opts.verbose), {
+      authDir: account.authDir,
+    });
+  } catch (err) {
+    return {
+      message: `Failed to start WhatsApp session: ${String(err)}`,
+    };
+  }
+
+  const login: ActiveLogin = {
+    accountId: account.accountId,
+    authDir: account.authDir,
+    isLegacyAuthDir: account.isLegacyAuthDir,
+    id: randomUUID(),
+    sock,
+    startedAt: Date.now(),
+    connected: false,
+    waitPromise: Promise.resolve(),
+    restartAttempted: false,
+    verbose: Boolean(opts.verbose),
+  };
+  activeLogins.set(account.accountId, login);
+  attachLoginWaiter(account.accountId, login);
+
+  // Request pairing code
+  try {
+    // Wait a moment for connection to initialize
+    await new Promise((resolve) => setTimeout(resolve, 2000));
+
+    const pairingCode = await sock.requestPairingCode(cleanPhone);
+    runtime.log(info(`WhatsApp pairing code generated for ${cleanPhone}: ${pairingCode}`));
+
+    return {
+      pairingCode,
+      message: `Enter this code in WhatsApp → Linked Devices → Link with phone number: ${pairingCode}`,
+    };
+  } catch (err) {
+    await resetActiveLogin(account.accountId);
+    return {
+      message: `Failed to request pairing code: ${String(err)}`,
+    };
+  }
+}
+
 export async function waitForWebLogin(
   opts: { timeoutMs?: number; runtime?: RuntimeEnv; accountId?: string } = {},
 ): Promise<{ connected: boolean; message: string }> {

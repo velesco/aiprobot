@@ -57,7 +57,7 @@ export const whatsappPlugin: ChannelPlugin<ResolvedWhatsAppAccount> = {
     media: true,
   },
   reload: { configPrefixes: ["web"], noopPrefixes: ["channels.whatsapp"] },
-  gatewayMethods: ["web.login.start", "web.login.wait"],
+  gatewayMethods: ["web.login.start", "web.login.wait", "web.login.phone"],
   configSchema: buildChannelConfigSchema(WhatsAppConfigSchema),
   config: {
     listAccountIds: (cfg) => listWhatsAppAccountIds(cfg),
@@ -488,6 +488,13 @@ export const whatsappPlugin: ChannelPlugin<ResolvedWhatsAppAccount> = {
       }),
     loginWithQrWait: async ({ accountId, timeoutMs }) =>
       await getWhatsAppRuntime().channel.whatsapp.waitForWebLogin({ accountId, timeoutMs }),
+    loginWithPhoneStart: async ({ phoneNumber, accountId, force, verbose }) =>
+      await getWhatsAppRuntime().channel.whatsapp.startWebLoginWithPhone({
+        phoneNumber,
+        accountId,
+        force,
+        verbose,
+      }),
     logoutAccount: async ({ account, runtime }) => {
       const cleared = await getWhatsAppRuntime().channel.whatsapp.logoutWeb({
         authDir: account.authDir,

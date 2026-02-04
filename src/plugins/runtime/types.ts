@@ -141,6 +141,7 @@ type SendMessageWhatsApp = typeof import("../../web/outbound.js").sendMessageWha
 type SendPollWhatsApp = typeof import("../../web/outbound.js").sendPollWhatsApp;
 type LoginWeb = typeof import("../../web/login.js").loginWeb;
 type StartWebLoginWithQr = typeof import("../../web/login-qr.js").startWebLoginWithQr;
+type StartWebLoginWithPhone = typeof import("../../web/login-qr.js").startWebLoginWithPhone;
 type WaitForWebLogin = typeof import("../../web/login-qr.js").waitForWebLogin;
 type MonitorWebChannel = typeof import("../../channels/web/index.js").monitorWebChannel;
 type HandleWhatsAppAction =
@@ -325,6 +326,7 @@ export type PluginRuntime = {
       sendPollWhatsApp: SendPollWhatsApp;
       loginWeb: LoginWeb;
       startWebLoginWithQr: StartWebLoginWithQr;
+      startWebLoginWithPhone: StartWebLoginWithPhone;
       waitForWebLogin: WaitForWebLogin;
       monitorWebChannel: MonitorWebChannel;
       handleWhatsAppAction: HandleWhatsAppAction;

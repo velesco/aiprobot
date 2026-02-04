@@ -9,7 +9,7 @@ import {
 import { formatForLog } from "../ws-log.js";
 import type { GatewayRequestHandlers } from "./types.js";
 
-const WEB_LOGIN_METHODS = new Set(["web.login.start", "web.login.wait"]);
+const WEB_LOGIN_METHODS = new Set(["web.login.start", "web.login.wait", "web.login.phone"]);
 
 const resolveWebLoginProvider = () =>
   listChannelPlugins().find((plugin) =>
@@ -116,6 +116,49 @@ export const webHandlers: GatewayRequestHandlers = {
       if (result.connected) {
         await context.startChannel(provider.id, accountId);
       }
+      respond(true, result, undefined);
+    } catch (err) {
+      respond(false, undefined, errorShape(ErrorCodes.UNAVAILABLE, formatForLog(err)));
+    }
+  },
+  "web.login.phone": async ({ params, respond, context }) => {
+    const phoneNumber = (params as { phoneNumber?: unknown }).phoneNumber;
+    if (typeof phoneNumber !== "string" || !phoneNumber.trim()) {
+      respond(false, undefined, errorShape(ErrorCodes.INVALID_REQUEST, "phoneNumber is required"));
+      return;
+    }
+    try {
+      const accountId =
+        typeof (params as { accountId?: unknown }).accountId === "string"
+          ? (params as { accountId?: string }).accountId
+          : undefined;
+      const provider = resolveWebLoginProvider();
+      if (!provider) {
+        respond(
+          false,
+          undefined,
+          errorShape(ErrorCodes.INVALID_REQUEST, "web login provider is not available"),
+        );
+        return;
+      }
+      await context.stopChannel(provider.id, accountId);
+      if (!provider.gateway?.loginWithPhoneStart) {
+        respond(
+          false,
+          undefined,
+          errorShape(
+            ErrorCodes.INVALID_REQUEST,
+            `phone number login is not supported by provider ${provider.id}`,
+          ),
+        );
+        return;
+      }
+      const result = await provider.gateway.loginWithPhoneStart({
+        phoneNumber: phoneNumber.trim(),
+        force: Boolean((params as { force?: boolean }).force),
+        verbose: Boolean((params as { verbose?: boolean }).verbose),
+        accountId,
+      });
       respond(true, result, undefined);
     } catch (err) {
       respond(false, undefined, errorShape(ErrorCodes.UNAVAILABLE, formatForLog(err)));

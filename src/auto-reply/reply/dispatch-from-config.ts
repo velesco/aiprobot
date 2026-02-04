@@ -17,6 +17,11 @@ import { shouldSkipDuplicateInbound } from "./inbound-dedupe.js";
 import type { ReplyDispatcher, ReplyDispatchKind } from "./reply-dispatcher.js";
 import { isRoutableChannel, routeReply } from "./route-reply.js";
 import { maybeApplyTtsToPayload, normalizeTtsAutoMode, resolveTtsConfig } from "../../tts/tts.js";
+import {
+  isPlatformSyncEnabled,
+  sendToPlatformWebhook,
+  generatePlatformSessionId,
+} from "../../platform/webhook.js";
 
 const AUDIO_PLACEHOLDER_RE = /^<media:audio>(\s*\([^)]*\))?$/i;
 const AUDIO_HEADER_RE = /^\[Audio\b/i;
@@ -178,6 +183,35 @@ export async function dispatchReplyFromConfig(params: {
       .catch((err) => {
         logVerbose(`dispatch-from-config: message_received hook failed: ${String(err)}`);
       });
+  }
+
+  // Send to AIPro Platform webhook (if configured)
+  if (isPlatformSyncEnabled()) {
+    const channelId = (ctx.OriginatingChannel ?? ctx.Surface ?? ctx.Provider ?? "").toLowerCase();
+    const conversationId = ctx.OriginatingTo ?? ctx.To ?? ctx.From ?? "";
+    const content =
+      typeof ctx.BodyForCommands === "string"
+        ? ctx.BodyForCommands
+        : typeof ctx.RawBody === "string"
+          ? ctx.RawBody
+          : typeof ctx.Body === "string"
+            ? ctx.Body
+            : "";
+
+    void sendToPlatformWebhook({
+      sessionId: generatePlatformSessionId(channelId, conversationId),
+      sessionKey: `${channelId}:${conversationId}`,
+      role: "user",
+      content,
+      contentType: "text",
+      timestamp: new Date().toISOString(),
+      externalId: ctx.From ?? undefined,
+      displayName: ctx.SenderName ?? ctx.SenderUsername ?? undefined,
+      channel: channelId,
+      messageId: ctx.MessageSid ?? ctx.MessageSidFull ?? undefined,
+    }).catch((err) => {
+      logVerbose(`dispatch-from-config: platform webhook failed: ${String(err)}`);
+    });
   }
 
   // Check if we should route replies to originating channel instead of dispatcher.

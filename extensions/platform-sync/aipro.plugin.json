@@ -1,0 +1,8 @@
+{
+  "id": "platform-sync",
+  "configSchema": {
+    "type": "object",
+    "additionalProperties": false,
+    "properties": {}
+  }
+}

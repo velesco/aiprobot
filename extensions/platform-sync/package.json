@@ -1,0 +1,17 @@
+{
+  "name": "@aipro/platform-sync",
+  "version": "1.0.0",
+  "type": "module",
+  "description": "AIPro Platform message sync plugin",
+  "aipro": {
+    "extensions": [
+      "./index.ts"
+    ]
+  },
+  "peerDependencies": {
+    "aipro": ">=2026.1.26"
+  },
+  "devDependencies": {
+    "aipro": "workspace:*"
+  }
+}

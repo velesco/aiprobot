@@ -21,6 +21,11 @@ import {
   appendAssistantMessageToSessionTranscript,
   resolveMirroredTranscriptText,
 } from "../../config/sessions.js";
+import {
+  isPlatformSyncEnabled,
+  sendToPlatformWebhook,
+  generatePlatformSessionId,
+} from "../../platform/webhook.js";
 import type { NormalizedOutboundPayload } from "./payloads.js";
 import { normalizeReplyPayloadsForDelivery } from "./payloads.js";
 import type { OutboundChannel } from "./targets.js";
@@ -361,6 +366,26 @@ export async function deliverOutboundPayloads(params: {
         sessionKey: params.mirror.sessionKey,
         text: mirrorText,
       });
+
+      // Send to AIPro Platform webhook (if configured)
+      if (isPlatformSyncEnabled()) {
+        const sessionKey = params.mirror.sessionKey;
+        const [channelId, ...toParts] = sessionKey.split(":");
+        const conversationId = toParts.join(":") || to;
+
+        void sendToPlatformWebhook({
+          sessionId: generatePlatformSessionId(channelId || channel, conversationId),
+          sessionKey,
+          role: "assistant",
+          content: mirrorText,
+          contentType: "text",
+          timestamp: new Date().toISOString(),
+          externalId: to,
+          channel: channelId || channel,
+        }).catch(() => {
+          // Silent fail
+        });
+      }
     }
   }
   return results;

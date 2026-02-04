@@ -168,6 +168,11 @@ export type ChannelLoginWithQrStartResult = {
   message: string;
 };
 
+export type ChannelLoginWithPhoneStartResult = {
+  pairingCode?: string;
+  message: string;
+};
+
 export type ChannelLoginWithQrWaitResult = {
   connected: boolean;
   message: string;
@@ -204,6 +209,12 @@ export type ChannelGatewayAdapter<ResolvedAccount = unknown> = {
     accountId?: string;
     timeoutMs?: number;
   }) => Promise<ChannelLoginWithQrWaitResult>;
+  loginWithPhoneStart?: (params: {
+    phoneNumber: string;
+    accountId?: string;
+    force?: boolean;
+    verbose?: boolean;
+  }) => Promise<ChannelLoginWithPhoneStartResult>;
   logoutAccount?: (ctx: ChannelLogoutContext<ResolvedAccount>) => Promise<ChannelLogoutResult>;
 };
 

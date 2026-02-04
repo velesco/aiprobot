@@ -120,7 +120,11 @@ import {
   webAuthExists,
 } from "../../web/auth-store.js";
 import { loginWeb } from "../../web/login.js";
-import { startWebLoginWithQr, waitForWebLogin } from "../../web/login-qr.js";
+import {
+  startWebLoginWithQr,
+  startWebLoginWithPhone,
+  waitForWebLogin,
+} from "../../web/login-qr.js";
 import { sendMessageWhatsApp, sendPollWhatsApp } from "../../web/outbound.js";
 import { registerMemoryCli } from "../../cli/memory-cli.js";
 import { formatNativeDependencyHint } from "./native-deps.js";
@@ -313,6 +317,7 @@ export function createPluginRuntime(): PluginRuntime {
         sendPollWhatsApp,
         loginWeb,
         startWebLoginWithQr,
+        startWebLoginWithPhone,
         waitForWebLogin,
         monitorWebChannel,
         handleWhatsAppAction,
