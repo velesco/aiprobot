@@ -1,10 +1,10 @@
 import AppKit
-import AIProKit
+import AiproKit
 import Foundation
 import OSLog
 import Security
 
-private let deepLinkLogger = Logger(subsystem: "ro.aipro", category: "DeepLink")
+private let deepLinkLogger = Logger(subsystem: "ai.aipro", category: "DeepLink")
 
 @MainActor
 final class DeepLinkHandler {

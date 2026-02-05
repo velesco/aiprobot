@@ -4,6 +4,7 @@ read_when:
   - You need to inspect raw model output for reasoning leakage
   - You want to run the Gateway in watch mode while iterating
   - You need a repeatable debugging workflow
+title: "Debugging"
 ---
 
 # Debugging
@@ -66,13 +67,13 @@ If you don’t have a global install yet, run the CLI via `pnpm aipro ...`.
 
 What this does:
 
-1) **Profile isolation** (global `--dev`)
+1. **Profile isolation** (global `--dev`)
    - `AIPRO_PROFILE=dev`
    - `AIPRO_STATE_DIR=~/.aipro-dev`
    - `AIPRO_CONFIG_PATH=~/.aipro-dev/aipro.json`
    - `AIPRO_GATEWAY_PORT=19001` (browser/canvas shift accordingly)
 
-2) **Dev bootstrap** (`gateway --dev`)
+2. **Dev bootstrap** (`gateway --dev`)
    - Writes a minimal config if missing (`gateway.mode=local`, bind loopback).
    - Sets `agent.workspace` to the dev workspace.
    - Sets `agent.skipBootstrap=true` (no BOOTSTRAP.md).

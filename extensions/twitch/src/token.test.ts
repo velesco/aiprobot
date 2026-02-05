@@ -8,9 +8,9 @@
  * - Account ID normalization
  */
 
+import type { AIProConfig } from "aipro/plugin-sdk";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { resolveTwitchToken, type TwitchTokenSource } from "./token.js";
-import type { AIProConfig } from "aipro/plugin-sdk";
 
 describe("token", () => {
   // Multi-account config for testing non-default accounts

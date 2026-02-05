@@ -1,9 +1,10 @@
 import Testing
-@testable import AIProDiscovery
+@testable import AiproDiscovery
 
 @Suite
 struct WideAreaGatewayDiscoveryTests {
     @Test func discoversBeaconFromTailnetDnsSdFallback() {
+        setenv("AIPRO_WIDE_AREA_DOMAIN", "aipro.internal", 1)
         let statusJson = """
         {
           "Self": { "TailscaleIPs": ["100.69.232.64"] },

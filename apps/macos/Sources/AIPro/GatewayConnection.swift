@@ -1,10 +1,10 @@
-import AIProChatUI
-import AIProKit
-import AIProProtocol
+import AiproChatUI
+import AiproKit
+import AiproProtocol
 import Foundation
 import OSLog
 
-private let gatewayConnectionLogger = Logger(subsystem: "ro.aipro", category: "gateway.connection")
+private let gatewayConnectionLogger = Logger(subsystem: "ai.aipro", category: "gateway.connection")
 
 enum GatewayAgentChannel: String, Codable, CaseIterable, Sendable {
     case last
@@ -272,7 +272,7 @@ actor GatewayConnection {
         return trimmed.isEmpty ? nil : trimmed
     }
 
-    private func sessionDefaultString(_ defaults: [String: AIProProtocol.AnyCodable]?, key: String) -> String {
+    private func sessionDefaultString(_ defaults: [String: AiproProtocol.AnyCodable]?, key: String) -> String {
         let raw = defaults?[key]?.value as? String
         return (raw ?? "").trimmingCharacters(in: CharacterSet.whitespacesAndNewlines)
     }

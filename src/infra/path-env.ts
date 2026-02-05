@@ -1,9 +1,8 @@
 import fs from "node:fs";
 import os from "node:os";
 import path from "node:path";
-import { isTruthyEnvValue } from "./env.js";
-
 import { resolveBrewPathDirs } from "./brew.js";
+import { isTruthyEnvValue } from "./env.js";
 
 type EnsureAIProPathOpts = {
   execPath?: string;
@@ -59,8 +58,10 @@ function candidateBinDirs(opts: EnsureAIProPathOpts): string[] {
   // Bundled macOS app: `aipro` lives next to the executable (process.execPath).
   try {
     const execDir = path.dirname(execPath);
-    const siblingAIPro = path.join(execDir, "aipro");
-    if (isExecutable(siblingAIPro)) candidates.push(execDir);
+    const siblingCli = path.join(execDir, "aipro");
+    if (isExecutable(siblingCli)) {
+      candidates.push(execDir);
+    }
   } catch {
     // ignore
   }
@@ -68,11 +69,15 @@ function candidateBinDirs(opts: EnsureAIProPathOpts): string[] {
   // Project-local installs (best effort): if a `node_modules/.bin/aipro` exists near cwd,
   // include it. This helps when running under launchd or other minimal PATH environments.
   const localBinDir = path.join(cwd, "node_modules", ".bin");
-  if (isExecutable(path.join(localBinDir, "aipro"))) candidates.push(localBinDir);
+  if (isExecutable(path.join(localBinDir, "aipro"))) {
+    candidates.push(localBinDir);
+  }
 
   const miseDataDir = process.env.MISE_DATA_DIR ?? path.join(homeDir, ".local", "share", "mise");
   const miseShims = path.join(miseDataDir, "shims");
-  if (isDirectory(miseShims)) candidates.push(miseShims);
+  if (isDirectory(miseShims)) {
+    candidates.push(miseShims);
+  }
 
   candidates.push(...resolveBrewPathDirs({ homeDir }));
 
@@ -80,7 +85,9 @@ function candidateBinDirs(opts: EnsureAIProPathOpts): string[] {
   if (platform === "darwin") {
     candidates.push(path.join(homeDir, "Library", "pnpm"));
   }
-  if (process.env.XDG_BIN_HOME) candidates.push(process.env.XDG_BIN_HOME);
+  if (process.env.XDG_BIN_HOME) {
+    candidates.push(process.env.XDG_BIN_HOME);
+  }
   candidates.push(path.join(homeDir, ".local", "bin"));
   candidates.push(path.join(homeDir, ".local", "share", "pnpm"));
   candidates.push(path.join(homeDir, ".bun", "bin"));
@@ -95,13 +102,19 @@ function candidateBinDirs(opts: EnsureAIProPathOpts): string[] {
  * under launchd/minimal environments (and inside the macOS app bundle).
  */
 export function ensureAIProCliOnPath(opts: EnsureAIProPathOpts = {}) {
-  if (isTruthyEnvValue(process.env.AIPRO_PATH_BOOTSTRAPPED)) return;
+  if (isTruthyEnvValue(process.env.AIPRO_PATH_BOOTSTRAPPED)) {
+    return;
+  }
   process.env.AIPRO_PATH_BOOTSTRAPPED = "1";
 
   const existing = opts.pathEnv ?? process.env.PATH ?? "";
   const prepend = candidateBinDirs(opts);
-  if (prepend.length === 0) return;
+  if (prepend.length === 0) {
+    return;
+  }
 
   const merged = mergePath({ existing, prepend });
-  if (merged) process.env.PATH = merged;
+  if (merged) {
+    process.env.PATH = merged;
+  }
 }

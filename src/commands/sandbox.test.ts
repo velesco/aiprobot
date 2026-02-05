@@ -1,5 +1,4 @@
 import { beforeEach, describe, expect, it, vi } from "vitest";
-
 import type { SandboxBrowserInfo, SandboxContainerInfo } from "../agents/sandbox.js";
 
 // --- Mocks ---
@@ -31,9 +30,9 @@ const NOW = Date.now();
 
 function createContainer(overrides: Partial<SandboxContainerInfo> = {}): SandboxContainerInfo {
   return {
-    containerName: "clawd-sandbox-test",
+    containerName: "aipro-sandbox-test",
     sessionKey: "test-session",
-    image: "clawd/sandbox:latest",
+    image: "aipro/sandbox:latest",
     imageMatch: true,
     running: true,
     createdAtMs: NOW - 3600000,
@@ -44,9 +43,9 @@ function createContainer(overrides: Partial<SandboxContainerInfo> = {}): Sandbox
 
 function createBrowser(overrides: Partial<SandboxBrowserInfo> = {}): SandboxBrowserInfo {
   return {
-    containerName: "clawd-browser-test",
+    containerName: "aipro-browser-test",
     sessionKey: "test-session",
-    image: "clawd/browser:latest",
+    image: "aipro/browser:latest",
     imageMatch: true,
     running: true,
     createdAtMs: NOW - 3600000,

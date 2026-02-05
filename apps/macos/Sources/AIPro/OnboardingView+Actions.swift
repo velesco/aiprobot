@@ -1,6 +1,6 @@
 import AppKit
-import AIProDiscovery
-import AIProIPC
+import AiproDiscovery
+import AiproIPC
 import Foundation
 import SwiftUI
 

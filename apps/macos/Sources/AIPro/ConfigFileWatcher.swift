@@ -13,7 +13,7 @@ final class ConfigFileWatcher: @unchecked Sendable {
 
     init(url: URL, onChange: @escaping () -> Void) {
         self.url = url
-        self.queue = DispatchQueue(label: "ro.aipro.configwatcher")
+        self.queue = DispatchQueue(label: "ai.aipro.configwatcher")
         self.onChange = onChange
         self.watchedDir = url.deletingLastPathComponent()
         self.targetPath = url.path

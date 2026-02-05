@@ -1,5 +1,5 @@
 import AppKit
-import AIProProtocol
+import AiproProtocol
 import SwiftUI
 import Testing
 

@@ -1,6 +1,5 @@
 import type { AIProPluginApi } from "aipro/plugin-sdk";
 import { emptyPluginConfigSchema } from "aipro/plugin-sdk";
-
 import { matrixPlugin } from "./src/channel.js";
 import { setMatrixRuntime } from "./src/runtime.js";
 

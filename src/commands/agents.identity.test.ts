@@ -1,9 +1,7 @@
 import fs from "node:fs/promises";
 import os from "node:os";
 import path from "node:path";
-
 import { beforeEach, describe, expect, it, vi } from "vitest";
-
 import type { RuntimeEnv } from "../runtime.js";
 
 const configMocks = vi.hoisted(() => ({
@@ -55,10 +53,10 @@ describe("agents set-identity command", () => {
     await fs.writeFile(
       path.join(workspace, "IDENTITY.md"),
       [
-        "- Name: Clawd",
+        "- Name: AIPro",
         "- Creature: helpful sloth",
         "- Emoji: :)",
-        "- Avatar: avatars/clawd.png",
+        "- Avatar: avatars/aipro.png",
         "",
       ].join("\n"),
       "utf-8",
@@ -84,10 +82,10 @@ describe("agents set-identity command", () => {
     };
     const main = written.agents?.list?.find((entry) => entry.id === "main");
     expect(main?.identity).toEqual({
-      name: "Clawd",
+      name: "AIPro",
       theme: "helpful sloth",
       emoji: ":)",
-      avatar: "avatars/clawd.png",
+      avatar: "avatars/aipro.png",
     });
   });
 
@@ -123,10 +121,10 @@ describe("agents set-identity command", () => {
     await fs.writeFile(
       path.join(workspace, "IDENTITY.md"),
       [
-        "- Name: Clawd",
+        "- Name: AIPro",
         "- Theme: space lobster",
         "- Emoji: :)",
-        "- Avatar: avatars/clawd.png",
+        "- Avatar: avatars/aipro.png",
         "",
       ].join("\n"),
       "utf-8",

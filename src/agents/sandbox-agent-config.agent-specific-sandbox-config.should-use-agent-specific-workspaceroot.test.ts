@@ -74,7 +74,7 @@ describe("Agent-specific sandbox config", () => {
         list: [
           {
             id: "isolated",
-            workspace: "~/clawd-isolated",
+            workspace: "~/aipro-isolated",
             sandbox: {
               mode: "all",
               scope: "agent",
@@ -108,14 +108,14 @@ describe("Agent-specific sandbox config", () => {
         list: [
           {
             id: "main",
-            workspace: "~/clawd",
+            workspace: "~/aipro",
             sandbox: {
               mode: "off", // main: no sandbox
             },
           },
           {
             id: "family",
-            workspace: "~/clawd-family",
+            workspace: "~/aipro-family",
             sandbox: {
               mode: "all", // family: always sandbox
               scope: "agent",
@@ -156,7 +156,7 @@ describe("Agent-specific sandbox config", () => {
         list: [
           {
             id: "restricted",
-            workspace: "~/clawd-restricted",
+            workspace: "~/aipro-restricted",
             sandbox: {
               mode: "all",
               scope: "agent",

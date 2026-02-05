@@ -1,9 +1,9 @@
-import AIProKit
+import AiproKit
 import Foundation
 import OSLog
 import WebKit
 
-private let canvasLogger = Logger(subsystem: "ro.aipro", category: "Canvas")
+private let canvasLogger = Logger(subsystem: "ai.aipro", category: "Canvas")
 
 final class CanvasSchemeHandler: NSObject, WKURLSchemeHandler {
     private let root: URL
@@ -45,7 +45,7 @@ final class CanvasSchemeHandler: NSObject, WKURLSchemeHandler {
     }
 
     private func response(for url: URL) -> CanvasResponse {
-        guard url.scheme == CanvasScheme.scheme else {
+        guard let scheme = url.scheme, CanvasScheme.allSchemes.contains(scheme) else {
             return self.html("Invalid scheme.")
         }
         guard let session = url.host, !session.isEmpty else {
@@ -222,7 +222,7 @@ final class CanvasSchemeHandler: NSObject, WKURLSchemeHandler {
         let name = fileURL.deletingPathExtension().lastPathComponent
         guard !name.isEmpty, !ext.isEmpty else { return nil }
 
-        let bundle = AIProKitResources.bundle
+        let bundle = AiproKitResources.bundle
         let resourceURL =
             bundle.url(forResource: name, withExtension: ext, subdirectory: subdirectory)
             ?? bundle.url(forResource: name, withExtension: ext)

@@ -1,8 +1,8 @@
 import AppKit
-import AIProDiscovery
-import AIProIPC
-import AIProKit
-import AIProProtocol
+import AiproDiscovery
+import AiproIPC
+import AiproKit
+import AiproProtocol
 import Foundation
 import Observation
 import OSLog
@@ -22,7 +22,7 @@ enum NodePairingReconcilePolicy {
 final class NodePairingApprovalPrompter {
     static let shared = NodePairingApprovalPrompter()
 
-    private let logger = Logger(subsystem: "ro.aipro", category: "node-pairing")
+    private let logger = Logger(subsystem: "ai.aipro", category: "node-pairing")
     private var task: Task<Void, Never>?
     private var reconcileTask: Task<Void, Never>?
     private var reconcileOnceTask: Task<Void, Never>?

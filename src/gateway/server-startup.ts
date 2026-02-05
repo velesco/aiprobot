@@ -1,3 +1,6 @@
+import type { CliDeps } from "../cli/deps.js";
+import type { loadConfig } from "../config/config.js";
+import type { loadAIProPlugins } from "../plugins/loader.js";
 import { DEFAULT_MODEL, DEFAULT_PROVIDER } from "../agents/defaults.js";
 import { loadModelCatalog } from "../agents/model-catalog.js";
 import {
@@ -5,9 +8,6 @@ import {
   resolveConfiguredModelRef,
   resolveHooksGmailModel,
 } from "../agents/model-selection.js";
-import type { CliDeps } from "../cli/deps.js";
-import type { loadConfig } from "../config/config.js";
-import { isTruthyEnvValue } from "../infra/env.js";
 import { startGmailWatcher } from "../hooks/gmail-watcher.js";
 import {
   clearInternalHooks,
@@ -15,7 +15,7 @@ import {
   triggerInternalHook,
 } from "../hooks/internal-hooks.js";
 import { loadInternalHooks } from "../hooks/loader.js";
-import type { loadAIProPlugins } from "../plugins/loader.js";
+import { isTruthyEnvValue } from "../infra/env.js";
 import { type PluginServicesHandle, startPluginServices } from "../plugins/services.js";
 import { startBrowserControlServerIfEnabled } from "./server-browser.js";
 import {
@@ -38,7 +38,7 @@ export async function startGatewaySidecars(params: {
   logChannels: { info: (msg: string) => void; error: (msg: string) => void };
   logBrowser: { error: (msg: string) => void };
 }) {
-  // Start clawd browser control server (unless disabled via config).
+  // Start AIPro browser control server (unless disabled via config).
   let browserControl: Awaited<ReturnType<typeof startBrowserControlServerIfEnabled>> = null;
   try {
     browserControl = await startBrowserControlServerIfEnabled();

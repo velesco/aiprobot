@@ -1,20 +1,9 @@
 import Foundation
 
 enum LaunchAgentManager {
-    private static let legacyLaunchdLabels = [
-        "com.steipete.aipro",
-        "com.aipro.mac",
-    ]
     private static var plistURL: URL {
         FileManager().homeDirectoryForCurrentUser
-            .appendingPathComponent("Library/LaunchAgents/ro.aipro.mac.plist")
-    }
-
-    private static var legacyPlistURLs: [URL] {
-        self.legacyLaunchdLabels.map { label in
-            FileManager().homeDirectoryForCurrentUser
-                .appendingPathComponent("Library/LaunchAgents/\(label).plist")
-        }
+            .appendingPathComponent("Library/LaunchAgents/ai.aipro.mac.plist")
     }
 
     static func status() async -> Bool {
@@ -25,12 +14,6 @@ enum LaunchAgentManager {
 
     static func set(enabled: Bool, bundlePath: String) async {
         if enabled {
-            for legacyLabel in self.legacyLaunchdLabels {
-                _ = await self.runLaunchctl(["bootout", "gui/\(getuid())/\(legacyLabel)"])
-            }
-            for legacyURL in self.legacyPlistURLs {
-                try? FileManager().removeItem(at: legacyURL)
-            }
             self.writePlist(bundlePath: bundlePath)
             _ = await self.runLaunchctl(["bootout", "gui/\(getuid())/\(launchdLabel)"])
             _ = await self.runLaunchctl(["bootstrap", "gui/\(getuid())", self.plistURL.path])
@@ -49,7 +32,7 @@ enum LaunchAgentManager {
         <plist version="1.0">
         <dict>
           <key>Label</key>
-          <string>ro.aipro.mac</string>
+          <string>ai.aipro.mac</string>
           <key>ProgramArguments</key>
           <array>
             <string>\(bundlePath)/Contents/MacOS/AIPro</string>

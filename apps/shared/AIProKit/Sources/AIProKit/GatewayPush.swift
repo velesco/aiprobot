@@ -1,4 +1,4 @@
-import AIProProtocol
+import AiproProtocol
 
 /// Server-push messages from the gateway websocket.
 ///

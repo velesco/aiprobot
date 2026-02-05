@@ -1,4 +1,4 @@
-import AIProKit
+import AiproKit
 import Testing
 
 @Suite struct CanvasA2UITests {

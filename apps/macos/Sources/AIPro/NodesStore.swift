@@ -38,7 +38,7 @@ final class NodesStore {
     var statusMessage: String?
     var isLoading = false
 
-    private let logger = Logger(subsystem: "ro.aipro", category: "nodes")
+    private let logger = Logger(subsystem: "ai.aipro", category: "nodes")
     private var task: Task<Void, Never>?
     private let interval: TimeInterval = 30
     private var startCount = 0

@@ -10,7 +10,7 @@ services:
       CLAUDE_WEB_COOKIE: ${CLAUDE_WEB_COOKIE}
     volumes:
       - ${AIPRO_CONFIG_DIR}:/home/node/.aipro
-      - ${AIPRO_WORKSPACE_DIR}:/home/node/clawd
+      - ${AIPRO_WORKSPACE_DIR}:/home/node/.aipro/workspace
     ports:
       - "${AIPRO_GATEWAY_PORT:-18789}:18789"
       - "${AIPRO_BRIDGE_PORT:-18790}:18790"
@@ -24,7 +24,7 @@ services:
         "--bind",
         "${AIPRO_GATEWAY_BIND:-lan}",
         "--port",
-        "${AIPRO_GATEWAY_PORT:-18789}"
+        "18789",
       ]
 
   aipro-cli:
@@ -32,13 +32,14 @@ services:
     environment:
       HOME: /home/node
       TERM: xterm-256color
+      AIPRO_GATEWAY_TOKEN: ${AIPRO_GATEWAY_TOKEN}
       BROWSER: echo
       CLAUDE_AI_SESSION_KEY: ${CLAUDE_AI_SESSION_KEY}
       CLAUDE_WEB_SESSION_KEY: ${CLAUDE_WEB_SESSION_KEY}
       CLAUDE_WEB_COOKIE: ${CLAUDE_WEB_COOKIE}
     volumes:
       - ${AIPRO_CONFIG_DIR}:/home/node/.aipro
-      - ${AIPRO_WORKSPACE_DIR}:/home/node/clawd
+      - ${AIPRO_WORKSPACE_DIR}:/home/node/.aipro/workspace
     stdin_open: true
     tty: true
     init: true

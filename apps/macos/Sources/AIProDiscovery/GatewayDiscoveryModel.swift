@@ -1,4 +1,4 @@
-import AIProKit
+import AiproKit
 import Foundation
 import Network
 import Observation
@@ -66,7 +66,7 @@ public final class GatewayDiscoveryModel {
     private var pendingTXTResolvers: [String: GatewayTXTResolver] = [:]
     private var wideAreaFallbackTask: Task<Void, Never>?
     private var wideAreaFallbackGateways: [DiscoveredGateway] = []
-    private let logger = Logger(subsystem: "ro.aipro", category: "gateway-discovery")
+    private let logger = Logger(subsystem: "ai.aipro", category: "gateway-discovery")
 
     public init(
         localDisplayName: String? = nil,
@@ -106,14 +106,14 @@ public final class GatewayDiscoveryModel {
             }
 
             self.browsers[domain] = browser
-            browser.start(queue: DispatchQueue(label: "ro.aipro.macos.gateway-discovery.\(domain)"))
+            browser.start(queue: DispatchQueue(label: "ai.aipro.macos.gateway-discovery.\(domain)"))
         }
 
         self.scheduleWideAreaFallback()
     }
 
     public func refreshWideAreaFallbackNow(timeoutSeconds: TimeInterval = 5.0) {
-        let domain = AIProBonjour.wideAreaGatewayServiceDomain
+        guard let domain = AIProBonjour.wideAreaGatewayServiceDomain else { return }
         Task.detached(priority: .utility) { [weak self] in
             guard let self else { return }
             let beacons = WideAreaGatewayDiscovery.discover(timeoutSeconds: timeoutSeconds)
@@ -235,7 +235,8 @@ public final class GatewayDiscoveryModel {
         }
         .sorted { $0.displayName.localizedCaseInsensitiveCompare($1.displayName) == .orderedAscending }
 
-        if domain == AIProBonjour.wideAreaGatewayServiceDomain,
+        if let wideAreaDomain = AIProBonjour.wideAreaGatewayServiceDomain,
+           domain == wideAreaDomain,
            self.hasUsableWideAreaResults
         {
             self.wideAreaFallbackGateways = []
@@ -243,7 +244,7 @@ public final class GatewayDiscoveryModel {
     }
 
     private func scheduleWideAreaFallback() {
-        let domain = AIProBonjour.wideAreaGatewayServiceDomain
+        guard let domain = AIProBonjour.wideAreaGatewayServiceDomain else { return }
         if Self.isRunningTests { return }
         guard self.wideAreaFallbackTask == nil else { return }
         self.wideAreaFallbackTask = Task.detached(priority: .utility) { [weak self] in
@@ -276,7 +277,7 @@ public final class GatewayDiscoveryModel {
     }
 
     private var hasUsableWideAreaResults: Bool {
-        let domain = AIProBonjour.wideAreaGatewayServiceDomain
+        guard let domain = AIProBonjour.wideAreaGatewayServiceDomain else { return false }
         guard let gateways = self.gatewaysByDomain[domain], !gateways.isEmpty else { return false }
         if !self.filterLocalGateways { return true }
         return gateways.contains(where: { !$0.isLocal })

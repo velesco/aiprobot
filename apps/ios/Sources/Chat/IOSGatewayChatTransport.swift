@@ -1,6 +1,6 @@
-import AIProChatUI
-import AIProKit
-import AIProProtocol
+import AiproChatUI
+import AiproKit
+import AiproProtocol
 import Foundation
 
 struct IOSGatewayChatTransport: AIProChatTransport, Sendable {

@@ -1,5 +1,5 @@
 import AppKit
-import AIProChatUI
+import AiproChatUI
 import Foundation
 import Testing
 @testable import AIPro

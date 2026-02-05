@@ -9,10 +9,10 @@ let package = Package(
         .macOS(.v15),
     ],
     products: [
-        .library(name: "AIProIPC", targets: ["AIProIPC"]),
-        .library(name: "AIProDiscovery", targets: ["AIProDiscovery"]),
+        .library(name: "AiproIPC", targets: ["AiproIPC"]),
+        .library(name: "AiproDiscovery", targets: ["AiproDiscovery"]),
         .executable(name: "AIPro", targets: ["AIPro"]),
-        .executable(name: "aipro-mac", targets: ["AIProMacCLI"]),
+        .executable(name: "aipro-mac", targets: ["AiproMacCLI"]),
     ],
     dependencies: [
         .package(url: "https://github.com/orchetect/MenuBarExtraAccess", exact: "1.2.2"),
@@ -20,33 +20,33 @@ let package = Package(
         .package(url: "https://github.com/apple/swift-log.git", from: "1.8.0"),
         .package(url: "https://github.com/sparkle-project/Sparkle", from: "2.8.1"),
         .package(url: "https://github.com/steipete/Peekaboo.git", branch: "main"),
-        .package(path: "../shared/AIProKit"),
+        .package(path: "../shared/AiproKit"),
         .package(path: "../../Swabble"),
     ],
     targets: [
         .target(
-            name: "AIProIPC",
+            name: "AiproIPC",
             dependencies: [],
             swiftSettings: [
                 .enableUpcomingFeature("StrictConcurrency"),
             ]),
         .target(
-            name: "AIProDiscovery",
+            name: "AiproDiscovery",
             dependencies: [
-                .product(name: "AIProKit", package: "AIProKit"),
+                .product(name: "AiproKit", package: "AiproKit"),
             ],
-            path: "Sources/AIProDiscovery",
+            path: "Sources/AiproDiscovery",
             swiftSettings: [
                 .enableUpcomingFeature("StrictConcurrency"),
             ]),
         .executableTarget(
             name: "AIPro",
             dependencies: [
-                "AIProIPC",
-                "AIProDiscovery",
-                .product(name: "AIProKit", package: "AIProKit"),
-                .product(name: "AIProChatUI", package: "AIProKit"),
-                .product(name: "AIProProtocol", package: "AIProKit"),
+                "AiproIPC",
+                "AiproDiscovery",
+                .product(name: "AiproKit", package: "AiproKit"),
+                .product(name: "AiproChatUI", package: "AiproKit"),
+                .product(name: "AiproProtocol", package: "AiproKit"),
                 .product(name: "SwabbleKit", package: "swabble"),
                 .product(name: "MenuBarExtraAccess", package: "MenuBarExtraAccess"),
                 .product(name: "Subprocess", package: "swift-subprocess"),
@@ -66,23 +66,23 @@ let package = Package(
                 .enableUpcomingFeature("StrictConcurrency"),
             ]),
         .executableTarget(
-            name: "AIProMacCLI",
+            name: "AiproMacCLI",
             dependencies: [
-                "AIProDiscovery",
-                .product(name: "AIProKit", package: "AIProKit"),
-                .product(name: "AIProProtocol", package: "AIProKit"),
+                "AiproDiscovery",
+                .product(name: "AiproKit", package: "AiproKit"),
+                .product(name: "AiproProtocol", package: "AiproKit"),
             ],
-            path: "Sources/AIProMacCLI",
+            path: "Sources/AiproMacCLI",
             swiftSettings: [
                 .enableUpcomingFeature("StrictConcurrency"),
             ]),
         .testTarget(
-            name: "AIProIPCTests",
+            name: "AiproIPCTests",
             dependencies: [
-                "AIProIPC",
+                "AiproIPC",
                 "AIPro",
-                "AIProDiscovery",
-                .product(name: "AIProProtocol", package: "AIProKit"),
+                "AiproDiscovery",
+                .product(name: "AiproProtocol", package: "AiproKit"),
                 .product(name: "SwabbleKit", package: "swabble"),
             ],
             swiftSettings: [

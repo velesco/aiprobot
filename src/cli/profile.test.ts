@@ -6,21 +6,27 @@ import { applyCliProfileEnv, parseCliProfileArgs } from "./profile.js";
 describe("parseCliProfileArgs", () => {
   it("leaves gateway --dev for subcommands", () => {
     const res = parseCliProfileArgs(["node", "aipro", "gateway", "--dev", "--allow-unconfigured"]);
-    if (!res.ok) throw new Error(res.error);
+    if (!res.ok) {
+      throw new Error(res.error);
+    }
     expect(res.profile).toBeNull();
     expect(res.argv).toEqual(["node", "aipro", "gateway", "--dev", "--allow-unconfigured"]);
   });
 
   it("still accepts global --dev before subcommand", () => {
     const res = parseCliProfileArgs(["node", "aipro", "--dev", "gateway"]);
-    if (!res.ok) throw new Error(res.error);
+    if (!res.ok) {
+      throw new Error(res.error);
+    }
     expect(res.profile).toBe("dev");
     expect(res.argv).toEqual(["node", "aipro", "gateway"]);
   });
 
   it("parses --profile value and strips it", () => {
     const res = parseCliProfileArgs(["node", "aipro", "--profile", "work", "status"]);
-    if (!res.ok) throw new Error(res.error);
+    if (!res.ok) {
+      throw new Error(res.error);
+    }
     expect(res.profile).toBe("work");
     expect(res.argv).toEqual(["node", "aipro", "status"]);
   });
@@ -114,8 +120,8 @@ describe("formatCliCommand", () => {
   });
 
   it("trims whitespace from profile", () => {
-    expect(formatCliCommand("aipro doctor --fix", { AIPRO_PROFILE: "  jbclawd  " })).toBe(
-      "aipro --profile jbclawd doctor --fix",
+    expect(formatCliCommand("aipro doctor --fix", { AIPRO_PROFILE: "  jbaipro  " })).toBe(
+      "aipro --profile jbaipro doctor --fix",
     );
   });
 

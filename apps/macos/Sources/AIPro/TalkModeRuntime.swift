@@ -1,6 +1,6 @@
 import AVFoundation
-import AIProChatUI
-import AIProKit
+import AiproChatUI
+import AiproKit
 import Foundation
 import OSLog
 import Speech
@@ -8,8 +8,8 @@ import Speech
 actor TalkModeRuntime {
     static let shared = TalkModeRuntime()
 
-    private let logger = Logger(subsystem: "ro.aipro", category: "talk.runtime")
-    private let ttsLogger = Logger(subsystem: "ro.aipro", category: "talk.tts")
+    private let logger = Logger(subsystem: "ai.aipro", category: "talk.runtime")
+    private let ttsLogger = Logger(subsystem: "ai.aipro", category: "talk.tts")
     private static let defaultModelIdFallback = "eleven_v3"
 
     private final class RMSMeter: @unchecked Sendable {

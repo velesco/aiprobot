@@ -1,6 +1,5 @@
 import type { AIProPluginApi } from "aipro/plugin-sdk";
 import { emptyPluginConfigSchema } from "aipro/plugin-sdk";
-
 import { discordPlugin } from "./src/channel.js";
 import { setDiscordRuntime } from "./src/runtime.js";
 

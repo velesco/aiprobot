@@ -2,7 +2,7 @@
 import process from "node:process";
 import type { GatewayLockHandle } from "../infra/gateway-lock.js";
 
-declare const __AIPRO_VERSION__: string;
+declare const __AIPRO_VERSION__: string | undefined;
 
 const BUNDLED_VERSION =
   (typeof __AIPRO_VERSION__ === "string" && __AIPRO_VERSION__) ||
@@ -11,7 +11,9 @@ const BUNDLED_VERSION =
 
 function argValue(args: string[], flag: string): string | undefined {
   const idx = args.indexOf(flag);
-  if (idx < 0) return undefined;
+  if (idx < 0) {
+    return undefined;
+  }
   const value = args[idx + 1];
   return value && !value.startsWith("-") ? value : undefined;
 }
@@ -65,9 +67,7 @@ async function main() {
   setConsoleTimestampPrefix(true);
   setVerbose(hasFlag(args, "--verbose"));
 
-  const wsLogRaw = (hasFlag(args, "--compact") ? "compact" : argValue(args, "--ws-log")) as
-    | string
-    | undefined;
+  const wsLogRaw = hasFlag(args, "--compact") ? "compact" : argValue(args, "--ws-log");
   const wsLogStyle: GatewayWsLogStyle =
     wsLogRaw === "compact" ? "compact" : wsLogRaw === "full" ? "full" : "auto";
   setGatewayWsLogStyle(wsLogStyle);
@@ -75,6 +75,7 @@ async function main() {
   const cfg = loadConfig();
   const portRaw =
     argValue(args, "--port") ??
+    process.env.AIPRO_GATEWAY_PORT ??
     process.env.AIPRO_GATEWAY_PORT ??
     (typeof cfg.gateway?.port === "number" ? String(cfg.gateway.port) : "") ??
     "18789";
@@ -85,7 +86,11 @@ async function main() {
   }
 
   const bindRaw =
-    argValue(args, "--bind") ?? process.env.AIPRO_GATEWAY_BIND ?? cfg.gateway?.bind ?? "loopback";
+    argValue(args, "--bind") ??
+    process.env.AIPRO_GATEWAY_BIND ??
+    process.env.AIPRO_GATEWAY_BIND ??
+    cfg.gateway?.bind ??
+    "loopback";
   const bind =
     bindRaw === "loopback" ||
     bindRaw === "lan" ||
@@ -100,7 +105,9 @@ async function main() {
   }
 
   const token = argValue(args, "--token");
-  if (token) process.env.AIPRO_GATEWAY_TOKEN = token;
+  if (token) {
+    process.env.AIPRO_GATEWAY_TOKEN = token;
+  }
 
   let server: Awaited<ReturnType<typeof startGatewayServer>> | null = null;
   let lock: GatewayLockHandle | null = null;
@@ -140,7 +147,9 @@ async function main() {
       } catch (err) {
         defaultRuntime.error(`gateway: shutdown error: ${String(err)}`);
       } finally {
-        if (forceExitTimer) clearTimeout(forceExitTimer);
+        if (forceExitTimer) {
+          clearTimeout(forceExitTimer);
+        }
         server = null;
         if (isRestart) {
           shuttingDown = false;

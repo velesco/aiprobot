@@ -8,7 +8,7 @@ ROOT_DIR="$(cd "$(dirname "$0")/.." && pwd)"
 APP_ROOT="$ROOT_DIR/dist/AIPro.app"
 BUILD_ROOT="$ROOT_DIR/apps/macos/.build"
 PRODUCT="AIPro"
-BUNDLE_ID="${BUNDLE_ID:-bot.molt.mac.debug}"
+BUNDLE_ID="${BUNDLE_ID:-ai.aipro.mac.debug}"
 PKG_VERSION="$(cd "$ROOT_DIR" && node -p "require('./package.json').version" 2>/dev/null || echo "0.0.0")"
 BUILD_TS=$(date -u +"%Y-%m-%dT%H:%M:%SZ")
 GIT_COMMIT=$(cd "$ROOT_DIR" && git rev-parse --short HEAD 2>/dev/null || echo "unknown")
@@ -110,10 +110,10 @@ merge_framework_machos() {
 echo "📦 Ensuring deps (pnpm install)"
 (cd "$ROOT_DIR" && pnpm install --no-frozen-lockfile --config.node-linker=hoisted)
 if [[ "${SKIP_TSC:-0}" != "1" ]]; then
-  echo "📦 Building JS (pnpm exec tsc)"
-  (cd "$ROOT_DIR" && pnpm exec tsc -p tsconfig.json)
+  echo "📦 Building JS (pnpm build)"
+  (cd "$ROOT_DIR" && pnpm build)
 else
-  echo "📦 Skipping TS build (SKIP_TSC=1)"
+  echo "📦 Skipping JS build (SKIP_TSC=1)"
 fi
 
 if [[ "${SKIP_UI_BUILD:-0}" != "1" ]]; then
@@ -216,13 +216,13 @@ else
   echo "WARN: model catalog missing at $MODEL_CATALOG_SRC (continuing)" >&2
 fi
 
-echo "📦 Copying AIProKit resources"
-AIPROKIT_BUNDLE="$(build_path_for_arch "$PRIMARY_ARCH")/$BUILD_CONFIG/AIProKit_AIProKit.bundle"
+echo "📦 Copying AiproKit resources"
+AIPROKIT_BUNDLE="$(build_path_for_arch "$PRIMARY_ARCH")/$BUILD_CONFIG/AiproKit_AiproKit.bundle"
 if [ -d "$AIPROKIT_BUNDLE" ]; then
-  rm -rf "$APP_ROOT/Contents/Resources/AIProKit_AIProKit.bundle"
-  cp -R "$AIPROKIT_BUNDLE" "$APP_ROOT/Contents/Resources/AIProKit_AIProKit.bundle"
+  rm -rf "$APP_ROOT/Contents/Resources/AiproKit_AiproKit.bundle"
+  cp -R "$AIPROKIT_BUNDLE" "$APP_ROOT/Contents/Resources/AiproKit_AiproKit.bundle"
 else
-  echo "WARN: AIProKit resource bundle not found at $AIPROKIT_BUNDLE (continuing)" >&2
+  echo "WARN: AiproKit resource bundle not found at $AIPROKIT_BUNDLE (continuing)" >&2
 fi
 
 echo "📦 Copying Textual resources"

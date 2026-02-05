@@ -1,5 +1,4 @@
 import { describe, expect, it, vi } from "vitest";
-
 import type { AIProConfig } from "../../../config/config.js";
 import { signalMessageActions } from "./signal.js";
 

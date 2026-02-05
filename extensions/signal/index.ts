@@ -1,6 +1,5 @@
 import type { AIProPluginApi } from "aipro/plugin-sdk";
 import { emptyPluginConfigSchema } from "aipro/plugin-sdk";
-
 import { signalPlugin } from "./src/channel.js";
 import { setSignalRuntime } from "./src/runtime.js";
 

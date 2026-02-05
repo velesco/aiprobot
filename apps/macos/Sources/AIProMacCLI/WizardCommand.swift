@@ -1,5 +1,5 @@
-import AIProKit
-import AIProProtocol
+import AiproKit
+import AiproProtocol
 import Darwin
 import Foundation
 
@@ -146,9 +146,6 @@ private func resolveWizardGatewayEndpoint(opts: WizardCliOptions, config: Gatewa
 
 private func resolvedToken(opts: WizardCliOptions, config: GatewayConfig) -> String? {
     if let token = opts.token, !token.isEmpty { return token }
-    if let token = ProcessInfo.processInfo.environment["AIPRO_GATEWAY_TOKEN"], !token.isEmpty {
-        return token
-    }
     if (config.mode ?? "local").lowercased() == "remote" {
         return config.remoteToken
     }
@@ -157,9 +154,6 @@ private func resolvedToken(opts: WizardCliOptions, config: GatewayConfig) -> Str
 
 private func resolvedPassword(opts: WizardCliOptions, config: GatewayConfig) -> String? {
     if let password = opts.password, !password.isEmpty { return password }
-    if let password = ProcessInfo.processInfo.environment["AIPRO_GATEWAY_PASSWORD"], !password.isEmpty {
-        return password
-    }
     if (config.mode ?? "local").lowercased() == "remote" {
         return config.remotePassword
     }

@@ -1,4 +1,4 @@
-import AIProKit
+import AiproKit
 import Foundation
 import OSLog
 
@@ -6,7 +6,7 @@ import OSLog
 final class MacNodeModeCoordinator {
     static let shared = MacNodeModeCoordinator()
 
-    private let logger = Logger(subsystem: "ro.aipro", category: "mac-node")
+    private let logger = Logger(subsystem: "ai.aipro", category: "mac-node")
     private var task: Task<Void, Never>?
     private let runtime = MacNodeRuntime()
     private let session = GatewayNodeSession()

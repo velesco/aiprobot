@@ -1,6 +1,5 @@
 import type { AIProPluginApi } from "aipro/plugin-sdk";
 import { emptyPluginConfigSchema } from "aipro/plugin-sdk";
-
 import { telegramPlugin } from "./src/channel.js";
 import { setTelegramRuntime } from "./src/runtime.js";
 

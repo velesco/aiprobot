@@ -1,6 +1,5 @@
 import type { AIProPluginApi } from "aipro/plugin-sdk";
 import { emptyPluginConfigSchema } from "aipro/plugin-sdk";
-
 import { msteamsPlugin } from "./src/channel.js";
 import { setMSTeamsRuntime } from "./src/runtime.js";
 

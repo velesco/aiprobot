@@ -41,13 +41,13 @@ final class AppState {
     }
 
     var onboardingSeen: Bool {
-        didSet { self.ifNotPreview { UserDefaults.standard.set(self.onboardingSeen, forKey: "aipro.onboardingSeen") }
+        didSet { self.ifNotPreview { UserDefaults.standard.set(self.onboardingSeen, forKey: onboardingSeenKey) }
         }
     }
 
     var debugPaneEnabled: Bool {
         didSet {
-            self.ifNotPreview { UserDefaults.standard.set(self.debugPaneEnabled, forKey: "aipro.debugPaneEnabled") }
+            self.ifNotPreview { UserDefaults.standard.set(self.debugPaneEnabled, forKey: debugPaneEnabledKey) }
             CanvasManager.shared.refreshDebugStatus()
         }
     }
@@ -228,12 +228,16 @@ final class AppState {
     private var earBoostTask: Task<Void, Never>?
 
     init(preview: Bool = false) {
-        self.isPreview = preview || ProcessInfo.processInfo.isRunningTests
-        let onboardingSeen = UserDefaults.standard.bool(forKey: "aipro.onboardingSeen")
+        let isPreview = preview || ProcessInfo.processInfo.isRunningTests
+        self.isPreview = isPreview
+        if !isPreview {
+            migrateLegacyDefaults()
+        }
+        let onboardingSeen = UserDefaults.standard.bool(forKey: onboardingSeenKey)
         self.isPaused = UserDefaults.standard.bool(forKey: pauseDefaultsKey)
         self.launchAtLogin = false
         self.onboardingSeen = onboardingSeen
-        self.debugPaneEnabled = UserDefaults.standard.bool(forKey: "aipro.debugPaneEnabled")
+        self.debugPaneEnabled = UserDefaults.standard.bool(forKey: debugPaneEnabledKey)
         let savedVoiceWake = UserDefaults.standard.bool(forKey: swabbleEnabledKey)
         self.swabbleEnabled = voiceWakeSupported ? savedVoiceWake : false
         self.swabbleTriggerWords = UserDefaults.standard

@@ -3,7 +3,9 @@ summary: "Model authentication: OAuth, API keys, and setup-token"
 read_when:
   - Debugging model auth or OAuth expiry
   - Documenting authentication or credential storage
+title: "Authentication"
 ---
+
 # Authentication
 
 AIPro supports OAuth and API keys for model providers. For Anthropic
@@ -17,16 +19,16 @@ layout.
 
 If you’re using Anthropic directly, use an API key.
 
-1) Create an API key in the Anthropic Console.
-2) Put it on the **gateway host** (the machine running `aipro gateway`).
+1. Create an API key in the Anthropic Console.
+2. Put it on the **gateway host** (the machine running `aipro gateway`).
 
 ```bash
 export ANTHROPIC_API_KEY="..."
 aipro models status
 ```
 
-3) If the Gateway runs under systemd/launchd, prefer putting the key in
-`~/.aipro/.env` so the daemon can read it:
+3. If the Gateway runs under systemd/launchd, prefer putting the key in
+   `~/.aipro/.env` so the daemon can read it:
 
 ```bash
 cat >> ~/.aipro/.env <<'EOF'

@@ -1,6 +1,6 @@
 import AppKit
-import AIProIPC
-import AIProKit
+import AiproIPC
+import AiproKit
 import Foundation
 
 actor MacNodeRuntime {
@@ -345,8 +345,9 @@ actor MacNodeRuntime {
         let sessionKey = self.mainSessionKey
         let json = try await CanvasManager.shared.eval(sessionKey: sessionKey, javaScript: """
         (() => {
-          if (!globalThis.aiproA2UI) return JSON.stringify({ ok: false, error: "missing aiproA2UI" });
-          return JSON.stringify(globalThis.aiproA2UI.reset());
+          const host = globalThis.aiproA2UI;
+          if (!host) return JSON.stringify({ ok: false, error: "missing aiproA2UI" });
+          return JSON.stringify(host.reset());
         })()
         """)
         return BridgeInvokeResponse(id: req.id, ok: true, payloadJSON: json)
@@ -354,7 +355,7 @@ actor MacNodeRuntime {
 
     private func handleA2UIPush(_ req: BridgeInvokeRequest) async throws -> BridgeInvokeResponse {
         let command = req.command
-        let messages: [AIProKit.AnyCodable]
+        let messages: [AiproKit.AnyCodable]
         if command == AIProCanvasA2UICommand.pushJSONL.rawValue {
             let params = try Self.decodeParams(AIProCanvasA2UIPushJSONLParams.self, from: req.paramsJSON)
             messages = try AIProCanvasA2UIJSONL.decodeMessagesFromJSONL(params.jsonl)
@@ -374,9 +375,10 @@ actor MacNodeRuntime {
         let js = """
         (() => {
           try {
-            if (!globalThis.aiproA2UI) return JSON.stringify({ ok: false, error: "missing aiproA2UI" });
+            const host = globalThis.aiproA2UI;
+            if (!host) return JSON.stringify({ ok: false, error: "missing aiproA2UI" });
             const messages = \(messagesJSON);
-            return JSON.stringify(globalThis.aiproA2UI.applyMessages(messages));
+            return JSON.stringify(host.applyMessages(messages));
           } catch (e) {
             return JSON.stringify({ ok: false, error: String(e?.message ?? e) });
           }
@@ -417,7 +419,10 @@ actor MacNodeRuntime {
             do {
                 let sessionKey = self.mainSessionKey
                 let ready = try await CanvasManager.shared.eval(sessionKey: sessionKey, javaScript: """
-                (() => String(Boolean(globalThis.aiproA2UI)))()
+                (() => {
+                  const host = globalThis.aiproA2UI;
+                  return String(Boolean(host));
+                })()
                 """)
                 let trimmed = ready.trimmingCharacters(in: .whitespacesAndNewlines)
                 if trimmed == "true" { return true }

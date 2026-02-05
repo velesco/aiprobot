@@ -1,5 +1,5 @@
 import AppKit
-import AIProIPC
+import AiproIPC
 import Foundation
 import Testing
 @testable import AIPro

@@ -9,10 +9,17 @@ import Security
 final class PeekabooBridgeHostCoordinator {
     static let shared = PeekabooBridgeHostCoordinator()
 
-    private let logger = Logger(subsystem: "ro.aipro", category: "PeekabooBridge")
+    private let logger = Logger(subsystem: "ai.aipro", category: "PeekabooBridge")
 
     private var host: PeekabooBridgeHost?
     private var services: AIProPeekabooBridgeServices?
+    private static var aiproSocketPath: String {
+        let fileManager = FileManager.default
+        let base = fileManager.urls(for: .applicationSupportDirectory, in: .userDomainMask).first
+            ?? fileManager.homeDirectoryForCurrentUser.appendingPathComponent("Library/Application Support")
+        let directory = base.appendingPathComponent("AIPro", isDirectory: true)
+        return directory.appendingPathComponent(PeekabooBridgeConstants.socketName, isDirectory: false).path
+    }
 
     func setEnabled(_ enabled: Bool) async {
         if enabled {
@@ -47,7 +54,7 @@ final class PeekabooBridgeHostCoordinator {
             allowlistedBundles: allowlistedBundles)
 
         let host = PeekabooBridgeHost(
-            socketPath: PeekabooBridgeConstants.aiproSocketPath,
+            socketPath: Self.aiproSocketPath,
             server: server,
             allowedTeamIDs: allowlistedTeamIDs,
             requestTimeoutSec: 10)
@@ -57,7 +64,7 @@ final class PeekabooBridgeHostCoordinator {
 
         await host.start()
         self.logger
-            .info("PeekabooBridge host started at \(PeekabooBridgeConstants.aiproSocketPath, privacy: .public)")
+            .info("PeekabooBridge host started at \(Self.aiproSocketPath, privacy: .public)")
     }
 
     private static func currentTeamID() -> String? {
@@ -102,7 +109,7 @@ private final class AIProPeekabooBridgeServices: PeekabooBridgeServiceProviding 
     let snapshots: any SnapshotManagerProtocol
 
     init() {
-        let logging = LoggingService(subsystem: "ro.aipro.peekaboo")
+        let logging = LoggingService(subsystem: "ai.aipro.peekaboo")
         let feedbackClient: any AutomationFeedbackClient = NoopAutomationFeedbackClient()
 
         let snapshots = InMemorySnapshotManager(options: .init(

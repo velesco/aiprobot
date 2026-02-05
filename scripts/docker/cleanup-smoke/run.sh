@@ -6,6 +6,9 @@ cd /repo
 export AIPRO_STATE_DIR="/tmp/aipro-test"
 export AIPRO_CONFIG_PATH="${AIPRO_STATE_DIR}/aipro.json"
 
+echo "==> Build"
+pnpm build
+
 echo "==> Seed state"
 mkdir -p "${AIPRO_STATE_DIR}/credentials"
 mkdir -p "${AIPRO_STATE_DIR}/agents/main/sessions"

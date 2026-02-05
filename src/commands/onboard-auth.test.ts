@@ -1,10 +1,8 @@
+import type { OAuthCredentials } from "@mariozechner/pi-ai";
 import fs from "node:fs/promises";
 import os from "node:os";
 import path from "node:path";
-
-import type { OAuthCredentials } from "@mariozechner/pi-ai";
 import { afterEach, describe, expect, it } from "vitest";
-
 import {
   applyAuthProfileConfig,
   applyMinimaxApiConfig,
@@ -15,6 +13,8 @@ import {
   applyOpenrouterProviderConfig,
   applySyntheticConfig,
   applySyntheticProviderConfig,
+  applyXiaomiConfig,
+  applyXiaomiProviderConfig,
   OPENROUTER_DEFAULT_MODEL_REF,
   SYNTHETIC_DEFAULT_MODEL_ID,
   SYNTHETIC_DEFAULT_MODEL_REF,
@@ -25,7 +25,9 @@ import {
 const authProfilePathFor = (agentDir: string) => path.join(agentDir, "auth-profiles.json");
 const requireAgentDir = () => {
   const agentDir = process.env.AIPRO_AGENT_DIR;
-  if (!agentDir) throw new Error("AIPRO_AGENT_DIR not set");
+  if (!agentDir) {
+    throw new Error("AIPRO_AGENT_DIR not set");
+  }
   return agentDir;
 };
 
@@ -340,6 +342,50 @@ describe("applySyntheticConfig", () => {
     const ids = cfg.models?.providers?.synthetic?.models.map((m) => m.id);
     expect(ids).toContain("old-model");
     expect(ids).toContain(SYNTHETIC_DEFAULT_MODEL_ID);
+  });
+});
+
+describe("applyXiaomiConfig", () => {
+  it("adds Xiaomi provider with correct settings", () => {
+    const cfg = applyXiaomiConfig({});
+    expect(cfg.models?.providers?.xiaomi).toMatchObject({
+      baseUrl: "https://api.xiaomimimo.com/anthropic",
+      api: "anthropic-messages",
+    });
+    expect(cfg.agents?.defaults?.model?.primary).toBe("xiaomi/mimo-v2-flash");
+  });
+
+  it("merges Xiaomi models and keeps existing provider overrides", () => {
+    const cfg = applyXiaomiProviderConfig({
+      models: {
+        providers: {
+          xiaomi: {
+            baseUrl: "https://old.example.com",
+            apiKey: "old-key",
+            api: "openai-completions",
+            models: [
+              {
+                id: "custom-model",
+                name: "Custom",
+                reasoning: false,
+                input: ["text"],
+                cost: { input: 1, output: 2, cacheRead: 0, cacheWrite: 0 },
+                contextWindow: 1000,
+                maxTokens: 100,
+              },
+            ],
+          },
+        },
+      },
+    });
+
+    expect(cfg.models?.providers?.xiaomi?.baseUrl).toBe("https://api.xiaomimimo.com/anthropic");
+    expect(cfg.models?.providers?.xiaomi?.api).toBe("anthropic-messages");
+    expect(cfg.models?.providers?.xiaomi?.apiKey).toBe("old-key");
+    expect(cfg.models?.providers?.xiaomi?.models.map((m) => m.id)).toEqual([
+      "custom-model",
+      "mimo-v2-flash",
+    ]);
   });
 });
 

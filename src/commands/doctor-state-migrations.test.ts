@@ -1,9 +1,7 @@
 import fs from "node:fs";
 import os from "node:os";
 import path from "node:path";
-
 import { afterEach, describe, expect, it, vi } from "vitest";
-
 import type { AIProConfig } from "../config/config.js";
 import {
   autoMigrateLegacyStateDir,
@@ -25,7 +23,9 @@ async function makeTempRoot() {
 afterEach(async () => {
   resetAutoMigrateLegacyStateForTest();
   resetAutoMigrateLegacyStateDirForTest();
-  if (!tempRoot) return;
+  if (!tempRoot) {
+    return;
+  }
   await fs.promises.rm(tempRoot, { recursive: true, force: true });
   tempRoot = null;
 });
@@ -327,39 +327,16 @@ describe("doctor legacy state migrations", () => {
     expect(store["agent:main:main"]?.sessionId).toBe("legacy");
   });
 
-  it("auto-migrates legacy state dir to ~/.aipro", async () => {
+  it("does nothing when no legacy state dir exists", async () => {
     const root = await makeTempRoot();
-    const legacyDir = path.join(root, ".aipro");
-    fs.mkdirSync(legacyDir, { recursive: true });
-    fs.writeFileSync(path.join(legacyDir, "foo.txt"), "legacy", "utf-8");
-
-    const result = await autoMigrateLegacyStateDir({
-      env: {} as NodeJS.ProcessEnv,
-      homedir: () => root,
-    });
-
-    const targetDir = path.join(root, ".aipro");
-    expect(fs.existsSync(path.join(targetDir, "foo.txt"))).toBe(true);
-    const legacyStat = fs.lstatSync(legacyDir);
-    expect(legacyStat.isSymbolicLink()).toBe(true);
-    expect(fs.realpathSync(legacyDir)).toBe(fs.realpathSync(targetDir));
-    expect(result.migrated).toBe(true);
-  });
-
-  it("skips state dir migration when target exists", async () => {
-    const root = await makeTempRoot();
-    const legacyDir = path.join(root, ".aipro");
-    const targetDir = path.join(root, ".aipro");
-    fs.mkdirSync(legacyDir, { recursive: true });
-    fs.mkdirSync(targetDir, { recursive: true });
-
     const result = await autoMigrateLegacyStateDir({
       env: {} as NodeJS.ProcessEnv,
       homedir: () => root,
     });
 
     expect(result.migrated).toBe(false);
-    expect(result.warnings.length).toBeGreaterThan(0);
+    expect(result.skipped).toBe(false);
+    expect(result.warnings).toHaveLength(0);
   });
 
   it("skips state dir migration when env override is set", async () => {

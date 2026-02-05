@@ -4,6 +4,7 @@ read_when:
   - You use `aipro browser` and want examples for common tasks
   - You want to control a browser running on another machine via a node host
   - You want to use the Chrome extension relay (attach/detach via toolbar button)
+title: "browser"
 ---
 
 # `aipro browser`
@@ -11,6 +12,7 @@ read_when:
 Manage AIPro’s browser control server and run browser actions (tabs, snapshots, screenshots, navigation, clicks, typing).
 
 Related:
+
 - Browser tool + API: [Browser tool](/tools/browser)
 - Chrome extension relay: [Chrome extension](/tools/chrome-extension)
 
@@ -26,15 +28,16 @@ Related:
 
 ```bash
 aipro browser --browser-profile chrome tabs
-aipro browser --browser-profile clawd start
-aipro browser --browser-profile clawd open https://example.com
-aipro browser --browser-profile clawd snapshot
+aipro browser --browser-profile aipro start
+aipro browser --browser-profile aipro open https://example.com
+aipro browser --browser-profile aipro snapshot
 ```
 
 ## Profiles
 
 Profiles are named browser routing configs. In practice:
-- `clawd`: launches/attaches to a dedicated AIPro-managed Chrome instance (isolated user data dir).
+
+- `aipro`: launches/attaches to a dedicated AIPro-managed Chrome instance (isolated user data dir).
 - `chrome`: controls your existing Chrome tab(s) via the Chrome extension relay.
 
 ```bash

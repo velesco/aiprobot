@@ -1,4 +1,4 @@
-import AIProIPC
+import AiproIPC
 import CoreLocation
 import Testing
 @testable import AIPro

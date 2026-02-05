@@ -1,8 +1,15 @@
 {
   "name": "@aipro/tlon",
-  "version": "2026.1.27-beta.1",
-  "type": "module",
+  "version": "2026.2.4",
   "description": "AIPro Tlon/Urbit channel plugin",
+  "type": "module",
+  "dependencies": {
+    "@urbit/aura": "^3.0.0",
+    "@urbit/http-api": "^3.0.0"
+  },
+  "devDependencies": {
+    "aipro": "workspace:*"
+  },
   "aipro": {
     "extensions": [
       "./index.ts"
@@ -22,9 +29,5 @@
       "localPath": "extensions/tlon",
       "defaultChoice": "npm"
     }
-  },
-  "dependencies": {
-    "@urbit/aura": "^3.0.0",
-    "@urbit/http-api": "^3.0.0"
   }
 }

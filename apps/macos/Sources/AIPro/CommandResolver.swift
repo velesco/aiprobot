@@ -7,6 +7,8 @@ enum CommandResolver {
     static func gatewayEntrypoint(in root: URL) -> String? {
         let distEntry = root.appendingPathComponent("dist/index.js").path
         if FileManager().isReadableFile(atPath: distEntry) { return distEntry }
+        let aiproEntry = root.appendingPathComponent("aipro.mjs").path
+        if FileManager().isReadableFile(atPath: aiproEntry) { return aiproEntry }
         let binEntry = root.appendingPathComponent("bin/aipro.js").path
         if FileManager().isReadableFile(atPath: binEntry) { return binEntry }
         return nil
@@ -98,15 +100,19 @@ enum CommandResolver {
     }
 
     private static func aiproManagedPaths(home: URL) -> [String] {
-        let base = home.appendingPathComponent(".aipro")
-        let bin = base.appendingPathComponent("bin")
-        let nodeBin = base.appendingPathComponent("tools/node/bin")
+        let bases = [
+            home.appendingPathComponent(".aipro"),
+        ]
         var paths: [String] = []
-        if FileManager().fileExists(atPath: bin.path) {
-            paths.append(bin.path)
-        }
-        if FileManager().fileExists(atPath: nodeBin.path) {
-            paths.append(nodeBin.path)
+        for base in bases {
+            let bin = base.appendingPathComponent("bin")
+            let nodeBin = base.appendingPathComponent("tools/node/bin")
+            if FileManager().fileExists(atPath: bin.path) {
+                paths.append(bin.path)
+            }
+            if FileManager().fileExists(atPath: nodeBin.path) {
+                paths.append(nodeBin.path)
+            }
         }
         return paths
     }
@@ -202,8 +208,15 @@ enum CommandResolver {
     }
 
     static func nodeCliPath() -> String? {
-        let candidate = self.projectRoot().appendingPathComponent("bin/aipro.js").path
-        return FileManager().isReadableFile(atPath: candidate) ? candidate : nil
+        let root = self.projectRoot()
+        let candidates = [
+            root.appendingPathComponent("aipro.mjs").path,
+            root.appendingPathComponent("bin/aipro.js").path,
+        ]
+        for candidate in candidates where FileManager().isReadableFile(atPath: candidate) {
+            return candidate
+        }
+        return nil
     }
 
     static func hasAnyAIProInvoker(searchPaths: [String]? = nil) -> Bool {
@@ -258,7 +271,7 @@ enum CommandResolver {
             }
 
             let missingEntry = """
-            aipro entrypoint missing (looked for dist/index.js or bin/aipro.js); run pnpm build.
+            aipro entrypoint missing (looked for dist/index.js or aipro.mjs); run pnpm build.
             """
             return self.errorCommand(with: missingEntry)
 
@@ -267,7 +280,6 @@ enum CommandResolver {
         }
     }
 
-    // Existing callers still refer to aiproCommand; keep it as node alias.
     static func aiproCommand(
         subcommand: String,
         extraArgs: [String] = [],
@@ -352,6 +364,13 @@ enum CommandResolver {
           if command -v node >/dev/null 2>&1; then
             CLI="node $PRJ/dist/index.js"
             node "$PRJ/dist/index.js" \(quotedArgs);
+          else
+            echo "Node >=22 required on remote host"; exit 127;
+          fi
+        elif [ -n "${PRJ:-}" ] && [ -f "$PRJ/aipro.mjs" ]; then
+          if command -v node >/dev/null 2>&1; then
+            CLI="node $PRJ/aipro.mjs"
+            node "$PRJ/aipro.mjs" \(quotedArgs);
           else
             echo "Node >=22 required on remote host"; exit 127;
           fi

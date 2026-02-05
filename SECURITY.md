@@ -7,6 +7,17 @@ If you believe you've found a security issue in AIPro, please report it privatel
 - Email: `steipete@gmail.com`
 - What to include: reproduction steps, impact assessment, and (if possible) a minimal PoC.
 
+## Bug Bounties
+
+AIPro is a labor of love. There is no bug bounty program and no budget for paid reports. Please still disclose responsibly so we can fix issues quickly.
+The best way to help the project right now is by sending PRs.
+
+## Out of Scope
+
+- Public Internet Exposure
+- Using AIPro in ways that the docs recommend not to
+- Prompt injection attacks
+
 ## Operational Guidance
 
 For threat model + hardening guidance (including `aipro security audit --deep` and `--fix`), see:

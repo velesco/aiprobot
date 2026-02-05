@@ -14,8 +14,8 @@ vi.mock("../agents/pi-embedded.js", () => ({
   resolveEmbeddedSessionLane: (key: string) => `session:${key.trim() || "main"}`,
 }));
 
-import { resetInboundDedupe } from "../auto-reply/reply/inbound-dedupe.js";
 import { expectInboundContextContract } from "../../test/helpers/inbound-contract.js";
+import { resetInboundDedupe } from "../auto-reply/reply/inbound-dedupe.js";
 import { resetLogger, setLoggerOverride } from "../logging.js";
 import { monitorWebChannel, SILENT_REPLY_TOKEN } from "./auto-reply.js";
 import { resetBaileysMocks, resetLoadConfigMock, setLoadConfigMock } from "./test-helpers.js";
@@ -126,7 +126,7 @@ describe("web auto-reply", () => {
 
     setLoadConfigMock(() => ({
       messages: {
-        groupChat: { mentionPatterns: ["@clawd"] },
+        groupChat: { mentionPatterns: ["@aipro"] },
       },
       session: { store: storePath },
     }));
@@ -209,7 +209,7 @@ describe("web auto-reply", () => {
       },
       messages: {
         groupChat: {
-          mentionPatterns: ["\\bclawd\\b"],
+          mentionPatterns: ["\\baipro\\b"],
         },
       },
     }));
@@ -248,9 +248,9 @@ describe("web auto-reply", () => {
 
     expect(resolver).not.toHaveBeenCalled();
 
-    // Text-based mentionPatterns still work (user can type "clawd" explicitly).
+    // Text-based mentionPatterns still work (user can type "aipro" explicitly).
     await capturedOnMessage?.({
-      body: "clawd ping",
+      body: "aipro ping",
       from: "123@g.us",
       conversationId: "123@g.us",
       chatId: "123@g.us",

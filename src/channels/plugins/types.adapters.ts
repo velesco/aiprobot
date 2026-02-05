@@ -1,5 +1,5 @@
-import type { AIProConfig } from "../../config/config.js";
 import type { ReplyPayload } from "../../auto-reply/types.js";
+import type { AIProConfig } from "../../config/config.js";
 import type { GroupToolPolicyConfig } from "../../config/types.tools.js";
 import type { OutboundDeliveryResult, OutboundSendDeps } from "../../infra/outbound/deliver.js";
 import type { RuntimeEnv } from "../../runtime.js";
@@ -105,7 +105,7 @@ export type ChannelOutboundAdapter = {
   sendPoll?: (ctx: ChannelPollContext) => Promise<ChannelPollResult>;
 };
 
-export type ChannelStatusAdapter<ResolvedAccount> = {
+export type ChannelStatusAdapter<ResolvedAccount, Probe = unknown, Audit = unknown> = {
   defaultRuntime?: ChannelAccountSnapshot;
   buildChannelSummary?: (params: {
     account: ResolvedAccount;
@@ -117,19 +117,19 @@ export type ChannelStatusAdapter<ResolvedAccount> = {
     account: ResolvedAccount;
     timeoutMs: number;
     cfg: AIProConfig;
-  }) => Promise<unknown>;
+  }) => Promise<Probe>;
   auditAccount?: (params: {
     account: ResolvedAccount;
     timeoutMs: number;
     cfg: AIProConfig;
-    probe?: unknown;
-  }) => Promise<unknown>;
+    probe?: Probe;
+  }) => Promise<Audit>;
   buildAccountSnapshot?: (params: {
     account: ResolvedAccount;
     cfg: AIProConfig;
     runtime?: ChannelAccountSnapshot;
-    probe?: unknown;
-    audit?: unknown;
+    probe?: Probe;
+    audit?: Audit;
   }) => ChannelAccountSnapshot | Promise<ChannelAccountSnapshot>;
   logSelfId?: (params: {
     account: ResolvedAccount;
@@ -165,11 +165,6 @@ export type ChannelLogoutResult = {
 
 export type ChannelLoginWithQrStartResult = {
   qrDataUrl?: string;
-  message: string;
-};
-
-export type ChannelLoginWithPhoneStartResult = {
-  pairingCode?: string;
   message: string;
 };
 
@@ -209,12 +204,6 @@ export type ChannelGatewayAdapter<ResolvedAccount = unknown> = {
     accountId?: string;
     timeoutMs?: number;
   }) => Promise<ChannelLoginWithQrWaitResult>;
-  loginWithPhoneStart?: (params: {
-    phoneNumber: string;
-    accountId?: string;
-    force?: boolean;
-    verbose?: boolean;
-  }) => Promise<ChannelLoginWithPhoneStartResult>;
   logoutAccount?: (ctx: ChannelLogoutContext<ResolvedAccount>) => Promise<ChannelLogoutResult>;
 };
 

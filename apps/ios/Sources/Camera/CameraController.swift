@@ -1,5 +1,5 @@
 import AVFoundation
-import AIProKit
+import AiproKit
 import Foundation
 
 actor CameraController {

@@ -1,8 +1,9 @@
 import Foundation
 
-let launchdLabel = "ro.aipro.mac"
-let gatewayLaunchdLabel = "ro.aipro.gateway"
+let launchdLabel = "ai.aipro.mac"
+let gatewayLaunchdLabel = "ai.aipro.gateway"
 let onboardingVersionKey = "aipro.onboardingVersion"
+let onboardingSeenKey = "aipro.onboardingSeen"
 let currentOnboardingVersion = 7
 let pauseDefaultsKey = "aipro.pauseEnabled"
 let iconAnimationsEnabledKey = "aipro.iconAnimationsEnabled"
@@ -11,7 +12,7 @@ let swabbleTriggersKey = "aipro.swabbleTriggers"
 let voiceWakeTriggerChimeKey = "aipro.voiceWakeTriggerChime"
 let voiceWakeSendChimeKey = "aipro.voiceWakeSendChime"
 let showDockIconKey = "aipro.showDockIcon"
-let defaultVoiceWakeTriggers = ["clawd", "claude"]
+let defaultVoiceWakeTriggers = ["aipro"]
 let voiceWakeMaxWords = 32
 let voiceWakeMaxWordLength = 64
 let voiceWakeMicKey = "aipro.voiceWakeMicID"
@@ -39,6 +40,7 @@ let modelCatalogPathKey = "aipro.modelCatalogPath"
 let modelCatalogReloadKey = "aipro.modelCatalogReload"
 let cliInstallPromptedVersionKey = "aipro.cliInstallPromptedVersion"
 let heartbeatsEnabledKey = "aipro.heartbeatsEnabled"
+let debugPaneEnabledKey = "aipro.debugPaneEnabled"
 let debugFileLogEnabledKey = "aipro.debug.fileLogEnabled"
 let appLogLevelKey = "aipro.debug.appLogLevel"
 let voiceWakeSupported: Bool = ProcessInfo.processInfo.operatingSystemVersion.majorVersion >= 26

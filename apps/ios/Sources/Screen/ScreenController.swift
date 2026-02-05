@@ -1,4 +1,4 @@
-import AIProKit
+import AiproKit
 import Observation
 import SwiftUI
 import WebKit
@@ -13,7 +13,7 @@ final class ScreenController {
     var urlString: String = ""
     var errorText: String?
 
-    /// Callback invoked when a aipro:// deep link is tapped in the canvas
+    /// Callback invoked when an aipro:// deep link is tapped in the canvas
     var onDeepLink: ((URL) -> Void)?
 
     /// Callback invoked when the user clicks an A2UI action (e.g. button) inside the canvas web UI.
@@ -124,7 +124,8 @@ final class ScreenController {
                 let res = try await self.eval(javaScript: """
                 (() => {
                   try {
-                    return !!globalThis.aiproA2UI && typeof globalThis.aiproA2UI.applyMessages === 'function';
+                    const host = globalThis.aiproA2UI;
+                    return !!host && typeof host.applyMessages === 'function';
                   } catch (_) { return false; }
                 })()
                 """)
@@ -229,7 +230,7 @@ final class ScreenController {
         subdirectory: String)
         -> URL?
     {
-        let bundle = AIProKitResources.bundle
+        let bundle = AiproKitResources.bundle
         return bundle.url(forResource: name, withExtension: ext, subdirectory: subdirectory)
             ?? bundle.url(forResource: name, withExtension: ext)
     }
@@ -357,8 +358,8 @@ private final class ScreenNavigationDelegate: NSObject, WKNavigationDelegate {
             return
         }
 
-        // Intercept aipro:// deep links
-        if url.scheme == "aipro" {
+        // Intercept aipro:// deep links.
+        if url.scheme?.lowercased() == "aipro" {
             decisionHandler(.cancel)
             self.controller?.onDeepLink?(url)
             return
@@ -387,13 +388,12 @@ private final class ScreenNavigationDelegate: NSObject, WKNavigationDelegate {
 
 private final class CanvasA2UIActionMessageHandler: NSObject, WKScriptMessageHandler {
     static let messageName = "aiproCanvasA2UIAction"
-    static let legacyMessageNames = ["canvas", "a2ui", "userAction", "action"]
-    static let handlerNames = [messageName] + legacyMessageNames
+    static let handlerNames = [messageName]
 
     weak var controller: ScreenController?
 
     func userContentController(_: WKUserContentController, didReceive message: WKScriptMessage) {
-        guard message.name == Self.messageName else { return }
+        guard Self.handlerNames.contains(message.name) else { return }
         guard let controller else { return }
 
         guard let url = message.webView?.url else { return }

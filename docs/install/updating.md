@@ -3,6 +3,7 @@ summary: "Updating AIPro safely (global install or source), plus rollback strate
 read_when:
   - Updating AIPro
   - Something breaks after an update
+title: "Updating"
 ---
 
 # Updating
@@ -20,6 +21,7 @@ curl -fsSL https://aipro.ro/install.sh | bash
 ```
 
 Notes:
+
 - Add `--no-onboard` if you don’t want the onboarding wizard to run again.
 - For **source installs**, use:
   ```bash
@@ -36,7 +38,7 @@ Notes:
 - Snapshot your tailoring:
   - Config: `~/.aipro/aipro.json`
   - Credentials: `~/.aipro/credentials/`
-  - Workspace: `~/clawd`
+  - Workspace: `~/.aipro/workspace`
 
 ## Update (global install)
 
@@ -49,6 +51,7 @@ npm i -g aipro@latest
 ```bash
 pnpm add -g aipro@latest
 ```
+
 We do **not** recommend Bun for the Gateway runtime (WhatsApp/Telegram bugs).
 
 To switch update channels (git + npm installs):
@@ -74,6 +77,7 @@ aipro health
 ```
 
 Notes:
+
 - If your Gateway runs as a service, `aipro gateway restart` is preferred over killing PIDs.
 - If you’re pinned to a specific version, see “Rollback / pinning” below.
 
@@ -86,6 +90,7 @@ aipro update
 ```
 
 It runs a safe-ish update flow:
+
 - Requires a clean worktree.
 - Switches to the selected channel (tag or branch).
 - Fetches + rebases against the configured upstream (dev channel).
@@ -97,9 +102,10 @@ If you installed via **npm/pnpm** (no git metadata), `aipro update` will try to 
 ## Update (Control UI / RPC)
 
 The Control UI has **Update & Restart** (RPC: `update.run`). It:
-1) Runs the same source-update flow as `aipro update` (git checkout only).
-2) Writes a restart sentinel with a structured report (stdout/stderr tail).
-3) Restarts the gateway and pings the last active session with the report.
+
+1. Runs the same source-update flow as `aipro update` (git checkout only).
+2. Writes a restart sentinel with a structured report (stdout/stderr tail).
+3. Restarts the gateway and pings the last active session with the report.
 
 If the rebase fails, the gateway aborts and restarts without applying the update.
 
@@ -125,6 +131,7 @@ aipro health
 ```
 
 Notes:
+
 - `pnpm build` matters when you run the packaged `aipro` binary ([`aipro.mjs`](https://github.com/aipro/aipro/blob/main/aipro.mjs)) or use Node to run `dist/`.
 - If you run from a repo checkout without a global install, use `pnpm aipro ...` for CLI commands.
 - If you run directly from TypeScript (`pnpm aipro ...`), a rebuild is usually unnecessary, but **config migrations still apply** → run doctor.
@@ -137,6 +144,7 @@ Doctor is the “safe update” command. It’s intentionally boring: repair + m
 Note: if you’re on a **source install** (git checkout), `aipro doctor` will offer to run `aipro update` first.
 
 Typical things it does:
+
 - Migrate deprecated config keys / legacy config file locations.
 - Audit DM policies and warn on risky “open” settings.
 - Check Gateway health and can offer to restart.
@@ -158,6 +166,7 @@ aipro logs --follow
 ```
 
 If you’re supervised:
+
 - macOS launchd (app-bundled LaunchAgent): `launchctl kickstart -k gui/$UID/bot.molt.gateway` (use `bot.molt.<profile>`; legacy `com.aipro.*` still works)
 - Linux systemd user service: `systemctl --user restart aipro-gateway[-<profile>].service`
 - Windows (WSL2): `systemctl --user restart aipro-gateway[-<profile>].service`
@@ -216,4 +225,4 @@ git pull
 
 - Run `aipro doctor` again and read the output carefully (it often tells you the fix).
 - Check: [Troubleshooting](/gateway/troubleshooting)
-- Ask in Discord: https://channels.discord.gg/clawd
+- Ask in Discord: https://discord.gg/clawd

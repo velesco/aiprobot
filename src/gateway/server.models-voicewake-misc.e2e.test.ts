@@ -4,12 +4,11 @@ import os from "node:os";
 import path from "node:path";
 import { afterAll, beforeAll, describe, expect, test } from "vitest";
 import { WebSocket } from "ws";
-
-import { getChannelPlugin } from "../channels/plugins/index.js";
 import type { ChannelOutboundAdapter } from "../channels/plugins/types.js";
+import type { PluginRegistry } from "../plugins/registry.js";
+import { getChannelPlugin } from "../channels/plugins/index.js";
 import { resolveCanvasHostUrl } from "../infra/canvas-host-url.js";
 import { GatewayLockError } from "../infra/gateway-lock.js";
-import type { PluginRegistry } from "../plugins/registry.js";
 import { getActivePluginRegistry, setActivePluginRegistry } from "../plugins/runtime.js";
 import { createOutboundTestPlugin } from "../test-utils/channel-plugins.js";
 import { GATEWAY_CLIENT_MODES, GATEWAY_CLIENT_NAMES } from "../utils/message-channel.js";
@@ -145,7 +144,7 @@ describe("gateway server models + voicewake", () => {
 
       const initial = await rpcReq<{ triggers: string[] }>(ws, "voicewake.get");
       expect(initial.ok).toBe(true);
-      expect(initial.payload?.triggers).toEqual(["clawd", "claude", "computer"]);
+      expect(initial.payload?.triggers).toEqual(["aipro", "claude", "computer"]);
 
       const changedP = onceMessage<{
         type: "event";
@@ -203,7 +202,7 @@ describe("gateway server models + voicewake", () => {
     const first = await firstEventP;
     expect(first.event).toBe("voicewake.changed");
     expect((first.payload as { triggers?: unknown } | undefined)?.triggers).toEqual([
-      "clawd",
+      "aipro",
       "claude",
       "computer",
     ]);
@@ -213,14 +212,14 @@ describe("gateway server models + voicewake", () => {
       (o) => o.type === "event" && o.event === "voicewake.changed",
     );
     const setRes = await rpcReq<{ triggers: string[] }>(ws, "voicewake.set", {
-      triggers: ["clawd", "computer"],
+      triggers: ["aipro", "computer"],
     });
     expect(setRes.ok).toBe(true);
 
     const broadcast = await broadcastP;
     expect(broadcast.event).toBe("voicewake.changed");
     expect((broadcast.payload as { triggers?: unknown } | undefined)?.triggers).toEqual([
-      "clawd",
+      "aipro",
       "computer",
     ]);
 
@@ -376,7 +375,9 @@ describe("gateway server misc", () => {
 
   test("auto-enables configured channel plugins on startup", async () => {
     const configPath = process.env.AIPRO_CONFIG_PATH;
-    if (!configPath) throw new Error("Missing AIPRO_CONFIG_PATH");
+    if (!configPath) {
+      throw new Error("Missing AIPRO_CONFIG_PATH");
+    }
     await fs.mkdir(path.dirname(configPath), { recursive: true });
     await fs.writeFile(
       configPath,

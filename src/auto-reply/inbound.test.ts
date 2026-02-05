@@ -1,13 +1,11 @@
 import fs from "node:fs/promises";
 import os from "node:os";
 import path from "node:path";
-
 import { describe, expect, it, vi } from "vitest";
-
 import type { AIProConfig } from "../config/config.js";
 import type { GroupKeyResolution } from "../config/sessions.js";
 import { createInboundDebouncer } from "./inbound-debounce.js";
-import { applyTemplate, type MsgContext, type TemplateContext } from "./templating.js";
+import { resolveGroupRequireMention } from "./reply/groups.js";
 import { finalizeInboundContext } from "./reply/inbound-context.js";
 import {
   buildInboundDedupeKey,
@@ -16,13 +14,13 @@ import {
 } from "./reply/inbound-dedupe.js";
 import { formatInboundBodyWithSenderMeta } from "./reply/inbound-sender-meta.js";
 import { normalizeInboundTextNewlines } from "./reply/inbound-text.js";
-import { resolveGroupRequireMention } from "./reply/groups.js";
 import {
   buildMentionRegexes,
   matchesMentionPatterns,
   normalizeMentionText,
 } from "./reply/mentions.js";
 import { initSessionState } from "./reply/session.js";
+import { applyTemplate, type MsgContext, type TemplateContext } from "./templating.js";
 
 describe("applyTemplate", () => {
   it("renders primitive values", () => {
@@ -305,22 +303,22 @@ describe("mention helpers", () => {
   it("builds regexes and skips invalid patterns", () => {
     const regexes = buildMentionRegexes({
       messages: {
-        groupChat: { mentionPatterns: ["\\bclawd\\b", "(invalid"] },
+        groupChat: { mentionPatterns: ["\\baipro\\b", "(invalid"] },
       },
     });
     expect(regexes).toHaveLength(1);
-    expect(regexes[0]?.test("clawd")).toBe(true);
+    expect(regexes[0]?.test("aipro")).toBe(true);
   });
 
   it("normalizes zero-width characters", () => {
-    expect(normalizeMentionText("cl\u200bawd")).toBe("clawd");
+    expect(normalizeMentionText("open\u200bclaw")).toBe("aipro");
   });
 
   it("matches patterns case-insensitively", () => {
     const regexes = buildMentionRegexes({
-      messages: { groupChat: { mentionPatterns: ["\\bclawd\\b"] } },
+      messages: { groupChat: { mentionPatterns: ["\\baipro\\b"] } },
     });
-    expect(matchesMentionPatterns("CLAWD: hi", regexes)).toBe(true);
+    expect(matchesMentionPatterns("AIPRO: hi", regexes)).toBe(true);
   });
 
   it("uses per-agent mention patterns when configured", () => {

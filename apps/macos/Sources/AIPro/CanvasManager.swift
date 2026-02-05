@@ -1,6 +1,6 @@
 import AppKit
-import AIProIPC
-import AIProKit
+import AiproIPC
+import AiproKit
 import Foundation
 import OSLog
 
@@ -8,7 +8,7 @@ import OSLog
 final class CanvasManager {
     static let shared = CanvasManager()
 
-    private static let logger = Logger(subsystem: "ro.aipro", category: "CanvasManager")
+    private static let logger = Logger(subsystem: "ai.aipro", category: "CanvasManager")
 
     private var panelController: CanvasWindowController?
     private var panelSessionKey: String?

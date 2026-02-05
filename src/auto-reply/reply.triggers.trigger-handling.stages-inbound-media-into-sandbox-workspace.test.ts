@@ -1,8 +1,8 @@
 import fs from "node:fs/promises";
 import { basename, join } from "node:path";
 import { afterEach, describe, expect, it, vi } from "vitest";
-import { withTempHome as withTempHomeBase } from "../../test/helpers/temp-home.js";
 import type { MsgContext, TemplateContext } from "./templating.js";
+import { withTempHome as withTempHomeBase } from "../../test/helpers/temp-home.js";
 
 const sandboxMocks = vi.hoisted(() => ({
   ensureSandboxWorkspaceForSession: vi.fn(),
@@ -54,7 +54,7 @@ describe("stageSandboxMedia", () => {
           agents: {
             defaults: {
               model: "anthropic/claude-opus-4-5",
-              workspace: join(home, "clawd"),
+              workspace: join(home, "aipro"),
               sandbox: {
                 mode: "non-main",
                 workspaceRoot: join(home, "sandboxes"),
@@ -65,7 +65,7 @@ describe("stageSandboxMedia", () => {
           session: { store: join(home, "sessions.json") },
         },
         sessionKey: "agent:main:main",
-        workspaceDir: join(home, "clawd"),
+        workspaceDir: join(home, "aipro"),
       });
 
       const stagedPath = `media/inbound/${basename(mediaPath)}`;

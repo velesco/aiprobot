@@ -45,7 +45,7 @@ final class GatewayProcessManager {
     #if DEBUG
     private var testingConnection: GatewayConnection?
     #endif
-    private let logger = Logger(subsystem: "ro.aipro", category: "gateway.process")
+    private let logger = Logger(subsystem: "ai.aipro", category: "gateway.process")
 
     private let logLimit = 20000 // characters to keep in-memory
     private let environmentRefreshMinInterval: TimeInterval = 30
@@ -270,8 +270,8 @@ final class GatewayProcessManager {
         let lower = message.lowercased()
         if self.isGatewayAuthFailure(error) {
             return """
-            Gateway on port \(port) rejected auth. Set gateway.auth.token (or AIPRO_GATEWAY_TOKEN) \
-            to match the running gateway (or clear it on the gateway) and retry.
+            Gateway on port \(port) rejected auth. Set gateway.auth.token to match the running gateway \
+            (or clear it on the gateway) and retry.
             """
         }
         if lower.contains("protocol mismatch") {

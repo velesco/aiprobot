@@ -3,15 +3,15 @@
 import PackageDescription
 
 let package = Package(
-    name: "AIProKit",
+    name: "AiproKit",
     platforms: [
         .iOS(.v18),
         .macOS(.v15),
     ],
     products: [
-        .library(name: "AIProProtocol", targets: ["AIProProtocol"]),
-        .library(name: "AIProKit", targets: ["AIProKit"]),
-        .library(name: "AIProChatUI", targets: ["AIProChatUI"]),
+        .library(name: "AiproProtocol", targets: ["AiproProtocol"]),
+        .library(name: "AiproKit", targets: ["AiproKit"]),
+        .library(name: "AiproChatUI", targets: ["AiproChatUI"]),
     ],
     dependencies: [
         .package(url: "https://github.com/steipete/ElevenLabsKit", exact: "0.1.0"),
@@ -19,18 +19,18 @@ let package = Package(
     ],
     targets: [
         .target(
-            name: "AIProProtocol",
-            path: "Sources/AIProProtocol",
+            name: "AiproProtocol",
+            path: "Sources/AiproProtocol",
             swiftSettings: [
                 .enableUpcomingFeature("StrictConcurrency"),
             ]),
         .target(
-            name: "AIProKit",
+            name: "AiproKit",
             dependencies: [
-                "AIProProtocol",
+                "AiproProtocol",
                 .product(name: "ElevenLabsKit", package: "ElevenLabsKit"),
             ],
-            path: "Sources/AIProKit",
+            path: "Sources/AiproKit",
             resources: [
                 .process("Resources"),
             ],
@@ -38,22 +38,22 @@ let package = Package(
                 .enableUpcomingFeature("StrictConcurrency"),
             ]),
         .target(
-            name: "AIProChatUI",
+            name: "AiproChatUI",
             dependencies: [
-                "AIProKit",
+                "AiproKit",
                 .product(
                     name: "Textual",
                     package: "textual",
                     condition: .when(platforms: [.macOS, .iOS])),
             ],
-            path: "Sources/AIProChatUI",
+            path: "Sources/AiproChatUI",
             swiftSettings: [
                 .enableUpcomingFeature("StrictConcurrency"),
             ]),
         .testTarget(
-            name: "AIProKitTests",
-            dependencies: ["AIProKit", "AIProChatUI"],
-            path: "Tests/AIProKitTests",
+            name: "AiproKitTests",
+            dependencies: ["AiproKit", "AiproChatUI"],
+            path: "Tests/AiproKitTests",
             swiftSettings: [
                 .enableUpcomingFeature("StrictConcurrency"),
                 .enableExperimentalFeature("SwiftTesting"),

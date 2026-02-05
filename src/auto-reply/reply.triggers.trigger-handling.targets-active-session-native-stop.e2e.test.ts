@@ -50,8 +50,8 @@ vi.mock("../agents/model-catalog.js", () => modelCatalogMocks);
 
 import { abortEmbeddedPiRun, runEmbeddedPiAgent } from "../agents/pi-embedded.js";
 import { loadSessionStore } from "../config/sessions.js";
-import { enqueueFollowupRun, getFollowupQueueDepth, type FollowupRun } from "./reply/queue.js";
 import { getReplyFromConfig } from "./reply.js";
+import { enqueueFollowupRun, getFollowupQueueDepth, type FollowupRun } from "./reply/queue.js";
 
 const MAIN_SESSION_KEY = "agent:main:main";
 
@@ -79,7 +79,7 @@ function makeCfg(home: string) {
     agents: {
       defaults: {
         model: "anthropic/claude-opus-4-5",
-        workspace: join(home, "clawd"),
+        workspace: join(home, "aipro"),
       },
     },
     channels: {
@@ -249,7 +249,7 @@ describe("trigger handling", () => {
         agents: {
           defaults: {
             model: "anthropic/claude-opus-4-5",
-            workspace: join(home, "clawd"),
+            workspace: join(home, "aipro"),
           },
           list: [{ id: "coding", model: "minimax/MiniMax-M2.1" }],
         },

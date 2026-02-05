@@ -21,16 +21,21 @@ if ! docker compose version >/dev/null 2>&1; then
   exit 1
 fi
 
-mkdir -p "${AIPRO_CONFIG_DIR:-$HOME/.aipro}"
-mkdir -p "${AIPRO_WORKSPACE_DIR:-$HOME/clawd}"
+AIPRO_CONFIG_DIR="${AIPRO_CONFIG_DIR:-$HOME/.aipro}"
+AIPRO_WORKSPACE_DIR="${AIPRO_WORKSPACE_DIR:-$HOME/.aipro/workspace}"
 
-export AIPRO_CONFIG_DIR="${AIPRO_CONFIG_DIR:-$HOME/.aipro}"
-export AIPRO_WORKSPACE_DIR="${AIPRO_WORKSPACE_DIR:-$HOME/clawd}"
+mkdir -p "$AIPRO_CONFIG_DIR"
+mkdir -p "$AIPRO_WORKSPACE_DIR"
+
+export AIPRO_CONFIG_DIR
+export AIPRO_WORKSPACE_DIR
 export AIPRO_GATEWAY_PORT="${AIPRO_GATEWAY_PORT:-18789}"
 export AIPRO_BRIDGE_PORT="${AIPRO_BRIDGE_PORT:-18790}"
 export AIPRO_GATEWAY_BIND="${AIPRO_GATEWAY_BIND:-lan}"
 export AIPRO_IMAGE="$IMAGE_NAME"
 export AIPRO_DOCKER_APT_PACKAGES="${AIPRO_DOCKER_APT_PACKAGES:-}"
+export AIPRO_EXTRA_MOUNTS="$EXTRA_MOUNTS"
+export AIPRO_HOME_VOLUME="$HOME_VOLUME_NAME"
 
 if [[ -z "${AIPRO_GATEWAY_TOKEN:-}" ]]; then
   if command -v openssl >/dev/null 2>&1; then
@@ -63,7 +68,7 @@ YAML
   if [[ -n "$home_volume" ]]; then
     printf '      - %s:/home/node\n' "$home_volume" >>"$EXTRA_COMPOSE_FILE"
     printf '      - %s:/home/node/.aipro\n' "$AIPRO_CONFIG_DIR" >>"$EXTRA_COMPOSE_FILE"
-    printf '      - %s:/home/node/clawd\n' "$AIPRO_WORKSPACE_DIR" >>"$EXTRA_COMPOSE_FILE"
+    printf '      - %s:/home/node/.aipro/workspace\n' "$AIPRO_WORKSPACE_DIR" >>"$EXTRA_COMPOSE_FILE"
   fi
 
   for mount in "${mounts[@]}"; do
@@ -78,7 +83,7 @@ YAML
   if [[ -n "$home_volume" ]]; then
     printf '      - %s:/home/node\n' "$home_volume" >>"$EXTRA_COMPOSE_FILE"
     printf '      - %s:/home/node/.aipro\n' "$AIPRO_CONFIG_DIR" >>"$EXTRA_COMPOSE_FILE"
-    printf '      - %s:/home/node/clawd\n' "$AIPRO_WORKSPACE_DIR" >>"$EXTRA_COMPOSE_FILE"
+    printf '      - %s:/home/node/.aipro/workspace\n' "$AIPRO_WORKSPACE_DIR" >>"$EXTRA_COMPOSE_FILE"
   fi
 
   for mount in "${mounts[@]}"; do
@@ -186,12 +191,12 @@ docker compose "${COMPOSE_ARGS[@]}" run --rm aipro-cli onboard --no-install-daem
 echo ""
 echo "==> Provider setup (optional)"
 echo "WhatsApp (QR):"
-echo "  ${COMPOSE_HINT} run --rm aipro-cli providers login"
+echo "  ${COMPOSE_HINT} run --rm aipro-cli channels login"
 echo "Telegram (bot token):"
-echo "  ${COMPOSE_HINT} run --rm aipro-cli providers add --provider telegram --token <token>"
+echo "  ${COMPOSE_HINT} run --rm aipro-cli channels add --channel telegram --token <token>"
 echo "Discord (bot token):"
-echo "  ${COMPOSE_HINT} run --rm aipro-cli providers add --provider discord --token <token>"
-echo "Docs: https://docs.aipro.ro/providers"
+echo "  ${COMPOSE_HINT} run --rm aipro-cli channels add --channel discord --token <token>"
+echo "Docs: https://docs.aipro.ro/channels"
 
 echo ""
 echo "==> Starting gateway"

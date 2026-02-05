@@ -1,9 +1,14 @@
+import fs from "node:fs";
 import os from "node:os";
 import path from "node:path";
 import type { AIProConfig } from "./types.js";
 
 /**
  * Nix mode detection: When AIPRO_NIX_MODE=1, the gateway is running under Nix.
+ * In this mode:
+ * - No auto-install flows should be attempted
+ * - Missing dependencies should produce actionable Nix-specific error messages
+ * - Config is managed externally (read-only from Nix perspective)
  */
 export function resolveIsNixMode(env: NodeJS.ProcessEnv = process.env): boolean {
   return env.AIPRO_NIX_MODE === "1";
@@ -11,31 +16,29 @@ export function resolveIsNixMode(env: NodeJS.ProcessEnv = process.env): boolean 
 
 export const isNixMode = resolveIsNixMode();
 
-const STATE_DIRNAME = ".aipro";
+const LEGACY_STATE_DIRNAMES = [".aipro", ".aipro", ".moldbot"] as const;
+const NEW_STATE_DIRNAME = ".aipro";
 const CONFIG_FILENAME = "aipro.json";
+const LEGACY_CONFIG_FILENAMES = ["aipro.json", "aipro.json", "moldbot.json"] as const;
 
-function stateDir(homedir: () => string = os.homedir): string {
-  return path.join(homedir(), STATE_DIRNAME);
+function legacyStateDirs(homedir: () => string = os.homedir): string[] {
+  return LEGACY_STATE_DIRNAMES.map((dir) => path.join(homedir(), dir));
 }
 
-function resolveUserPath(input: string): string {
-  const trimmed = input.trim();
-  if (!trimmed) return trimmed;
-  if (trimmed.startsWith("~")) {
-    const expanded = trimmed.replace(/^~(?=$|[\\/])/, os.homedir());
-    return path.resolve(expanded);
-  }
-  return path.resolve(trimmed);
+function newStateDir(homedir: () => string = os.homedir): string {
+  return path.join(homedir(), NEW_STATE_DIRNAME);
 }
 
-/** @deprecated Use resolveStateDir instead */
 export function resolveLegacyStateDir(homedir: () => string = os.homedir): string {
-  return stateDir(homedir);
+  return legacyStateDirs(homedir)[0] ?? newStateDir(homedir);
 }
 
-/** @deprecated Use resolveStateDir instead */
+export function resolveLegacyStateDirs(homedir: () => string = os.homedir): string[] {
+  return legacyStateDirs(homedir);
+}
+
 export function resolveNewStateDir(homedir: () => string = os.homedir): string {
-  return stateDir(homedir);
+  return newStateDir(homedir);
 }
 
 /**
@@ -47,71 +50,154 @@ export function resolveStateDir(
   env: NodeJS.ProcessEnv = process.env,
   homedir: () => string = os.homedir,
 ): string {
-  const override = env.AIPRO_STATE_DIR?.trim();
-  if (override) return resolveUserPath(override);
-  return stateDir(homedir);
+  const override = env.AIPRO_STATE_DIR?.trim() || env.AIPRO_STATE_DIR?.trim();
+  if (override) {
+    return resolveUserPath(override);
+  }
+  const newDir = newStateDir(homedir);
+  const legacyDirs = legacyStateDirs(homedir);
+  const hasNew = fs.existsSync(newDir);
+  if (hasNew) {
+    return newDir;
+  }
+  const existingLegacy = legacyDirs.find((dir) => {
+    try {
+      return fs.existsSync(dir);
+    } catch {
+      return false;
+    }
+  });
+  if (existingLegacy) {
+    return existingLegacy;
+  }
+  return newDir;
+}
+
+function resolveUserPath(input: string): string {
+  const trimmed = input.trim();
+  if (!trimmed) {
+    return trimmed;
+  }
+  if (trimmed.startsWith("~")) {
+    const expanded = trimmed.replace(/^~(?=$|[\\/])/, os.homedir());
+    return path.resolve(expanded);
+  }
+  return path.resolve(trimmed);
 }
 
 export const STATE_DIR = resolveStateDir();
 
 /**
- * Config file path.
+ * Config file path (JSON5).
  * Can be overridden via AIPRO_CONFIG_PATH.
- * Default: ~/.aipro/aipro.json
+ * Default: ~/.aipro/aipro.json (or $AIPRO_STATE_DIR/aipro.json)
  */
 export function resolveCanonicalConfigPath(
   env: NodeJS.ProcessEnv = process.env,
-  stateDirectory: string = resolveStateDir(env, os.homedir),
+  stateDir: string = resolveStateDir(env, os.homedir),
 ): string {
-  const override = env.AIPRO_CONFIG_PATH?.trim();
-  if (override) return resolveUserPath(override);
-  return path.join(stateDirectory, CONFIG_FILENAME);
+  const override = env.AIPRO_CONFIG_PATH?.trim() || env.AIPRO_CONFIG_PATH?.trim();
+  if (override) {
+    return resolveUserPath(override);
+  }
+  return path.join(stateDir, CONFIG_FILENAME);
 }
 
 /**
- * Resolve the active config path.
+ * Resolve the active config path by preferring existing config candidates
+ * before falling back to the canonical path.
  */
 export function resolveConfigPathCandidate(
   env: NodeJS.ProcessEnv = process.env,
   homedir: () => string = os.homedir,
 ): string {
-  const override = env.AIPRO_CONFIG_PATH?.trim();
-  if (override) return resolveUserPath(override);
-  return path.join(resolveStateDir(env, homedir), CONFIG_FILENAME);
+  const candidates = resolveDefaultConfigCandidates(env, homedir);
+  const existing = candidates.find((candidate) => {
+    try {
+      return fs.existsSync(candidate);
+    } catch {
+      return false;
+    }
+  });
+  if (existing) {
+    return existing;
+  }
+  return resolveCanonicalConfigPath(env, resolveStateDir(env, homedir));
 }
 
 /**
- * Active config path.
+ * Active config path (prefers existing config files).
  */
 export function resolveConfigPath(
   env: NodeJS.ProcessEnv = process.env,
-  stateDirectory: string = resolveStateDir(env, os.homedir),
-  _homedir: () => string = os.homedir,
+  stateDir: string = resolveStateDir(env, os.homedir),
+  homedir: () => string = os.homedir,
 ): string {
   const override = env.AIPRO_CONFIG_PATH?.trim();
-  if (override) return resolveUserPath(override);
-  return path.join(stateDirectory, CONFIG_FILENAME);
+  if (override) {
+    return resolveUserPath(override);
+  }
+  const stateOverride = env.AIPRO_STATE_DIR?.trim();
+  const candidates = [
+    path.join(stateDir, CONFIG_FILENAME),
+    ...LEGACY_CONFIG_FILENAMES.map((name) => path.join(stateDir, name)),
+  ];
+  const existing = candidates.find((candidate) => {
+    try {
+      return fs.existsSync(candidate);
+    } catch {
+      return false;
+    }
+  });
+  if (existing) {
+    return existing;
+  }
+  if (stateOverride) {
+    return path.join(stateDir, CONFIG_FILENAME);
+  }
+  const defaultStateDir = resolveStateDir(env, homedir);
+  if (path.resolve(stateDir) === path.resolve(defaultStateDir)) {
+    return resolveConfigPathCandidate(env, homedir);
+  }
+  return path.join(stateDir, CONFIG_FILENAME);
 }
 
 export const CONFIG_PATH = resolveConfigPathCandidate();
 
 /**
- * Resolve config path candidates.
+ * Resolve default config path candidates across default locations.
+ * Order: explicit config path → state-dir-derived paths → new default.
  */
 export function resolveDefaultConfigCandidates(
   env: NodeJS.ProcessEnv = process.env,
   homedir: () => string = os.homedir,
 ): string[] {
-  const override = env.AIPRO_CONFIG_PATH?.trim();
-  if (override) return [resolveUserPath(override)];
-  return [path.join(resolveStateDir(env, homedir), CONFIG_FILENAME)];
+  const explicit = env.AIPRO_CONFIG_PATH?.trim() || env.AIPRO_CONFIG_PATH?.trim();
+  if (explicit) {
+    return [resolveUserPath(explicit)];
+  }
+
+  const candidates: string[] = [];
+  const aiproStateDir = env.AIPRO_STATE_DIR?.trim() || env.AIPRO_STATE_DIR?.trim();
+  if (aiproStateDir) {
+    const resolved = resolveUserPath(aiproStateDir);
+    candidates.push(path.join(resolved, CONFIG_FILENAME));
+    candidates.push(...LEGACY_CONFIG_FILENAMES.map((name) => path.join(resolved, name)));
+  }
+
+  const defaultDirs = [newStateDir(homedir), ...legacyStateDirs(homedir)];
+  for (const dir of defaultDirs) {
+    candidates.push(path.join(dir, CONFIG_FILENAME));
+    candidates.push(...LEGACY_CONFIG_FILENAMES.map((name) => path.join(dir, name)));
+  }
+  return candidates;
 }
 
 export const DEFAULT_GATEWAY_PORT = 18789;
 
 /**
  * Gateway lock directory (ephemeral).
- * Default: os.tmpdir()/aipro-<uid>
+ * Default: os.tmpdir()/aipro-<uid> (uid suffix when available).
  */
 export function resolveGatewayLockDir(tmpdir: () => string = os.tmpdir): string {
   const base = tmpdir();
@@ -124,36 +210,45 @@ const OAUTH_FILENAME = "oauth.json";
 
 /**
  * OAuth credentials storage directory.
- * Default: ~/.aipro/credentials
+ *
+ * Precedence:
+ * - `AIPRO_OAUTH_DIR` (explicit override)
+ * - `$*_STATE_DIR/credentials` (canonical server/default)
  */
 export function resolveOAuthDir(
   env: NodeJS.ProcessEnv = process.env,
-  stateDirectory: string = resolveStateDir(env, os.homedir),
+  stateDir: string = resolveStateDir(env, os.homedir),
 ): string {
   const override = env.AIPRO_OAUTH_DIR?.trim();
-  if (override) return resolveUserPath(override);
-  return path.join(stateDirectory, "credentials");
+  if (override) {
+    return resolveUserPath(override);
+  }
+  return path.join(stateDir, "credentials");
 }
 
 export function resolveOAuthPath(
   env: NodeJS.ProcessEnv = process.env,
-  stateDirectory: string = resolveStateDir(env, os.homedir),
+  stateDir: string = resolveStateDir(env, os.homedir),
 ): string {
-  return path.join(resolveOAuthDir(env, stateDirectory), OAUTH_FILENAME);
+  return path.join(resolveOAuthDir(env, stateDir), OAUTH_FILENAME);
 }
 
 export function resolveGatewayPort(
   cfg?: AIProConfig,
   env: NodeJS.ProcessEnv = process.env,
 ): number {
-  const envRaw = env.AIPRO_GATEWAY_PORT?.trim();
+  const envRaw = env.AIPRO_GATEWAY_PORT?.trim() || env.AIPRO_GATEWAY_PORT?.trim();
   if (envRaw) {
     const parsed = Number.parseInt(envRaw, 10);
-    if (Number.isFinite(parsed) && parsed > 0) return parsed;
+    if (Number.isFinite(parsed) && parsed > 0) {
+      return parsed;
+    }
   }
   const configPort = cfg?.gateway?.port;
   if (typeof configPort === "number" && Number.isFinite(configPort)) {
-    if (configPort > 0) return configPort;
+    if (configPort > 0) {
+      return configPort;
+    }
   }
   return DEFAULT_GATEWAY_PORT;
 }

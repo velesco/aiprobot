@@ -1,4 +1,4 @@
-import AIProKit
+import AiproKit
 import Network
 import Testing
 @testable import AIPro

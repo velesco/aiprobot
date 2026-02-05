@@ -2,6 +2,7 @@
 summary: "CLI reference for `aipro config` (get/set/unset config values)"
 read_when:
   - You want to read or edit config non-interactively
+title: "config"
 ---
 
 # `aipro config`

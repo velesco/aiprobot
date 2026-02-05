@@ -1,10 +1,10 @@
 import { describe, expect, it } from "vitest";
-
-import { renderWideAreaGatewayZoneText, WIDE_AREA_DISCOVERY_DOMAIN } from "./widearea-dns.js";
+import { renderWideAreaGatewayZoneText } from "./widearea-dns.js";
 
 describe("wide-area DNS-SD zone rendering", () => {
-  it("renders a aipro.internal zone with gateway PTR/SRV/TXT records", () => {
+  it("renders a zone with gateway PTR/SRV/TXT records", () => {
     const txt = renderWideAreaGatewayZoneText({
+      domain: "aipro.internal.",
       serial: 2025121701,
       gatewayPort: 18789,
       displayName: "Mac Studio (AIPro)",
@@ -16,7 +16,7 @@ describe("wide-area DNS-SD zone rendering", () => {
       cliPath: "/opt/homebrew/bin/aipro",
     });
 
-    expect(txt).toContain(`$ORIGIN ${WIDE_AREA_DISCOVERY_DOMAIN}`);
+    expect(txt).toContain(`$ORIGIN aipro.internal.`);
     expect(txt).toContain(`studio-london IN A 100.123.224.76`);
     expect(txt).toContain(`studio-london IN AAAA fd7a:115c:a1e0::8801:e04c`);
     expect(txt).toContain(`_aipro-gw._tcp IN PTR studio-london._aipro-gw._tcp`);
@@ -29,6 +29,7 @@ describe("wide-area DNS-SD zone rendering", () => {
 
   it("includes tailnetDns when provided", () => {
     const txt = renderWideAreaGatewayZoneText({
+      domain: "aipro.internal.",
       serial: 2025121701,
       gatewayPort: 18789,
       displayName: "Mac Studio (AIPro)",

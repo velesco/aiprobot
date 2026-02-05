@@ -1,4 +1,4 @@
-import AIProIPC
+import AiproIPC
 import Foundation
 
 extension OnboardingView {

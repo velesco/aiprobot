@@ -246,10 +246,6 @@ vi.mock("../daemon/service.js", () => ({
   }),
 }));
 
-vi.mock("../telegram/pairing-store.js", () => ({
-  readTelegramAllowFromStore: vi.fn().mockResolvedValue([]),
-}));
-
 vi.mock("../pairing/pairing-store.js", () => ({
   readChannelAllowFromStore: vi.fn().mockResolvedValue([]),
   upsertChannelPairingRequest: vi.fn().mockResolvedValue({ code: "000000", created: false }),
@@ -348,7 +344,7 @@ describe("doctor command", () => {
           list: [
             {
               id: "work",
-              workspace: "~/clawd-work",
+              workspace: "~/aipro-work",
               sandbox: {
                 mode: "all",
                 scope: "shared",
@@ -377,7 +373,9 @@ describe("doctor command", () => {
 
     expect(
       note.mock.calls.some(([message, title]) => {
-        if (title !== "Sandbox" || typeof message !== "string") return false;
+        if (title !== "Sandbox" || typeof message !== "string") {
+          return false;
+        }
         const normalized = message.replace(/\s+/g, " ").trim();
         return (
           normalized.includes('agents.list (id "work") sandbox docker') &&
@@ -387,7 +385,7 @@ describe("doctor command", () => {
     ).toBe(true);
   }, 30_000);
 
-  it("warns when extra workspace directories exist", async () => {
+  it("does not warn when only the active workspace is present", async () => {
     readConfigFileSnapshot.mockResolvedValue({
       path: "/tmp/aipro.json",
       exists: true,
@@ -395,7 +393,7 @@ describe("doctor command", () => {
       parsed: {},
       valid: true,
       config: {
-        agents: { defaults: { workspace: "/Users/steipete/clawd" } },
+        agents: { defaults: { workspace: "/Users/steipete/aipro" } },
       },
       issues: [],
       legacyIssues: [],
@@ -407,8 +405,9 @@ describe("doctor command", () => {
     const legacyPath = path.join("/Users/steipete", "aipro");
     const legacyAgentsPath = path.join(legacyPath, "AGENTS.md");
     const existsSpy = vi.spyOn(fs, "existsSync").mockImplementation((value) => {
-      if (value === "/Users/steipete/aipro" || value === legacyPath || value === legacyAgentsPath)
+      if (value === "/Users/steipete/aipro" || value === legacyPath || value === legacyAgentsPath) {
         return true;
+      }
       return realExists(value as never);
     });
 
@@ -421,12 +420,7 @@ describe("doctor command", () => {
 
     await doctorCommand(runtime, { nonInteractive: true });
 
-    expect(
-      note.mock.calls.some(
-        ([message, title]) =>
-          title === "Extra workspace" && typeof message === "string" && message.includes("aipro"),
-      ),
-    ).toBe(true);
+    expect(note.mock.calls.some(([_, title]) => title === "Extra workspace")).toBe(false);
 
     homedirSpy.mockRestore();
     existsSpy.mockRestore();

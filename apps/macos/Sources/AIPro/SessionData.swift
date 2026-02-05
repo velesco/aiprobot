@@ -246,8 +246,8 @@ enum SessionLoader {
     static let fallbackContextTokens = 200_000
 
     static let defaultStorePath = standardize(
-        FileManager().homeDirectoryForCurrentUser
-            .appendingPathComponent(".aipro/sessions/sessions.json").path)
+        AIProPaths.stateDirURL
+            .appendingPathComponent("sessions/sessions.json").path)
 
     static func loadSnapshot(
         activeMinutes: Int? = nil,

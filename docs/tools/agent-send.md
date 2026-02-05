@@ -2,7 +2,9 @@
 summary: "Direct `aipro agent` CLI runs (with optional delivery)"
 read_when:
   - Adding or modifying the agent CLI entrypoint
+title: "Agent Send"
 ---
+
 # `aipro agent` (direct agent runs)
 
 `aipro agent` runs a single agent turn without needing an inbound chat message.

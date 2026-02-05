@@ -1,6 +1,5 @@
 import type { AIProPluginApi } from "aipro/plugin-sdk";
 import { emptyPluginConfigSchema } from "aipro/plugin-sdk";
-
 import { nextcloudTalkPlugin } from "./src/channel.js";
 import { setNextcloudTalkRuntime } from "./src/runtime.js";
 

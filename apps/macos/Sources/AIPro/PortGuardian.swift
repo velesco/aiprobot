@@ -22,7 +22,7 @@ actor PortGuardian {
     }
 
     private var records: [Record] = []
-    private let logger = Logger(subsystem: "ro.aipro", category: "portguard")
+    private let logger = Logger(subsystem: "ai.aipro", category: "portguard")
     private nonisolated static let appSupportDir: URL = {
         let base = FileManager().urls(for: .applicationSupportDirectory, in: .userDomainMask).first!
         return base.appendingPathComponent("AIPro", isDirectory: true)
@@ -359,7 +359,7 @@ actor PortGuardian {
         case .local:
             // The gateway daemon may listen as `aipro` or as its runtime (`node`, `bun`, etc).
             if full.contains("gateway-daemon") { return true }
-            // If args are unavailable, treat a aipro listener as expected.
+            // If args are unavailable, treat a CLI listener as expected.
             if cmd.contains("aipro"), full == cmd { return true }
             return false
         case .unconfigured:

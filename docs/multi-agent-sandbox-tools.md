@@ -10,10 +10,12 @@ status: active
 ## Overview
 
 Each agent in a multi-agent setup can now have its own:
+
 - **Sandbox configuration** (`agents.list[].sandbox` overrides `agents.defaults.sandbox`)
 - **Tool restrictions** (`tools.allow` / `tools.deny`, plus `agents.list[].tools`)
 
 This allows you to run multiple agents with different security profiles:
+
 - Personal assistant with full access
 - Family/work agents with restricted tools
 - Public-facing agents in sandboxes
@@ -47,13 +49,13 @@ For debugging “why is this blocked?”, see [Sandbox vs Tool Policy vs Elevate
         "id": "main",
         "default": true,
         "name": "Personal Assistant",
-        "workspace": "~/clawd",
+        "workspace": "~/.aipro/workspace",
         "sandbox": { "mode": "off" }
       },
       {
         "id": "family",
         "name": "Family Bot",
-        "workspace": "~/clawd-family",
+        "workspace": "~/.aipro/workspace-family",
         "sandbox": {
           "mode": "all",
           "scope": "agent"
@@ -82,6 +84,7 @@ For debugging “why is this blocked?”, see [Sandbox vs Tool Policy vs Elevate
 ```
 
 **Result:**
+
 - `main` agent: Runs on host, full tool access
 - `family` agent: Runs in Docker (one container per agent), only `read` tool
 
@@ -95,12 +98,12 @@ For debugging “why is this blocked?”, see [Sandbox vs Tool Policy vs Elevate
     "list": [
       {
         "id": "personal",
-        "workspace": "~/clawd-personal",
+        "workspace": "~/.aipro/workspace-personal",
         "sandbox": { "mode": "off" }
       },
       {
         "id": "work",
-        "workspace": "~/clawd-work",
+        "workspace": "~/.aipro/workspace-work",
         "sandbox": {
           "mode": "all",
           "scope": "shared",
@@ -135,6 +138,7 @@ For debugging “why is this blocked?”, see [Sandbox vs Tool Policy vs Elevate
 ```
 
 **Result:**
+
 - default agents get coding tools
 - `support` agent is messaging-only (+ Slack tool)
 
@@ -147,23 +151,23 @@ For debugging “why is this blocked?”, see [Sandbox vs Tool Policy vs Elevate
   "agents": {
     "defaults": {
       "sandbox": {
-        "mode": "non-main",  // Global default
+        "mode": "non-main", // Global default
         "scope": "session"
       }
     },
     "list": [
       {
         "id": "main",
-        "workspace": "~/clawd",
+        "workspace": "~/.aipro/workspace",
         "sandbox": {
-          "mode": "off"  // Override: main never sandboxed
+          "mode": "off" // Override: main never sandboxed
         }
       },
       {
         "id": "public",
-        "workspace": "~/clawd-public",
+        "workspace": "~/.aipro/workspace-public",
         "sandbox": {
-          "mode": "all",  // Override: public always sandboxed
+          "mode": "all", // Override: public always sandboxed
           "scope": "agent"
         },
         "tools": {
@@ -183,7 +187,9 @@ For debugging “why is this blocked?”, see [Sandbox vs Tool Policy vs Elevate
 When both global (`agents.defaults.*`) and agent-specific (`agents.list[].*`) configs exist:
 
 ### Sandbox Config
+
 Agent-specific settings override global:
+
 ```
 agents.list[].sandbox.mode > agents.defaults.sandbox.mode
 agents.list[].sandbox.scope > agents.defaults.sandbox.scope
@@ -195,10 +201,13 @@ agents.list[].sandbox.prune.* > agents.defaults.sandbox.prune.*
 ```
 
 **Notes:**
+
 - `agents.list[].sandbox.{docker,browser,prune}.*` overrides `agents.defaults.sandbox.{docker,browser,prune}.*` for that agent (ignored when sandbox scope resolves to `"shared"`).
 
 ### Tool Restrictions
+
 The filtering order is:
+
 1. **Tool profile** (`tools.profile` or `agents.list[].tools.profile`)
 2. **Provider tool profile** (`tools.byProvider[provider].profile` or `agents.list[].tools.byProvider[provider].profile`)
 3. **Global tool policy** (`tools.allow` / `tools.deny`)
@@ -228,9 +237,11 @@ Tool policies (global, agent, sandbox) support `group:*` entries that expand to 
 - `group:aipro`: all built-in AIPro tools (excludes provider plugins)
 
 ### Elevated Mode
+
 `tools.elevated` is the global baseline (sender-based allowlist). `agents.list[].tools.elevated` can further restrict elevated for specific agents (both must allow).
 
 Mitigation patterns:
+
 - Deny `exec` for untrusted agents (`agents.list[].tools.deny: ["exec"]`)
 - Avoid allowlisting senders that route to restricted agents
 - Disable elevated globally (`tools.elevated.enabled: false`) if you only want sandboxed execution
@@ -241,11 +252,12 @@ Mitigation patterns:
 ## Migration from Single Agent
 
 **Before (single agent):**
+
 ```json
 {
   "agents": {
     "defaults": {
-      "workspace": "~/clawd",
+      "workspace": "~/.aipro/workspace",
       "sandbox": {
         "mode": "non-main"
       }
@@ -263,6 +275,7 @@ Mitigation patterns:
 ```
 
 **After (multi-agent with different profiles):**
+
 ```json
 {
   "agents": {
@@ -270,7 +283,7 @@ Mitigation patterns:
       {
         "id": "main",
         "default": true,
-        "workspace": "~/clawd",
+        "workspace": "~/.aipro/workspace",
         "sandbox": { "mode": "off" }
       }
     ]
@@ -285,6 +298,7 @@ Legacy `agent.*` configs are migrated by `aipro doctor`; prefer `agents.defaults
 ## Tool Restriction Examples
 
 ### Read-only Agent
+
 ```json
 {
   "tools": {
@@ -295,6 +309,7 @@ Legacy `agent.*` configs are migrated by `aipro doctor`; prefer `agents.defaults
 ```
 
 ### Safe Execution Agent (no file modifications)
+
 ```json
 {
   "tools": {
@@ -305,6 +320,7 @@ Legacy `agent.*` configs are migrated by `aipro doctor`; prefer `agents.defaults
 ```
 
 ### Communication-only Agent
+
 ```json
 {
   "tools": {
@@ -330,13 +346,15 @@ sandbox, set `agents.list[].sandbox.mode: "off"`.
 After configuring multi-agent sandbox and tools:
 
 1. **Check agent resolution:**
+
    ```exec
    aipro agents list --bindings
    ```
 
 2. **Verify sandbox containers:**
+
    ```exec
-   docker ps --filter "label=aipro.sandbox=1"
+   docker ps --filter "name=aipro-sbx-"
    ```
 
 3. **Test tool restrictions:**
@@ -353,15 +371,18 @@ After configuring multi-agent sandbox and tools:
 ## Troubleshooting
 
 ### Agent not sandboxed despite `mode: "all"`
+
 - Check if there's a global `agents.defaults.sandbox.mode` that overrides it
 - Agent-specific config takes precedence, so set `agents.list[].sandbox.mode: "all"`
 
 ### Tools still available despite deny list
+
 - Check tool filtering order: global → agent → sandbox → subagent
 - Each level can only further restrict, not grant back
 - Verify with logs: `[tools] filtering tools for agent:${agentId}`
 
 ### Container not isolated per agent
+
 - Set `scope: "agent"` in agent-specific sandbox config
 - Default is `"session"` which creates one container per session
 

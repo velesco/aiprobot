@@ -1,5 +1,5 @@
-import AIProKit
-import AIProProtocol
+import AiproKit
+import AiproProtocol
 import Foundation
 import Observation
 import SwiftUI
@@ -56,7 +56,7 @@ final class WorkActivityStore {
         phase: String,
         name: String?,
         meta: String?,
-        args: [String: AIProProtocol.AnyCodable]?)
+        args: [String: AiproProtocol.AnyCodable]?)
     {
         let toolKind = Self.mapToolKind(name)
         let label = Self.buildLabel(name: name, meta: meta, args: args)
@@ -225,7 +225,7 @@ final class WorkActivityStore {
     private static func buildLabel(
         name: String?,
         meta: String?,
-        args: [String: AIProProtocol.AnyCodable]?) -> String
+        args: [String: AiproProtocol.AnyCodable]?) -> String
     {
         let wrappedArgs = self.wrapToolArgs(args)
         let display = ToolDisplayRegistry.resolve(name: name ?? "tool", args: wrappedArgs, meta: meta)
@@ -236,17 +236,17 @@ final class WorkActivityStore {
         return display.label
     }
 
-    private static func wrapToolArgs(_ args: [String: AIProProtocol.AnyCodable]?) -> AIProKit.AnyCodable? {
+    private static func wrapToolArgs(_ args: [String: AiproProtocol.AnyCodable]?) -> AiproKit.AnyCodable? {
         guard let args else { return nil }
         let converted: [String: Any] = args.mapValues { self.unwrapJSONValue($0.value) }
-        return AIProKit.AnyCodable(converted)
+        return AiproKit.AnyCodable(converted)
     }
 
     private static func unwrapJSONValue(_ value: Any) -> Any {
-        if let dict = value as? [String: AIProProtocol.AnyCodable] {
+        if let dict = value as? [String: AiproProtocol.AnyCodable] {
             return dict.mapValues { self.unwrapJSONValue($0.value) }
         }
-        if let array = value as? [AIProProtocol.AnyCodable] {
+        if let array = value as? [AiproProtocol.AnyCodable] {
             return array.map { self.unwrapJSONValue($0.value) }
         }
         if let dict = value as? [String: Any] {

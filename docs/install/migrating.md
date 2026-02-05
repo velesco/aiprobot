@@ -3,7 +3,9 @@ summary: "Move (migrate) a AIPro install from one machine to another"
 read_when:
   - You are moving AIPro to a new laptop/server
   - You want to preserve sessions, auth, and channel logins (WhatsApp, etc.)
+title: "Migration Guide"
 ---
+
 # Migrating AIPro to a new machine
 
 This guide migrates a AIPro Gateway from one machine to another **without redoing onboarding**.
@@ -11,7 +13,7 @@ This guide migrates a AIPro Gateway from one machine to another **without redoin
 The migration is simple conceptually:
 
 - Copy the **state directory** (`$AIPRO_STATE_DIR`, default: `~/.aipro/`) — this includes config, auth, sessions, and channel state.
-- Copy your **workspace** (`~/clawd/` by default) — this includes your agent files (memory, prompts, etc.).
+- Copy your **workspace** (`~/.aipro/workspace/` by default) — this includes your agent files (memory, prompts, etc.).
 
 But there are common footguns around **profiles**, **permissions**, and **partial copies**.
 
@@ -40,7 +42,7 @@ Look for mentions of `AIPRO_STATE_DIR` / profile in the output. If you run multi
 
 Common defaults:
 
-- `~/clawd/` (recommended workspace)
+- `~/.aipro/workspace/` (recommended workspace)
 - a custom folder you created
 
 Your workspace is where files like `MEMORY.md`, `USER.md`, and `memory/*.md` live.
@@ -80,7 +82,7 @@ aipro gateway stop
 cd ~
 tar -czf aipro-state.tgz .aipro
 
-tar -czf clawd-workspace.tgz clawd
+tar -czf aipro-workspace.tgz .aipro/workspace
 ```
 
 If you have multiple profiles/state dirs (e.g. `~/.aipro-main`, `~/.aipro-work`), archive each.
@@ -98,7 +100,7 @@ At this stage, it’s OK if onboarding creates a fresh `~/.aipro/` — you will 
 Copy **both**:
 
 - `$AIPRO_STATE_DIR` (default `~/.aipro/`)
-- your workspace (default `~/clawd/`)
+- your workspace (default `~/.aipro/workspace/`)
 
 Common approaches:
 

@@ -1,5 +1,4 @@
 import { describe, expect, it, vi } from "vitest";
-
 import type { AIProConfig } from "../config/config.js";
 
 const mocks = vi.hoisted(() => ({

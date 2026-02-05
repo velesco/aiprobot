@@ -3,7 +3,7 @@ import JavaScriptCore
 
 enum ModelCatalogLoader {
     static var defaultPath: String { self.resolveDefaultPath() }
-    private static let logger = Logger(subsystem: "ro.aipro", category: "models")
+    private static let logger = Logger(subsystem: "ai.aipro", category: "models")
     private nonisolated static let appSupportDir: URL = {
         let base = FileManager().urls(for: .applicationSupportDirectory, in: .userDomainMask).first!
         return base.appendingPathComponent("AIPro", isDirectory: true)

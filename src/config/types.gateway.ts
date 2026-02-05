@@ -15,6 +15,8 @@ export type GatewayTlsConfig = {
 
 export type WideAreaDiscoveryConfig = {
   enabled?: boolean;
+  /** Optional unicast DNS-SD domain (e.g. "aipro.internal"). */
+  domain?: string;
 };
 
 export type MdnsDiscoveryMode = "off" | "minimal" | "full";
@@ -36,7 +38,7 @@ export type DiscoveryConfig = {
 
 export type CanvasHostConfig = {
   enabled?: boolean;
-  /** Directory to serve (default: ~/clawd/canvas). */
+  /** Directory to serve (default: ~/.aipro/workspace/canvas). */
   root?: string;
   /** HTTP port to listen on (default: 18793). */
   port?: number;
@@ -64,6 +66,10 @@ export type GatewayControlUiConfig = {
   enabled?: boolean;
   /** Optional base path prefix for the Control UI (e.g. "/aipro"). */
   basePath?: string;
+  /** Optional filesystem root for Control UI assets (defaults to dist/control-ui). */
+  root?: string;
+  /** Allowed browser origins for Control UI/WebChat websocket connections. */
+  allowedOrigins?: string[];
   /** Allow token-only auth over insecure HTTP (default: false). */
   allowInsecureAuth?: boolean;
   /** DANGEROUS: Disable device identity checks for the Control UI (default: false). */

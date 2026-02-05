@@ -1,9 +1,9 @@
-import AIProProtocol
+import AiproProtocol
 import SwiftUI
 import Testing
 @testable import AIPro
 
-private typealias ProtoAnyCodable = AIProProtocol.AnyCodable
+private typealias ProtoAnyCodable = AiproProtocol.AnyCodable
 
 @Suite(.serialized)
 @MainActor

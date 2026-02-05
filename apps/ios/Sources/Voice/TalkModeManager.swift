@@ -1,6 +1,6 @@
 import AVFAudio
-import AIProKit
-import AIProProtocol
+import AiproKit
+import AiproProtocol
 import Foundation
 import Observation
 import OSLog
@@ -48,7 +48,7 @@ final class TalkModeManager: NSObject {
 
     private var chatSubscribedSessionKeys = Set<String>()
 
-    private let logger = Logger(subsystem: "ro.aipro", category: "TalkMode")
+    private let logger = Logger(subsystem: "bot.molt", category: "TalkMode")
 
     func attachGateway(_ gateway: GatewayNodeSession) {
         self.gateway = gateway

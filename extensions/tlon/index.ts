@@ -1,6 +1,5 @@
 import type { AIProPluginApi } from "aipro/plugin-sdk";
 import { emptyPluginConfigSchema } from "aipro/plugin-sdk";
-
 import { tlonPlugin } from "./src/channel.js";
 import { setTlonRuntime } from "./src/runtime.js";
 

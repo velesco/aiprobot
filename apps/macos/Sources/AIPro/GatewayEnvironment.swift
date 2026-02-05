@@ -1,4 +1,4 @@
-import AIProIPC
+import AiproIPC
 import Foundation
 import OSLog
 
@@ -68,7 +68,7 @@ struct GatewayCommandResolution {
 }
 
 enum GatewayEnvironment {
-    private static let logger = Logger(subsystem: "ro.aipro", category: "gateway.env")
+    private static let logger = Logger(subsystem: "ai.aipro", category: "gateway.env")
     private static let supportedBindModes: Set<String> = ["loopback", "tailnet", "lan", "auto"]
 
     static func gatewayPort() -> Int {

@@ -1,6 +1,5 @@
 import type { AIProPluginApi } from "aipro/plugin-sdk";
 import { emptyPluginConfigSchema } from "aipro/plugin-sdk";
-
 import { googlechatDock, googlechatPlugin } from "./src/channel.js";
 import { handleGoogleChatWebhookRequest } from "./src/monitor.js";
 import { setGoogleChatRuntime } from "./src/runtime.js";

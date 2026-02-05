@@ -1,4 +1,4 @@
-import AIProProtocol
+import AiproProtocol
 import SwiftUI
 
 @MainActor
@@ -81,7 +81,7 @@ private struct EventRow: View {
         return f.string(from: date)
     }
 
-    private func prettyJSON(_ dict: [String: AIProProtocol.AnyCodable]) -> String? {
+    private func prettyJSON(_ dict: [String: AiproProtocol.AnyCodable]) -> String? {
         let normalized = dict.mapValues { $0.value }
         guard JSONSerialization.isValidJSONObject(normalized),
               let data = try? JSONSerialization.data(withJSONObject: normalized, options: [.prettyPrinted]),
@@ -99,8 +99,8 @@ struct AgentEventsWindow_Previews: PreviewProvider {
             stream: "tool",
             ts: Date().timeIntervalSince1970 * 1000,
             data: [
-                "phase": AIProProtocol.AnyCodable("start"),
-                "name": AIProProtocol.AnyCodable("bash"),
+                "phase": AiproProtocol.AnyCodable("start"),
+                "name": AiproProtocol.AnyCodable("bash"),
             ],
             summary: nil)
         AgentEventStore.shared.append(sample)

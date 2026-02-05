@@ -1,4 +1,4 @@
-import AIProDiscovery
+import AiproDiscovery
 import SwiftUI
 import Testing
 @testable import AIPro

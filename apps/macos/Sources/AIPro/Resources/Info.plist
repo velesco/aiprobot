@@ -7,7 +7,7 @@
     <key>CFBundleExecutable</key>
     <string>AIPro</string>
     <key>CFBundleIdentifier</key>
-    <string>ro.aipro.mac</string>
+    <string>ai.aipro.mac</string>
     <key>CFBundleInfoDictionaryVersion</key>
     <string>6.0</string>
     <key>CFBundleName</key>
@@ -15,16 +15,16 @@
     <key>CFBundlePackageType</key>
     <string>APPL</string>
     <key>CFBundleShortVersionString</key>
-    <string>2026.1.27-beta.1</string>
+    <string>2026.2.4</string>
     <key>CFBundleVersion</key>
-    <string>202601260</string>
+    <string>202602020</string>
     <key>CFBundleIconFile</key>
     <string>AIPro</string>
     <key>CFBundleURLTypes</key>
     <array>
         <dict>
             <key>CFBundleURLName</key>
-            <string>ro.aipro.mac.deeplink</string>
+            <string>ai.aipro.mac.deeplink</string>
             <key>CFBundleURLSchemes</key>
             <array>
                 <string>aipro</string>

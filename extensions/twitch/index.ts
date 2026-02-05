@@ -1,6 +1,5 @@
 import type { AIProPluginApi } from "aipro/plugin-sdk";
 import { emptyPluginConfigSchema } from "aipro/plugin-sdk";
-
 import { twitchPlugin } from "./src/plugin.js";
 import { setTwitchRuntime } from "./src/runtime.js";
 
@@ -13,6 +12,7 @@ const plugin = {
   configSchema: emptyPluginConfigSchema(),
   register(api: AIProPluginApi) {
     setTwitchRuntime(api.runtime);
+    // oxlint-disable-next-line typescript/no-explicit-any
     api.registerChannel({ plugin: twitchPlugin as any });
   },
 };

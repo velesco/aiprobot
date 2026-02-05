@@ -14,5 +14,5 @@ dependencyResolutionManagement {
   }
 }
 
-rootProject.name = "DigibossNodeAndroid"
+rootProject.name = "AIProNodeAndroid"
 include(":app")

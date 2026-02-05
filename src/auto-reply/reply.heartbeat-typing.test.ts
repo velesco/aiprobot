@@ -1,7 +1,5 @@
 import { join } from "node:path";
-
 import { afterEach, describe, expect, it, vi } from "vitest";
-
 import { withTempHome as withTempHomeBase } from "../../test/helpers/temp-home.js";
 
 const runEmbeddedPiAgentMock = vi.fn();
@@ -56,7 +54,7 @@ function makeCfg(home: string) {
     agents: {
       defaults: {
         model: "anthropic/claude-opus-4-5",
-        workspace: join(home, "clawd"),
+        workspace: join(home, "aipro"),
       },
     },
     channels: {

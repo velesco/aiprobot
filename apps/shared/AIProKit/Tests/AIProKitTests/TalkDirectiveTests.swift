@@ -1,5 +1,5 @@
 import XCTest
-@testable import AIProKit
+@testable import AiproKit
 
 final class TalkDirectiveTests: XCTestCase {
     func testParsesDirectiveAndStripsLine() {

@@ -1,6 +1,6 @@
 name: AIPro
 options:
-  bundleIdPrefix: ro.aipro
+  bundleIdPrefix: ai.aipro
   deploymentTarget:
     iOS: "18.0"
   xcodeVersion: "16.0"
@@ -10,8 +10,8 @@ settings:
     SWIFT_VERSION: "6.0"
 
 packages:
-  AIProKit:
-    path: ../shared/AIProKit
+  AiproKit:
+    path: ../shared/AiproKit
   Swabble:
     path: ../../Swabble
 
@@ -32,11 +32,11 @@ targets:
     sources:
       - path: Sources
     dependencies:
-      - package: AIProKit
-      - package: AIProKit
-        product: AIProChatUI
-      - package: AIProKit
-        product: AIProProtocol
+      - package: AiproKit
+      - package: AiproKit
+        product: AiproChatUI
+      - package: AiproKit
+        product: AiproProtocol
       - package: Swabble
         product: SwabbleKit
       - sdk: AppIntents.framework
@@ -71,8 +71,8 @@ targets:
         CODE_SIGN_IDENTITY: "Apple Development"
         CODE_SIGN_STYLE: Manual
         DEVELOPMENT_TEAM: Y5PE65HELJ
-        PRODUCT_BUNDLE_IDENTIFIER: ro.aipro.ios
-        PROVISIONING_PROFILE_SPECIFIER: "ro.aipro.ios Development"
+        PRODUCT_BUNDLE_IDENTIFIER: ai.aipro.ios
+        PROVISIONING_PROFILE_SPECIFIER: "ai.aipro.ios Development"
         SWIFT_VERSION: "6.0"
         SWIFT_STRICT_CONCURRENCY: complete
         ENABLE_APPINTENTS_METADATA: NO
@@ -81,8 +81,8 @@ targets:
       properties:
         CFBundleDisplayName: AIPro
         CFBundleIconName: AppIcon
-        CFBundleShortVersionString: "2026.1.27-beta.1"
-        CFBundleVersion: "20260126"
+        CFBundleShortVersionString: "2026.2.4"
+        CFBundleVersion: "20260202"
         UILaunchScreen: {}
         UIApplicationSceneManifest:
           UIApplicationSupportsMultipleScenes: false
@@ -121,7 +121,7 @@ targets:
       - sdk: AppIntents.framework
     settings:
       base:
-        PRODUCT_BUNDLE_IDENTIFIER: ro.aipro.ios.tests
+        PRODUCT_BUNDLE_IDENTIFIER: ai.aipro.ios.tests
         SWIFT_VERSION: "6.0"
         SWIFT_STRICT_CONCURRENCY: complete
         TEST_HOST: "$(BUILT_PRODUCTS_DIR)/AIPro.app/AIPro"
@@ -130,5 +130,5 @@ targets:
       path: Tests/Info.plist
       properties:
         CFBundleDisplayName: AIProTests
-        CFBundleShortVersionString: "2026.1.27-beta.1"
-        CFBundleVersion: "20260126"
+        CFBundleShortVersionString: "2026.2.4"
+        CFBundleVersion: "20260202"

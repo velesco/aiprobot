@@ -29,7 +29,9 @@ import {
 
 function sanitizeDaemonStatusForJson(status: DaemonStatus): DaemonStatus {
   const command = status.service.command;
-  if (!command?.environment) return status;
+  if (!command?.environment) {
+    return status;
+  }
   const safeEnv = filterDaemonEnv(command.environment);
   const nextCommand = {
     ...command,
@@ -60,7 +62,7 @@ export function printDaemonStatus(status: DaemonStatus, opts: { json: boolean })
   const errorText = (value: string) => colorize(rich, theme.error, value);
   const spacer = () => defaultRuntime.log("");
 
-  const { service, rpc, legacyServices, extraServices } = status;
+  const { service, rpc, extraServices } = status;
   const serviceStatus = service.loaded
     ? okText(service.loadedText)
     : warnText(service.notLoadedText);
@@ -189,7 +191,9 @@ export function printDaemonStatus(status: DaemonStatus, opts: { json: boolean })
       defaultRuntime.log(`${label("RPC probe:")} ${okText("ok")}`);
     } else {
       defaultRuntime.error(`${label("RPC probe:")} ${errorText("failed")}`);
-      if (rpc.url) defaultRuntime.error(`${label("RPC target:")} ${rpc.url}`);
+      if (rpc.url) {
+        defaultRuntime.error(`${label("RPC target:")} ${rpc.url}`);
+      }
       const lines = String(rpc.error ?? "unknown")
         .split(/\r?\n/)
         .filter(Boolean);
@@ -285,15 +289,6 @@ export function printDaemonStatus(status: DaemonStatus, opts: { json: boolean })
     spacer();
   }
 
-  if (legacyServices.length > 0) {
-    defaultRuntime.error(errorText("Legacy gateway services detected:"));
-    for (const svc of legacyServices) {
-      defaultRuntime.error(`- ${errorText(svc.label)} (${svc.detail})`);
-    }
-    defaultRuntime.error(errorText(`Cleanup: ${formatCliCommand("aipro doctor")}`));
-    spacer();
-  }
-
   if (extraServices.length > 0) {
     defaultRuntime.error(errorText("Other gateway-like services detected (best effort):"));
     for (const svc of extraServices) {
@@ -305,7 +300,7 @@ export function printDaemonStatus(status: DaemonStatus, opts: { json: boolean })
     spacer();
   }
 
-  if (legacyServices.length > 0 || extraServices.length > 0) {
+  if (extraServices.length > 0) {
     defaultRuntime.error(
       errorText(
         "Recommendation: run a single gateway per machine for most setups. One gateway supports multiple agents (see docs: /gateway#multiple-gateways-same-host).",

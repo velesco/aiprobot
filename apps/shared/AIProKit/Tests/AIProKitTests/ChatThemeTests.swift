@@ -1,6 +1,6 @@
 import Foundation
 import Testing
-@testable import AIProChatUI
+@testable import AiproChatUI
 
 #if os(macOS)
 import AppKit

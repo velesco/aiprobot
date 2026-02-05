@@ -94,7 +94,7 @@ vi.mock("../memory/manager.js", () => ({
         files: 2,
         chunks: 3,
         dirty: false,
-        workspaceDir: "/tmp/clawd",
+        workspaceDir: "/tmp/aipro",
         dbPath: "/tmp/memory.sqlite",
         provider: "openai",
         model: "text-embedding-3-small",
@@ -103,7 +103,12 @@ vi.mock("../memory/manager.js", () => ({
         sourceCounts: [{ source: "memory", files: 2, chunks: 3 }],
         cache: { enabled: true, entries: 10, maxEntries: 500 },
         fts: { enabled: true, available: true },
-        vector: { enabled: true, available: true, extensionPath: "/opt/vec0.dylib", dims: 1024 },
+        vector: {
+          enabled: true,
+          available: true,
+          extensionPath: "/opt/vec0.dylib",
+          dims: 1024,
+        },
       }),
       close: vi.fn(async () => {}),
       __agentId: agentId,
@@ -255,7 +260,7 @@ vi.mock("../daemon/service.js", () => ({
     readRuntime: async () => ({ status: "running", pid: 1234 }),
     readCommand: async () => ({
       programArguments: ["node", "dist/entry.js", "gateway"],
-      sourcePath: "/tmp/Library/LaunchAgents/ro.aipro.gateway.plist",
+      sourcePath: "/tmp/Library/LaunchAgents/bot.molt.gateway.plist",
     }),
   }),
 }));
@@ -268,7 +273,7 @@ vi.mock("../daemon/node-service.js", () => ({
     readRuntime: async () => ({ status: "running", pid: 4321 }),
     readCommand: async () => ({
       programArguments: ["node", "dist/entry.js", "node-host"],
-      sourcePath: "/tmp/Library/LaunchAgents/ro.aipro.node.plist",
+      sourcePath: "/tmp/Library/LaunchAgents/bot.molt.node.plist",
     }),
   }),
 }));
@@ -358,8 +363,11 @@ describe("statusCommand", () => {
       const logs = (runtime.log as vi.Mock).mock.calls.map((c) => String(c[0]));
       expect(logs.some((l) => l.includes("auth token"))).toBe(true);
     } finally {
-      if (prevToken === undefined) delete process.env.AIPRO_GATEWAY_TOKEN;
-      else process.env.AIPRO_GATEWAY_TOKEN = prevToken;
+      if (prevToken === undefined) {
+        delete process.env.AIPRO_GATEWAY_TOKEN;
+      } else {
+        process.env.AIPRO_GATEWAY_TOKEN = prevToken;
+      }
     }
   });
 
@@ -459,10 +467,14 @@ describe("statusCommand", () => {
       payload.sessions.recent.some((sess: { key?: string }) => sess.key === "agent:ops:main"),
     ).toBe(true);
 
-    if (originalAgents) mocks.listAgentsForGateway.mockImplementation(originalAgents);
-    if (originalResolveStorePath)
+    if (originalAgents) {
+      mocks.listAgentsForGateway.mockImplementation(originalAgents);
+    }
+    if (originalResolveStorePath) {
       mocks.resolveStorePath.mockImplementation(originalResolveStorePath);
-    if (originalLoadSessionStore)
+    }
+    if (originalLoadSessionStore) {
       mocks.loadSessionStore.mockImplementation(originalLoadSessionStore);
+    }
   });
 });

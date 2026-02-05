@@ -830,9 +830,7 @@ struct DebugSettings: View {
     }
 
     private func configURL() -> URL {
-        FileManager().homeDirectoryForCurrentUser
-            .appendingPathComponent(".aipro")
-            .appendingPathComponent("aipro.json")
+        AIProPaths.configURL
     }
 }
 

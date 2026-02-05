@@ -32,7 +32,6 @@ if (modalElement && Array.isArray(modalElement.styles)) {
   modalElement.styles = [...modalElement.styles, modalStyles];
 }
 
-const empty = Object.freeze({});
 const emptyClasses = () => ({});
 const textHintStyles = () => ({ h1: {}, h2: {}, h3: {}, h4: {}, h5: {}, body: {}, caption: {} });
 
@@ -160,7 +159,7 @@ class AIProA2UIHost extends LitElement {
   };
 
   #processor = v0_8.Data.createSignalA2uiMessageProcessor();
-  #themeProvider = new ContextProvider(this, {
+  themeProvider = new ContextProvider(this, {
     context: themeContext,
     initialValue: aiproTheme,
   });
@@ -282,17 +281,20 @@ class AIProA2UIHost extends LitElement {
       getSurfaces: () => Array.from(this.#processor.getSurfaces().keys()),
     };
     globalThis.aiproA2UI = api;
-    globalThis.aiproA2UI = api;
     this.addEventListener("a2uiaction", (evt) => this.#handleA2UIAction(evt));
     this.#statusListener = (evt) => this.#handleActionStatus(evt);
-    globalThis.addEventListener("aipro:a2ui-action-status", this.#statusListener);
+    for (const eventName of ["aipro:a2ui-action-status"]) {
+      globalThis.addEventListener(eventName, this.#statusListener);
+    }
     this.#syncSurfaces();
   }
 
   disconnectedCallback() {
     super.disconnectedCallback();
     if (this.#statusListener) {
-      globalThis.removeEventListener("aipro:a2ui-action-status", this.#statusListener);
+      for (const eventName of ["aipro:a2ui-action-status"]) {
+        globalThis.removeEventListener(eventName, this.#statusListener);
+      }
       this.#statusListener = null;
     }
   }
@@ -315,8 +317,8 @@ class AIProA2UIHost extends LitElement {
 
   #handleActionStatus(evt) {
     const detail = evt?.detail ?? null;
-    if (!detail || typeof detail.id !== "string") return;
-    if (!this.pendingAction || this.pendingAction.id !== detail.id) return;
+    if (!detail || typeof detail.id !== "string") {return;}
+    if (!this.pendingAction || this.pendingAction.id !== detail.id) {return;}
 
     if (detail.ok) {
       this.pendingAction = { ...this.pendingAction, phase: "sent", sentAt: Date.now() };
@@ -359,7 +361,7 @@ class AIProA2UIHost extends LitElement {
     for (const item of ctxItems) {
       const key = item?.key;
       const value = item?.value ?? null;
-      if (!key || !value) continue;
+      if (!key || !value) {continue;}
 
       if (typeof value.path === "string") {
         const resolved = sourceNode
@@ -399,16 +401,11 @@ class AIProA2UIHost extends LitElement {
 
     const handler =
       globalThis.webkit?.messageHandlers?.aiproCanvasA2UIAction ??
-      globalThis.webkit?.messageHandlers?.aiproCanvasA2UIAction ??
-      globalThis.aiproCanvasA2UIAction ??
       globalThis.aiproCanvasA2UIAction;
     if (handler?.postMessage) {
       try {
         // WebKit message handlers support structured objects; Android's JS interface expects strings.
-        if (
-          handler === globalThis.aiproCanvasA2UIAction ||
-          handler === globalThis.aiproCanvasA2UIAction
-        ) {
+        if (handler === globalThis.aiproCanvasA2UIAction) {
           handler.postMessage(JSON.stringify({ userAction }));
         } else {
           handler.postMessage({ userAction });
@@ -488,4 +485,6 @@ class AIProA2UIHost extends LitElement {
   }
 }
 
-customElements.define("aipro-a2ui-host", AIProA2UIHost);
+if (!customElements.get("aipro-a2ui-host")) {
+  customElements.define("aipro-a2ui-host", AIProA2UIHost);
+}

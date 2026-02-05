@@ -1,4 +1,4 @@
-import AIProDiscovery
+import AiproDiscovery
 import Foundation
 
 struct DiscoveryOptions {

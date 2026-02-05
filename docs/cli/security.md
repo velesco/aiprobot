@@ -3,6 +3,7 @@ summary: "CLI reference for `aipro security` (audit and fix common security foot
 read_when:
   - You want to run a quick security audit on config/state
   - You want to apply safe “fix” suggestions (chmod, tighten defaults)
+title: "security"
 ---
 
 # `aipro security`
@@ -10,6 +11,7 @@ read_when:
 Security tools (audit + optional fixes).
 
 Related:
+
 - Security guide: [Security](/gateway/security)
 
 ## Audit
@@ -20,5 +22,5 @@ aipro security audit --deep
 aipro security audit --fix
 ```
 
-The audit warns when multiple DM senders share the main session and recommends `session.dmScope="per-channel-peer"` (or `per-account-channel-peer` for multi-account channels) for shared inboxes.
+The audit warns when multiple DM senders share the main session and recommends **secure DM mode**: `session.dmScope="per-channel-peer"` (or `per-account-channel-peer` for multi-account channels) for shared inboxes.
 It also warns when small models (`<=300B`) are used without sandboxing and with web/browser tools enabled.

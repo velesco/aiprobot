@@ -17,29 +17,17 @@ public struct GatewayTLSParams: Sendable {
 }
 
 public enum GatewayTLSStore {
-    private static let suiteName = "ro.aipro.shared"
-    private static let legacySuiteName = "com.aipro.shared"
+    private static let suiteName = "ai.aipro.shared"
     private static let keyPrefix = "gateway.tls."
 
     private static var defaults: UserDefaults {
         UserDefaults(suiteName: suiteName) ?? .standard
     }
 
-    private static var legacyDefaults: UserDefaults? {
-        UserDefaults(suiteName: legacySuiteName)
-    }
-
     public static func loadFingerprint(stableID: String) -> String? {
         let key = self.keyPrefix + stableID
         let raw = self.defaults.string(forKey: key)?.trimmingCharacters(in: .whitespacesAndNewlines)
         if raw?.isEmpty == false { return raw }
-
-        let legacy = self.legacyDefaults?.string(forKey: key)?.trimmingCharacters(in: .whitespacesAndNewlines)
-        if legacy?.isEmpty == false {
-            self.defaults.set(legacy, forKey: key)
-            return legacy
-        }
-
         return nil
     }
 

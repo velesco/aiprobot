@@ -1,14 +1,14 @@
 {
   "name": "aipro",
-  "version": "2026.1.26",
-  "type": "module",
+  "version": "2026.1.27-beta.1",
   "description": "Compatibility shim that forwards to aipro",
-  "exports": {
-    ".": "./index.js",
-    "./plugin-sdk": "./plugin-sdk/index.js"
-  },
   "bin": {
     "aipro": "./bin/aipro.js"
+  },
+  "type": "module",
+  "exports": {
+    ".": "./index.js",
+    "./cli-entry": "./bin/aipro.js"
   },
   "dependencies": {
     "aipro": "workspace:*"

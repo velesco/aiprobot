@@ -17,9 +17,7 @@ vi.mock("@buape/carbon", () => ({
   MessageReactionAddListener: class {},
   MessageReactionRemoveListener: class {},
   PresenceUpdateListener: class {},
-  Row: class {
-    constructor(_components: unknown[]) {}
-  },
+  Row: class {},
 }));
 
 vi.mock("../auto-reply/dispatch.js", async (importOriginal) => {
@@ -61,7 +59,7 @@ describe("discord native commands", () => {
         defaults: {
           model: "anthropic/claude-opus-4-5",
           humanDelay: { mode: "off" },
-          workspace: "/tmp/clawd",
+          workspace: "/tmp/aipro",
         },
       },
       session: { store: "/tmp/aipro-sessions.json" },

@@ -1,6 +1,6 @@
 import AppKit
-import AIProIPC
-import AIProKit
+import AiproIPC
+import AiproKit
 import Foundation
 import WebKit
 
@@ -43,7 +43,9 @@ final class CanvasWindowController: NSWindowController, WKNavigationDelegate, NS
         config.preferences.isElementFullscreenEnabled = true
         config.preferences.setValue(true, forKey: "developerExtrasEnabled")
         canvasWindowLogger.debug("CanvasWindowController init config ready")
-        config.setURLSchemeHandler(self.schemeHandler, forURLScheme: CanvasScheme.scheme)
+        for scheme in CanvasScheme.allSchemes {
+            config.setURLSchemeHandler(self.schemeHandler, forURLScheme: scheme)
+        }
         canvasWindowLogger.debug("CanvasWindowController init scheme handler installed")
 
         // Bridge A2UI "a2uiaction" DOM events back into the native agent loop.
@@ -56,7 +58,9 @@ final class CanvasWindowController: NSWindowController, WKNavigationDelegate, NS
         let bridgeScript = """
         (() => {
           try {
-            if (location.protocol !== '\(CanvasScheme.scheme):') return;
+            const allowedSchemes = \(String(describing: CanvasScheme.allSchemes));
+            const protocol = location.protocol.replace(':', '');
+            if (!allowedSchemes.includes(protocol)) return;
             if (globalThis.__aiproA2UIBridgeInstalled) return;
             globalThis.__aiproA2UIBridgeInstalled = true;
 
@@ -89,7 +93,9 @@ final class CanvasWindowController: NSWindowController, WKNavigationDelegate, NS
 
                 // If the bundled A2UI shell is present, let it forward actions so we keep its richer
                 // context resolution (data model path lookups, surface detection, etc.).
-                const hasBundledA2UIHost = !!globalThis.aiproA2UI || !!document.querySelector('aipro-a2ui-host');
+                const hasBundledA2UIHost =
+                  !!globalThis.aiproA2UI ||
+                  !!document.querySelector('aipro-a2ui-host');
                 if (hasBundledA2UIHost && handler?.postMessage) return;
 
                 // Otherwise, forward directly when possible.
@@ -137,7 +143,8 @@ final class CanvasWindowController: NSWindowController, WKNavigationDelegate, NS
                 guard let webView else { return }
 
                 // Only auto-reload when we are showing local canvas content.
-                guard webView.url?.scheme == CanvasScheme.scheme else { return }
+                guard let scheme = webView.url?.scheme,
+                      CanvasScheme.allSchemes.contains(scheme) else { return }
 
                 let path = webView.url?.path ?? ""
                 if path == "/" || path.isEmpty {
@@ -161,7 +168,9 @@ final class CanvasWindowController: NSWindowController, WKNavigationDelegate, NS
 
         let handler = CanvasA2UIActionMessageHandler(sessionKey: sessionKey)
         self.a2uiActionMessageHandler = handler
-        self.webView.configuration.userContentController.add(handler, name: CanvasA2UIActionMessageHandler.messageName)
+        for name in CanvasA2UIActionMessageHandler.allMessageNames {
+            self.webView.configuration.userContentController.add(handler, name: name)
+        }
 
         self.webView.navigationDelegate = self
         self.window?.delegate = self
@@ -177,8 +186,9 @@ final class CanvasWindowController: NSWindowController, WKNavigationDelegate, NS
     required init?(coder: NSCoder) { fatalError("init(coder:) is not supported") }
 
     @MainActor deinit {
-        self.webView.configuration.userContentController
-            .removeScriptMessageHandler(forName: CanvasA2UIActionMessageHandler.messageName)
+        for name in CanvasA2UIActionMessageHandler.allMessageNames {
+            self.webView.configuration.userContentController.removeScriptMessageHandler(forName: name)
+        }
         self.watcher.stop()
     }
 

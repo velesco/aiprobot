@@ -1,4 +1,4 @@
-import AIProProtocol
+import AiproProtocol
 import SwiftUI
 
 extension ChannelsSettings {

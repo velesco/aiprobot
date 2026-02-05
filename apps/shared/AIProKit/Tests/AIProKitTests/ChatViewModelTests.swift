@@ -1,7 +1,7 @@
-import AIProKit
+import AiproKit
 import Foundation
 import Testing
-@testable import AIProChatUI
+@testable import AiproChatUI
 
 private struct TimeoutError: Error, CustomStringConvertible {
     let label: String

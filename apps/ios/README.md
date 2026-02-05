@@ -15,7 +15,7 @@ open AIPro.xcodeproj
 ```
 
 ## Shared packages
-- `../shared/AIProKit` — shared types/constants used by iOS (and later macOS bridge + gateway routing).
+- `../shared/AiproKit` — shared types/constants used by iOS (and later macOS bridge + gateway routing).
 
 ## fastlane
 ```bash

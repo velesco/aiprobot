@@ -1,13 +1,13 @@
 import AppKit
-import AIProChatUI
-import AIProKit
-import AIProProtocol
+import AiproChatUI
+import AiproKit
+import AiproProtocol
 import Foundation
 import OSLog
 import QuartzCore
 import SwiftUI
 
-private let webChatSwiftLogger = Logger(subsystem: "ro.aipro", category: "WebChatSwiftUI")
+private let webChatSwiftLogger = Logger(subsystem: "ai.aipro", category: "WebChatSwiftUI")
 
 private enum WebChatSwiftUILayout {
     static let windowSize = NSSize(width: 500, height: 840)

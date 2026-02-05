@@ -51,10 +51,7 @@ describe("Nix integration (U3, U5, U9)", () => {
 
     it("CONFIG_PATH defaults to ~/.aipro/aipro.json when env not set", async () => {
       await withEnvOverride(
-        {
-          AIPRO_CONFIG_PATH: undefined,
-          AIPRO_STATE_DIR: undefined,
-        },
+        { AIPRO_CONFIG_PATH: undefined, AIPRO_STATE_DIR: undefined },
         async () => {
           const { CONFIG_PATH } = await import("./config.js");
           expect(CONFIG_PATH).toMatch(/\.aipro[\\/]aipro\.json$/);

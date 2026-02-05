@@ -3,6 +3,7 @@ summary: "Setup guide: keep your AIPro setup tailored while staying up-to-date"
 read_when:
   - Setting up a new machine
   - You want “latest + greatest” without breaking your personal setup
+title: "Setup"
 ---
 
 # Setup
@@ -10,21 +11,23 @@ read_when:
 Last updated: 2026-01-01
 
 ## TL;DR
-- **Tailoring lives outside the repo:** `~/clawd` (workspace) + `~/.aipro/aipro.json` (config).
+
+- **Tailoring lives outside the repo:** `~/.aipro/workspace` (workspace) + `~/.aipro/aipro.json` (config).
 - **Stable workflow:** install the macOS app; let it run the bundled Gateway.
 - **Bleeding edge workflow:** run the Gateway yourself via `pnpm gateway:watch`, then let the macOS app attach in Local mode.
 
 ## Prereqs (from source)
+
 - Node `>=22`
 - `pnpm`
 - Docker (optional; only for containerized setup/e2e — see [Docker](/install/docker))
 
 ## Tailoring strategy (so updates don’t hurt)
 
-If you want “100% tailored to me” *and* easy updates, keep your customization in:
+If you want “100% tailored to me” _and_ easy updates, keep your customization in:
 
 - **Config:** `~/.aipro/aipro.json` (JSON/JSON5-ish)
-- **Workspace:** `~/clawd` (skills, prompts, memories; make it a private git repo)
+- **Workspace:** `~/.aipro/workspace` (skills, prompts, memories; make it a private git repo)
 
 Bootstrap once:
 
@@ -42,22 +45,23 @@ If you don’t have a global install yet, run it via `pnpm aipro setup`.
 
 ## Stable workflow (macOS app first)
 
-1) Install + launch **AIPro.app** (menu bar).
-2) Complete the onboarding/permissions checklist (TCC prompts).
-3) Ensure Gateway is **Local** and running (the app manages it).
-4) Link surfaces (example: WhatsApp):
+1. Install + launch **AIPro.app** (menu bar).
+2. Complete the onboarding/permissions checklist (TCC prompts).
+3. Ensure Gateway is **Local** and running (the app manages it).
+4. Link surfaces (example: WhatsApp):
 
 ```bash
 aipro channels login
 ```
 
-5) Sanity check:
+5. Sanity check:
 
 ```bash
 aipro health
 ```
 
 If onboarding is not available in your build:
+
 - Run `aipro setup`, then `aipro channels login`, then start the Gateway manually (`aipro gateway`).
 
 ## Bleeding edge workflow (Gateway in a terminal)
@@ -86,7 +90,7 @@ pnpm gateway:watch
 In **AIPro.app**:
 
 - Connection Mode: **Local**
-The app will attach to the running gateway on the configured port.
+  The app will attach to the running gateway on the configured port.
 
 ### 3) Verify
 
@@ -98,6 +102,7 @@ aipro health
 ```
 
 ### Common footguns
+
 - **Wrong port:** Gateway WS defaults to `ws://127.0.0.1:18789`; keep app + CLI on the same port.
 - **Where state lives:**
   - Credentials: `~/.aipro/credentials/`
@@ -115,11 +120,11 @@ Use this when debugging auth or deciding what to back up:
 - **Pairing allowlists**: `~/.aipro/credentials/<channel>-allowFrom.json`
 - **Model auth profiles**: `~/.aipro/agents/<agentId>/agent/auth-profiles.json`
 - **Legacy OAuth import**: `~/.aipro/credentials/oauth.json`
-More detail: [Security](/gateway/security#credential-storage-map).
+  More detail: [Security](/gateway/security#credential-storage-map).
 
 ## Updating (without wrecking your setup)
 
-- Keep `~/clawd` and `~/.aipro/` as “your stuff”; don’t put personal prompts/config into the `aipro` repo.
+- Keep `~/.aipro/workspace` and `~/.aipro/` as “your stuff”; don’t put personal prompts/config into the `aipro` repo.
 - Updating source: `git pull` + `pnpm install` (when lockfile changed) + keep using `pnpm gateway:watch`.
 
 ## Linux (systemd user service)
@@ -140,5 +145,5 @@ user service (no lingering needed). See [Gateway runbook](/gateway) for the syst
 - [Gateway runbook](/gateway) (flags, supervision, ports)
 - [Gateway configuration](/gateway/configuration) (config schema + examples)
 - [Discord](/channels/discord) and [Telegram](/channels/telegram) (reply tags + replyToMode settings)
-- [AIPro assistant setup](/start/clawd)
+- [AIPro assistant setup](/start/aipro)
 - [macOS app](/platforms/macos) (gateway lifecycle)

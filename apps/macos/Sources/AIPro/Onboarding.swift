@@ -1,7 +1,7 @@
 import AppKit
-import AIProChatUI
-import AIProDiscovery
-import AIProIPC
+import AiproChatUI
+import AiproDiscovery
+import AiproIPC
 import Combine
 import Observation
 import SwiftUI

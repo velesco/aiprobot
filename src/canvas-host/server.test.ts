@@ -1,6 +1,6 @@
+import type { AddressInfo } from "node:net";
 import fs from "node:fs/promises";
 import { createServer } from "node:http";
-import type { AddressInfo } from "node:net";
 import os from "node:os";
 import path from "node:path";
 import { describe, expect, it, vi } from "vitest";
@@ -84,14 +84,18 @@ describe("canvas host", () => {
 
     const server = createServer((req, res) => {
       void (async () => {
-        if (await handler.handleHttpRequest(req, res)) return;
+        if (await handler.handleHttpRequest(req, res)) {
+          return;
+        }
         res.statusCode = 404;
         res.setHeader("Content-Type", "text/plain; charset=utf-8");
         res.end("Not Found");
       })();
     });
     server.on("upgrade", (req, socket, head) => {
-      if (handler.handleUpgrade(req, socket, head)) return;
+      if (handler.handleUpgrade(req, socket, head)) {
+        return;
+      }
       socket.destroy();
     });
 
@@ -202,6 +206,16 @@ describe("canvas host", () => {
 
   it("serves the gateway-hosted A2UI scaffold", async () => {
     const dir = await fs.mkdtemp(path.join(os.tmpdir(), "aipro-canvas-"));
+    const a2uiRoot = path.resolve(process.cwd(), "src/canvas-host/a2ui");
+    const bundlePath = path.join(a2uiRoot, "a2ui.bundle.js");
+    let createdBundle = false;
+
+    try {
+      await fs.stat(bundlePath);
+    } catch {
+      await fs.writeFile(bundlePath, "window.aiproA2UI = {};", "utf8");
+      createdBundle = true;
+    }
 
     const server = await startCanvasHost({
       runtime: defaultRuntime,
@@ -226,6 +240,9 @@ describe("canvas host", () => {
       expect(js).toContain("aiproA2UI");
     } finally {
       await server.close();
+      if (createdBundle) {
+        await fs.rm(bundlePath, { force: true });
+      }
       await fs.rm(dir, { recursive: true, force: true });
     }
   });

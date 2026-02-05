@@ -7,7 +7,7 @@ status: active
 
 # Multi-Agent Routing
 
-Goal: multiple *isolated* agents (separate workspace + `agentDir` + sessions), plus multiple channel accounts (e.g. two WhatsApps) in one running Gateway. Inbound is routed to an agent via bindings.
+Goal: multiple _isolated_ agents (separate workspace + `agentDir` + sessions), plus multiple channel accounts (e.g. two WhatsApps) in one running Gateway. Inbound is routed to an agent via bindings.
 
 ## What is “one agent”?
 
@@ -41,7 +41,7 @@ reach other host locations unless sandboxing is enabled. See
 
 - Config: `~/.aipro/aipro.json` (or `AIPRO_CONFIG_PATH`)
 - State dir: `~/.aipro` (or `AIPRO_STATE_DIR`)
-- Workspace: `~/clawd` (or `~/clawd-<agentId>`)
+- Workspace: `~/.aipro/workspace` (or `~/.aipro/workspace-<agentId>`)
 - Agent dir: `~/.aipro/agents/<agentId>/agent` (or `agents.list[].agentDir`)
 - Sessions: `~/.aipro/agents/<agentId>/sessions`
 
@@ -51,7 +51,7 @@ If you do nothing, AIPro runs a single agent:
 
 - `agentId` defaults to **`main`**.
 - Sessions are keyed as `agent:main:<mainKey>`.
-- Workspace defaults to `~/clawd` (or `~/clawd-<profile>` when `AIPRO_PROFILE` is set).
+- Workspace defaults to `~/.aipro/workspace` (or `~/.aipro/workspace-<profile>` when `AIPRO_PROFILE` is set).
 - State defaults to `~/.aipro/agents/main/agent`.
 
 ## Agent helper
@@ -92,24 +92,25 @@ Example:
 {
   agents: {
     list: [
-      { id: "alex", workspace: "~/clawd-alex" },
-      { id: "mia", workspace: "~/clawd-mia" }
-    ]
+      { id: "alex", workspace: "~/.aipro/workspace-alex" },
+      { id: "mia", workspace: "~/.aipro/workspace-mia" },
+    ],
   },
   bindings: [
     { agentId: "alex", match: { channel: "whatsapp", peer: { kind: "dm", id: "+15551230001" } } },
-    { agentId: "mia",  match: { channel: "whatsapp", peer: { kind: "dm", id: "+15551230002" } } }
+    { agentId: "mia", match: { channel: "whatsapp", peer: { kind: "dm", id: "+15551230002" } } },
   ],
   channels: {
     whatsapp: {
       dmPolicy: "allowlist",
-      allowFrom: ["+15551230001", "+15551230002"]
-    }
-  }
+      allowFrom: ["+15551230001", "+15551230002"],
+    },
+  },
 }
 ```
 
 Notes:
+
 - DM access control is **global per WhatsApp account** (pairing/allowlist), not per agent.
 - For shared groups, bind the group to one agent or use [Broadcast groups](/broadcast-groups).
 
@@ -149,13 +150,13 @@ multiple phone numbers without mixing sessions.
         id: "home",
         default: true,
         name: "Home",
-        workspace: "~/clawd-home",
+        workspace: "~/.aipro/workspace-home",
         agentDir: "~/.aipro/agents/home/agent",
       },
       {
         id: "work",
         name: "Work",
-        workspace: "~/clawd-work",
+        workspace: "~/.aipro/workspace-work",
         agentDir: "~/.aipro/agents/work/agent",
       },
     ],
@@ -213,25 +214,26 @@ Split by channel: route WhatsApp to a fast everyday agent and Telegram to an Opu
       {
         id: "chat",
         name: "Everyday",
-        workspace: "~/clawd-chat",
-        model: "anthropic/claude-sonnet-4-5"
+        workspace: "~/.aipro/workspace-chat",
+        model: "anthropic/claude-sonnet-4-5",
       },
       {
         id: "opus",
         name: "Deep Work",
-        workspace: "~/clawd-opus",
-        model: "anthropic/claude-opus-4-5"
-      }
-    ]
+        workspace: "~/.aipro/workspace-opus",
+        model: "anthropic/claude-opus-4-5",
+      },
+    ],
   },
   bindings: [
     { agentId: "chat", match: { channel: "whatsapp" } },
-    { agentId: "opus", match: { channel: "telegram" } }
-  ]
+    { agentId: "opus", match: { channel: "telegram" } },
+  ],
 }
 ```
 
 Notes:
+
 - If you have multiple accounts for a channel, add `accountId` to the binding (for example `{ channel: "whatsapp", accountId: "personal" }`).
 - To route a single DM/group to Opus while keeping the rest on chat, add a `match.peer` binding for that peer; peer matches always win over channel-wide rules.
 
@@ -243,14 +245,24 @@ Keep WhatsApp on the fast agent, but route one DM to Opus:
 {
   agents: {
     list: [
-      { id: "chat", name: "Everyday", workspace: "~/clawd-chat", model: "anthropic/claude-sonnet-4-5" },
-      { id: "opus", name: "Deep Work", workspace: "~/clawd-opus", model: "anthropic/claude-opus-4-5" }
-    ]
+      {
+        id: "chat",
+        name: "Everyday",
+        workspace: "~/.aipro/workspace-chat",
+        model: "anthropic/claude-sonnet-4-5",
+      },
+      {
+        id: "opus",
+        name: "Deep Work",
+        workspace: "~/.aipro/workspace-opus",
+        model: "anthropic/claude-opus-4-5",
+      },
+    ],
   },
   bindings: [
     { agentId: "opus", match: { channel: "whatsapp", peer: { kind: "dm", id: "+15551234567" } } },
-    { agentId: "chat", match: { channel: "whatsapp" } }
-  ]
+    { agentId: "chat", match: { channel: "whatsapp" } },
+  ],
 }
 ```
 
@@ -268,35 +280,44 @@ and a tighter tool policy:
       {
         id: "family",
         name: "Family",
-        workspace: "~/clawd-family",
+        workspace: "~/.aipro/workspace-family",
         identity: { name: "Family Bot" },
         groupChat: {
-          mentionPatterns: ["@family", "@familybot", "@Family Bot"]
+          mentionPatterns: ["@family", "@familybot", "@Family Bot"],
         },
         sandbox: {
           mode: "all",
-          scope: "agent"
+          scope: "agent",
         },
         tools: {
-          allow: ["exec", "read", "sessions_list", "sessions_history", "sessions_send", "sessions_spawn", "session_status"],
-          deny: ["write", "edit", "apply_patch", "browser", "canvas", "nodes", "cron"]
-        }
-      }
-    ]
+          allow: [
+            "exec",
+            "read",
+            "sessions_list",
+            "sessions_history",
+            "sessions_send",
+            "sessions_spawn",
+            "session_status",
+          ],
+          deny: ["write", "edit", "apply_patch", "browser", "canvas", "nodes", "cron"],
+        },
+      },
+    ],
   },
   bindings: [
     {
       agentId: "family",
       match: {
         channel: "whatsapp",
-        peer: { kind: "group", id: "120363999999999999@g.us" }
-      }
-    }
-  ]
+        peer: { kind: "group", id: "120363999999999999@g.us" },
+      },
+    },
+  ],
 }
 ```
 
 Notes:
+
 - Tool allow/deny lists are **tools**, not skills. If a skill needs to run a
   binary, ensure `exec` is allowed and the binary exists in the sandbox.
 - For stricter gating, set `agents.list[].groupChat.mentionPatterns` and keep
@@ -312,7 +333,7 @@ Starting with v2026.1.6, each agent can have its own sandbox and tool restrictio
     list: [
       {
         id: "personal",
-        workspace: "~/clawd-personal",
+        workspace: "~/.aipro/workspace-personal",
         sandbox: {
           mode: "off",  // No sandbox for personal agent
         },
@@ -320,7 +341,7 @@ Starting with v2026.1.6, each agent can have its own sandbox and tool restrictio
       },
       {
         id: "family",
-        workspace: "~/clawd-family",
+        workspace: "~/.aipro/workspace-family",
         sandbox: {
           mode: "all",     // Always sandboxed
           scope: "agent",  // One container per agent
@@ -343,6 +364,7 @@ Note: `setupCommand` lives under `sandbox.docker` and runs once on container cre
 Per-agent `sandbox.docker.*` overrides are ignored when the resolved scope is `"shared"`.
 
 **Benefits:**
+
 - **Security isolation**: Restrict tools for untrusted agents
 - **Resource control**: Sandbox specific agents while keeping others on host
 - **Flexible policies**: Different permissions per agent

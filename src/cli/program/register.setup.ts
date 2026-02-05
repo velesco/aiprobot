@@ -4,8 +4,8 @@ import { setupCommand } from "../../commands/setup.js";
 import { defaultRuntime } from "../../runtime.js";
 import { formatDocsLink } from "../../terminal/links.js";
 import { theme } from "../../terminal/theme.js";
-import { hasExplicitOptions } from "../command-options.js";
 import { runCommandWithRuntime } from "../cli-utils.js";
+import { hasExplicitOptions } from "../command-options.js";
 
 export function registerSetupCommand(program: Command) {
   program
@@ -18,7 +18,7 @@ export function registerSetupCommand(program: Command) {
     )
     .option(
       "--workspace <dir>",
-      "Agent workspace directory (default: ~/clawd; stored as agents.defaults.workspace)",
+      "Agent workspace directory (default: ~/.aipro/workspace; stored as agents.defaults.workspace)",
     )
     .option("--wizard", "Run the interactive onboarding wizard", false)
     .option("--non-interactive", "Run the wizard without prompts", false)

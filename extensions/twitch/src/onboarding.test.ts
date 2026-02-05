@@ -11,8 +11,8 @@
  * - setTwitchAccount config updates
  */
 
-import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import type { WizardPrompter } from "aipro/plugin-sdk";
+import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import type { TwitchAccountConfig } from "./types.js";
 
 // Mock the helpers we're testing

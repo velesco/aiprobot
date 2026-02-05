@@ -1,4 +1,4 @@
-import AIProProtocol
+import AiproProtocol
 import Foundation
 import Testing
 @testable import AIPro
@@ -16,7 +16,7 @@ struct AgentEventStoreTests {
             seq: 1,
             stream: "test",
             ts: 0,
-            data: [:] as [String: AIProProtocol.AnyCodable],
+            data: [:] as [String: AiproProtocol.AnyCodable],
             summary: nil))
         #expect(store.events.count == 1)
 
@@ -33,7 +33,7 @@ struct AgentEventStoreTests {
                 seq: i,
                 stream: "test",
                 ts: Double(i),
-                data: [:] as [String: AIProProtocol.AnyCodable],
+                data: [:] as [String: AiproProtocol.AnyCodable],
                 summary: nil))
         }
 

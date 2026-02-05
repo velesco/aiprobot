@@ -4,6 +4,7 @@ read_when:
   - You need a beginner-friendly overview of logging
   - You want to configure log levels or formats
   - You are troubleshooting and need to find logs quickly
+title: "Logging"
 ---
 
 # Logging
@@ -107,9 +108,7 @@ All logging configuration lives under `logging` in `~/.aipro/aipro.json`.
     "consoleLevel": "info",
     "consoleStyle": "pretty",
     "redactSensitive": "tools",
-    "redactPatterns": [
-      "sk-.*"
-    ]
+    "redactPatterns": ["sk-.*"]
   }
 }
 ```
@@ -163,9 +162,11 @@ diagnostics + the exporter plugin are enabled.
 ### Diagnostic event catalog
 
 Model usage:
+
 - `model.usage`: tokens, cost, duration, context, provider/model/channel, session ids.
 
 Message flow:
+
 - `webhook.received`: webhook ingress per channel.
 - `webhook.processed`: webhook handled + duration.
 - `webhook.error`: webhook handler errors.
@@ -173,6 +174,7 @@ Message flow:
 - `message.processed`: outcome + duration + optional error.
 
 Queue + session:
+
 - `queue.lane.enqueue`: command queue lane enqueue + depth.
 - `queue.lane.dequeue`: command queue lane dequeue + wait time.
 - `session.state`: session state transition + reason.
@@ -212,6 +214,7 @@ AIPRO_DIAGNOSTICS=telegram.http,telegram.payload
 ```
 
 Notes:
+
 - Flag logs go to the standard log file (same as `logging.file`).
 - Output is still redacted according to `logging.redactSensitive`.
 - Full guide: [/diagnostics/flags](/diagnostics/flags).
@@ -249,6 +252,7 @@ works with any OpenTelemetry collector/backend that accepts OTLP/HTTP.
 ```
 
 Notes:
+
 - You can also enable the plugin with `aipro plugins enable diagnostics-otel`.
 - `protocol` currently supports `http/protobuf` only. `grpc` is ignored.
 - Metrics include token usage, cost, context size, run duration, and message-flow
@@ -262,6 +266,7 @@ Notes:
 ### Exported metrics (names + types)
 
 Model usage:
+
 - `aipro.tokens` (counter, attrs: `aipro.token`, `aipro.channel`,
   `aipro.provider`, `aipro.model`)
 - `aipro.cost.usd` (counter, attrs: `aipro.channel`, `aipro.provider`,
@@ -272,6 +277,7 @@ Model usage:
   `aipro.channel`, `aipro.provider`, `aipro.model`)
 
 Message flow:
+
 - `aipro.webhook.received` (counter, attrs: `aipro.channel`,
   `aipro.webhook`)
 - `aipro.webhook.error` (counter, attrs: `aipro.channel`,
@@ -286,6 +292,7 @@ Message flow:
   `aipro.outcome`)
 
 Queues + sessions:
+
 - `aipro.queue.lane.enqueue` (counter, attrs: `aipro.lane`)
 - `aipro.queue.lane.dequeue` (counter, attrs: `aipro.lane`)
 - `aipro.queue.depth` (histogram, attrs: `aipro.lane` or

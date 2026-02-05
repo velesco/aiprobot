@@ -1,7 +1,5 @@
 import path from "node:path";
-
 import { describe, expect, it, vi } from "vitest";
-
 import { withTempHome as withTempHomeBase } from "../../test/helpers/temp-home.js";
 import { runEmbeddedPiAgent } from "../agents/pi-embedded.js";
 import { getReplyFromConfig } from "./reply.js";
@@ -45,7 +43,7 @@ function makeCfg(home: string) {
     agents: {
       defaults: {
         model: "anthropic/claude-opus-4-5",
-        workspace: path.join(home, "clawd"),
+        workspace: path.join(home, "aipro"),
       },
     },
     channels: { whatsapp: { allowFrom: ["*"] } },

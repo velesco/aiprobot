@@ -1,7 +1,7 @@
 import Foundation
 
 enum GatewayLaunchAgentManager {
-    private static let logger = Logger(subsystem: "ro.aipro", category: "gateway.launchd")
+    private static let logger = Logger(subsystem: "ai.aipro", category: "gateway.launchd")
     private static let disableLaunchAgentMarker = ".aipro/disable-launchagent"
 
     private static var disableLaunchAgentMarkerURL: URL {
@@ -15,7 +15,8 @@ enum GatewayLaunchAgentManager {
     }
 
     static func isLaunchAgentWriteDisabled() -> Bool {
-        FileManager().fileExists(atPath: self.disableLaunchAgentMarkerURL.path)
+        if FileManager().fileExists(atPath: self.disableLaunchAgentMarkerURL.path) { return true }
+        return false
     }
 
     static func setLaunchAgentWriteDisabled(_ disabled: Bool) -> String? {

@@ -1,6 +1,5 @@
 import type { AIProPluginApi } from "aipro/plugin-sdk";
 import { emptyPluginConfigSchema } from "aipro/plugin-sdk";
-
 import { whatsappPlugin } from "./src/channel.js";
 import { setWhatsAppRuntime } from "./src/runtime.js";
 

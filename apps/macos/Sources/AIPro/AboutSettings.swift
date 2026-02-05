@@ -50,7 +50,7 @@ struct AboutSettings: View {
                     icon: "chevron.left.slash.chevron.right",
                     title: "GitHub",
                     url: "https://github.com/aipro/aipro")
-                AboutLinkRow(icon: "globe", title: "Website", url: "https://steipete.me")
+                AboutLinkRow(icon: "globe", title: "Website", url: "https://aipro.ro")
                 AboutLinkRow(icon: "bird", title: "Twitter", url: "https://twitter.com/steipete")
                 AboutLinkRow(icon: "envelope", title: "Email", url: "mailto:peter@steipete.me")
             }
@@ -108,7 +108,10 @@ struct AboutSettings: View {
     }
 
     private var buildTimestamp: String? {
-        guard let raw = Bundle.main.object(forInfoDictionaryKey: "AIProBuildTimestamp") as? String
+        guard
+            let raw =
+                (Bundle.main.object(forInfoDictionaryKey: "AIProBuildTimestamp") as? String) ??
+                (Bundle.main.object(forInfoDictionaryKey: "AIProBuildTimestamp") as? String)
         else { return nil }
         let parser = ISO8601DateFormatter()
         parser.formatOptions = [.withInternetDateTime]
@@ -122,7 +125,9 @@ struct AboutSettings: View {
     }
 
     private var gitCommit: String {
-        Bundle.main.object(forInfoDictionaryKey: "AIProGitCommit") as? String ?? "unknown"
+        (Bundle.main.object(forInfoDictionaryKey: "AIProGitCommit") as? String) ??
+            (Bundle.main.object(forInfoDictionaryKey: "AIProGitCommit") as? String) ??
+            "unknown"
     }
 
     private var bundleID: String {

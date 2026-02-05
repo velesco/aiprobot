@@ -2,11 +2,13 @@ import Foundation
 
 enum LogLocator {
     private static var logDir: URL {
-        if let override = ProcessInfo.processInfo.environment["AIPRO_LOG_DIR"], !override.isEmpty {
+        if let override = ProcessInfo.processInfo.environment["AIPRO_LOG_DIR"],
+           !override.isEmpty
+        {
             return URL(fileURLWithPath: override)
         }
-
-        return URL(fileURLWithPath: "/tmp/aipro")
+        let preferred = URL(fileURLWithPath: "/tmp/aipro")
+        return preferred
     }
 
     private static var stdoutLog: URL {
@@ -34,8 +36,11 @@ enum LogLocator {
             includingPropertiesForKeys: [.contentModificationDateKey],
             options: [.skipsHiddenFiles])) ?? []
 
+        let prefixes = ["aipro"]
         return files
-            .filter { $0.lastPathComponent.hasPrefix("aipro") && $0.pathExtension == "log" }
+            .filter { file in
+                prefixes.contains { file.lastPathComponent.hasPrefix($0) } && file.pathExtension == "log"
+            }
             .max { lhs, rhs in
                 self.modificationDate(for: lhs) < self.modificationDate(for: rhs)
             }

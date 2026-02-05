@@ -103,8 +103,8 @@ vi.mock("aipro/plugin-sdk", async () => {
   };
 });
 
-import { createDiagnosticsOtelService } from "./service.js";
 import { emitDiagnosticEvent } from "aipro/plugin-sdk";
+import { createDiagnosticsOtelService } from "./service.js";
 
 describe("diagnostics-otel service", () => {
   beforeEach(() => {
@@ -209,7 +209,7 @@ describe("diagnostics-otel service", () => {
     expect(registerLogTransportMock).toHaveBeenCalledTimes(1);
     expect(registeredTransports).toHaveLength(1);
     registeredTransports[0]?.({
-      0: "{\"subsystem\":\"diagnostic\"}",
+      0: '{"subsystem":"diagnostic"}',
       1: "hello",
       _meta: { logLevelName: "INFO", date: new Date() },
     });

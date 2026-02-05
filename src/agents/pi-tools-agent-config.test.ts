@@ -1,8 +1,8 @@
 import { describe, expect, it } from "vitest";
 import "./test-helpers/fast-coding-tools.js";
 import type { AIProConfig } from "../config/config.js";
-import { createAIProCodingTools } from "./pi-tools.js";
 import type { SandboxDockerConfig } from "./sandbox.js";
+import { createAIProCodingTools } from "./pi-tools.js";
 
 describe("Agent-specific tool filtering", () => {
   it("should apply global tool policy when no agent-specific policy exists", () => {
@@ -15,7 +15,7 @@ describe("Agent-specific tool filtering", () => {
         list: [
           {
             id: "main",
-            workspace: "~/clawd",
+            workspace: "~/aipro",
           },
         ],
       },
@@ -44,7 +44,7 @@ describe("Agent-specific tool filtering", () => {
         list: [
           {
             id: "main",
-            workspace: "~/clawd",
+            workspace: "~/aipro",
             tools: {
               elevated: {
                 enabled: true,
@@ -105,7 +105,7 @@ describe("Agent-specific tool filtering", () => {
         list: [
           {
             id: "restricted",
-            workspace: "~/clawd-restricted",
+            workspace: "~/aipro-restricted",
             tools: {
               allow: ["read"], // Agent override: only read
               deny: ["exec", "write", "edit"],
@@ -189,12 +189,12 @@ describe("Agent-specific tool filtering", () => {
         list: [
           {
             id: "main",
-            workspace: "~/clawd",
+            workspace: "~/aipro",
             // No tools restriction - all tools available
           },
           {
             id: "family",
-            workspace: "~/clawd-family",
+            workspace: "~/aipro-family",
             tools: {
               allow: ["read"],
               deny: ["exec", "write", "edit", "process"],
@@ -399,7 +399,7 @@ describe("Agent-specific tool filtering", () => {
         list: [
           {
             id: "work",
-            workspace: "~/clawd-work",
+            workspace: "~/aipro-work",
             tools: {
               deny: ["exec", "process"], // Agent deny (override)
             },
@@ -435,7 +435,7 @@ describe("Agent-specific tool filtering", () => {
         list: [
           {
             id: "restricted",
-            workspace: "~/clawd-restricted",
+            workspace: "~/aipro-restricted",
             sandbox: {
               mode: "all",
               scope: "agent",

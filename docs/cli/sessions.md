@@ -2,6 +2,7 @@
 summary: "CLI reference for `aipro sessions` (list stored sessions + usage)"
 read_when:
   - You want to list stored sessions and see recent activity
+title: "sessions"
 ---
 
 # `aipro sessions`
@@ -13,4 +14,3 @@ aipro sessions
 aipro sessions --active 120
 aipro sessions --json
 ```
-

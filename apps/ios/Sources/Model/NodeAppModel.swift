@@ -1,4 +1,4 @@
-import AIProKit
+import AiproKit
 import Network
 import Observation
 import SwiftUI
@@ -699,8 +699,9 @@ final class NodeAppModel {
 
             let json = try await self.screen.eval(javaScript: """
             (() => {
-              if (!globalThis.aiproA2UI) return JSON.stringify({ ok: false, error: "missing aiproA2UI" });
-              return JSON.stringify(globalThis.aiproA2UI.reset());
+              const host = globalThis.aiproA2UI;
+              if (!host) return JSON.stringify({ ok: false, error: "missing aiproA2UI" });
+              return JSON.stringify(host.reset());
             })()
             """)
             return BridgeInvokeResponse(id: req.id, ok: true, payloadJSON: json)
@@ -742,9 +743,10 @@ final class NodeAppModel {
             let js = """
             (() => {
               try {
-                if (!globalThis.aiproA2UI) return JSON.stringify({ ok: false, error: "missing aiproA2UI" });
+                const host = globalThis.aiproA2UI;
+                if (!host) return JSON.stringify({ ok: false, error: "missing aiproA2UI" });
                 const messages = \(messagesJSON);
-                return JSON.stringify(globalThis.aiproA2UI.applyMessages(messages));
+                return JSON.stringify(host.applyMessages(messages));
               } catch (e) {
                 return JSON.stringify({ ok: false, error: String(e?.message ?? e) });
               }

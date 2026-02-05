@@ -3,7 +3,9 @@ summary: "Platform support overview (Gateway + companion apps)"
 read_when:
   - Looking for OS support or install paths
   - Deciding where to run the Gateway
+title: "Platforms"
 ---
+
 # Platforms
 
 AIPro core is written in TypeScript. **Node is the recommended runtime**.
@@ -46,5 +48,6 @@ Use one of these (all supported):
 - Repair/migrate: `aipro doctor` (offers to install or fix the service)
 
 The service target depends on OS:
+
 - macOS: LaunchAgent (`bot.molt.gateway` or `bot.molt.<profile>`; legacy `com.aipro.*`)
 - Linux/WSL2: systemd user service (`aipro-gateway[-<profile>].service`)

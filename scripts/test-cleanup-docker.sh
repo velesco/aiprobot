@@ -2,7 +2,7 @@
 set -euo pipefail
 
 ROOT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
-IMAGE_NAME="${AIPRO_CLEANUP_SMOKE_IMAGE:-aipro-cleanup-smoke:local}"
+IMAGE_NAME="${AIPRO_CLEANUP_SMOKE_IMAGE:-${AIPRO_CLEANUP_SMOKE_IMAGE:-aipro-cleanup-smoke:local}}"
 
 echo "==> Build image: $IMAGE_NAME"
 docker build \

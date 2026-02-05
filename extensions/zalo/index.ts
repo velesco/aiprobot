@@ -1,6 +1,5 @@
 import type { AIProPluginApi } from "aipro/plugin-sdk";
 import { emptyPluginConfigSchema } from "aipro/plugin-sdk";
-
 import { zaloDock, zaloPlugin } from "./src/channel.js";
 import { handleZaloWebhookRequest } from "./src/monitor.js";
 import { setZaloRuntime } from "./src/runtime.js";

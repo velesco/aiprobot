@@ -1,6 +1,5 @@
 import type { AIProPluginApi } from "aipro/plugin-sdk";
 import { emptyPluginConfigSchema } from "aipro/plugin-sdk";
-
 import { slackPlugin } from "./src/channel.js";
 import { setSlackRuntime } from "./src/runtime.js";
 

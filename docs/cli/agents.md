@@ -2,6 +2,7 @@
 summary: "CLI reference for `aipro agents` (list/add/delete/set identity)"
 read_when:
   - You want multiple isolated agents (workspaces + routing + auth)
+title: "agents"
 ---
 
 # `aipro agents`
@@ -9,6 +10,7 @@ read_when:
 Manage isolated agents (workspaces + auth + routing).
 
 Related:
+
 - Multi-agent routing: [Multi-Agent Routing](/concepts/multi-agent)
 - Agent workspace: [Agent workspace](/concepts/agent-workspace)
 
@@ -16,16 +18,17 @@ Related:
 
 ```bash
 aipro agents list
-aipro agents add work --workspace ~/clawd-work
-aipro agents set-identity --workspace ~/clawd --from-identity
-aipro agents set-identity --agent main --avatar avatars/clawd.png
+aipro agents add work --workspace ~/.aipro/workspace-work
+aipro agents set-identity --workspace ~/.aipro/workspace --from-identity
+aipro agents set-identity --agent main --avatar avatars/aipro.png
 aipro agents delete work
 ```
 
 ## Identity files
 
 Each agent workspace can include an `IDENTITY.md` at the workspace root:
-- Example path: `~/clawd/IDENTITY.md`
+
+- Example path: `~/.aipro/workspace/IDENTITY.md`
 - `set-identity --from-identity` reads from the workspace root (or an explicit `--identity-file`)
 
 Avatar paths resolve relative to the workspace root.
@@ -33,6 +36,7 @@ Avatar paths resolve relative to the workspace root.
 ## Set identity
 
 `set-identity` writes fields into `agents.list[].identity`:
+
 - `name`
 - `theme`
 - `emoji`
@@ -41,13 +45,13 @@ Avatar paths resolve relative to the workspace root.
 Load from `IDENTITY.md`:
 
 ```bash
-aipro agents set-identity --workspace ~/clawd --from-identity
+aipro agents set-identity --workspace ~/.aipro/workspace --from-identity
 ```
 
 Override fields explicitly:
 
 ```bash
-aipro agents set-identity --agent main --name "Clawd" --emoji "🦞" --avatar avatars/clawd.png
+aipro agents set-identity --agent main --name "AIPro" --emoji "🦞" --avatar avatars/aipro.png
 ```
 
 Config sample:
@@ -59,13 +63,13 @@ Config sample:
       {
         id: "main",
         identity: {
-          name: "Clawd",
+          name: "AIPro",
           theme: "space lobster",
           emoji: "🦞",
-          avatar: "avatars/clawd.png"
-        }
-      }
-    ]
-  }
+          avatar: "avatars/aipro.png",
+        },
+      },
+    ],
+  },
 }
 ```

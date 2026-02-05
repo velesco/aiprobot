@@ -96,21 +96,29 @@ describe("daemon-cli coverage", () => {
   });
 
   afterEach(() => {
-    if (originalEnv.AIPRO_STATE_DIR !== undefined)
+    if (originalEnv.AIPRO_STATE_DIR !== undefined) {
       process.env.AIPRO_STATE_DIR = originalEnv.AIPRO_STATE_DIR;
-    else delete process.env.AIPRO_STATE_DIR;
+    } else {
+      delete process.env.AIPRO_STATE_DIR;
+    }
 
-    if (originalEnv.AIPRO_CONFIG_PATH !== undefined)
+    if (originalEnv.AIPRO_CONFIG_PATH !== undefined) {
       process.env.AIPRO_CONFIG_PATH = originalEnv.AIPRO_CONFIG_PATH;
-    else delete process.env.AIPRO_CONFIG_PATH;
+    } else {
+      delete process.env.AIPRO_CONFIG_PATH;
+    }
 
-    if (originalEnv.AIPRO_GATEWAY_PORT !== undefined)
+    if (originalEnv.AIPRO_GATEWAY_PORT !== undefined) {
       process.env.AIPRO_GATEWAY_PORT = originalEnv.AIPRO_GATEWAY_PORT;
-    else delete process.env.AIPRO_GATEWAY_PORT;
+    } else {
+      delete process.env.AIPRO_GATEWAY_PORT;
+    }
 
-    if (originalEnv.AIPRO_PROFILE !== undefined)
+    if (originalEnv.AIPRO_PROFILE !== undefined) {
       process.env.AIPRO_PROFILE = originalEnv.AIPRO_PROFILE;
-    else delete process.env.AIPRO_PROFILE;
+    } else {
+      delete process.env.AIPRO_PROFILE;
+    }
   });
 
   it("probes gateway status by default", async () => {
@@ -145,7 +153,7 @@ describe("daemon-cli coverage", () => {
         AIPRO_CONFIG_PATH: "/tmp/aipro-daemon-state/aipro.json",
         AIPRO_GATEWAY_PORT: "19001",
       },
-      sourcePath: "/tmp/ro.aipro.gateway.plist",
+      sourcePath: "/tmp/bot.molt.gateway.plist",
     });
 
     const { registerDaemonCli } = await import("./daemon-cli.js");

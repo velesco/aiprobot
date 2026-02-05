@@ -409,6 +409,12 @@ importers:
 
   extensions/open-prose: {}
 
+  extensions/platform-sync:
+    devDependencies:
+      aipro:
+        specifier: workspace:*
+        version: link:../..
+
   extensions/signal: {}
 
   extensions/slack: {}

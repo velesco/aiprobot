@@ -1,10 +1,10 @@
-import AIProKit
+import AiproKit
 import Foundation
 import Testing
 
 @Suite struct ToolDisplayRegistryTests {
     @Test func loadsToolDisplayConfigFromBundle() {
-        let url = AIProKitResources.bundle.url(forResource: "tool-display", withExtension: "json")
+        let url = AiproKitResources.bundle.url(forResource: "tool-display", withExtension: "json")
         #expect(url != nil)
     }
 

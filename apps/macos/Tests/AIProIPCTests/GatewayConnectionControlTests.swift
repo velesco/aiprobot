@@ -1,8 +1,8 @@
-import AIProKit
+import AiproKit
 import Foundation
 import Testing
 @testable import AIPro
-@testable import AIProIPC
+@testable import AiproIPC
 
 private final class FakeWebSocketTask: WebSocketTasking, @unchecked Sendable {
     var state: URLSessionTask.State = .running

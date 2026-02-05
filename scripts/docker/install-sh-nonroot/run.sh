@@ -1,17 +1,9 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-INSTALL_URL="${AIPRO_INSTALL_URL:-https://aipro.ro/install.sh}"
+INSTALL_URL="${AIPRO_INSTALL_URL:-https://aipro.bot/install.sh}"
 DEFAULT_PACKAGE="aipro"
-if [[ -z "${AIPRO_INSTALL_PACKAGE:-}" && "$INSTALL_URL" == *"clawd.bot"* ]]; then
-  DEFAULT_PACKAGE="aipro"
-fi
 PACKAGE_NAME="${AIPRO_INSTALL_PACKAGE:-$DEFAULT_PACKAGE}"
-if [[ "$PACKAGE_NAME" == "aipro" ]]; then
-  ALT_PACKAGE_NAME="aipro"
-else
-  ALT_PACKAGE_NAME="aipro"
-fi
 
 echo "==> Pre-flight: ensure git absent"
 if command -v git >/dev/null; then
@@ -36,24 +28,13 @@ else
 fi
 CLI_NAME="$PACKAGE_NAME"
 CMD_PATH="$(command -v "$CLI_NAME" || true)"
-if [[ -z "$CMD_PATH" ]]; then
-  CLI_NAME="$ALT_PACKAGE_NAME"
-  CMD_PATH="$(command -v "$CLI_NAME" || true)"
-fi
 if [[ -z "$CMD_PATH" && -x "$HOME/.npm-global/bin/$PACKAGE_NAME" ]]; then
   CLI_NAME="$PACKAGE_NAME"
   CMD_PATH="$HOME/.npm-global/bin/$PACKAGE_NAME"
 fi
-if [[ -z "$CMD_PATH" && -x "$HOME/.npm-global/bin/$ALT_PACKAGE_NAME" ]]; then
-  CLI_NAME="$ALT_PACKAGE_NAME"
-  CMD_PATH="$HOME/.npm-global/bin/$ALT_PACKAGE_NAME"
-fi
 if [[ -z "$CMD_PATH" ]]; then
-  echo "Neither $PACKAGE_NAME nor $ALT_PACKAGE_NAME is on PATH" >&2
+  echo "$PACKAGE_NAME is not on PATH" >&2
   exit 1
-fi
-if [[ -z "$EXPECTED_VERSION" && "$CLI_NAME" != "$PACKAGE_NAME" ]]; then
-  LATEST_VERSION="$(npm view "$CLI_NAME" version)"
 fi
 echo "==> Verify CLI installed: $CLI_NAME"
 INSTALLED_VERSION="$("$CMD_PATH" --version 2>/dev/null | head -n 1 | tr -d '\r')"

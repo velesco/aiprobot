@@ -230,7 +230,7 @@ describe("buildServiceEnvironment", () => {
     expect(typeof env.AIPRO_SERVICE_VERSION).toBe("string");
     expect(env.AIPRO_SYSTEMD_UNIT).toBe("aipro-gateway.service");
     if (process.platform === "darwin") {
-      expect(env.AIPRO_LAUNCHD_LABEL).toBe("ro.aipro.gateway");
+      expect(env.AIPRO_LAUNCHD_LABEL).toBe("ai.aipro.gateway");
     }
   });
 
@@ -241,7 +241,7 @@ describe("buildServiceEnvironment", () => {
     });
     expect(env.AIPRO_SYSTEMD_UNIT).toBe("aipro-gateway-work.service");
     if (process.platform === "darwin") {
-      expect(env.AIPRO_LAUNCHD_LABEL).toBe("ro.aipro.work");
+      expect(env.AIPRO_LAUNCHD_LABEL).toBe("ai.aipro.work");
     }
   });
 });

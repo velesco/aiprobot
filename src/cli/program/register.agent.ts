@@ -11,10 +11,10 @@ import { setVerbose } from "../../globals.js";
 import { defaultRuntime } from "../../runtime.js";
 import { formatDocsLink } from "../../terminal/links.js";
 import { theme } from "../../terminal/theme.js";
-import { hasExplicitOptions } from "../command-options.js";
-import { formatHelpExamples } from "../help-format.js";
-import { createDefaultDeps } from "../deps.js";
 import { runCommandWithRuntime } from "../cli-utils.js";
+import { hasExplicitOptions } from "../command-options.js";
+import { createDefaultDeps } from "../deps.js";
+import { formatHelpExamples } from "../help-format.js";
 import { collectOption } from "./helpers.js";
 
 export function registerAgentCommands(program: Command, args: { agentChannelOptions: string }) {
@@ -155,11 +155,14 @@ ${theme.muted("Docs:")} ${formatDocsLink("/cli/agent", "docs.aipro.ro/cli/agent"
         `
 ${theme.heading("Examples:")}
 ${formatHelpExamples([
-  ['aipro agents set-identity --agent main --name "Clawd" --emoji "🦞"', "Set name + emoji."],
-  ["aipro agents set-identity --agent main --avatar avatars/clawd.png", "Set avatar path."],
-  ["aipro agents set-identity --workspace ~/clawd --from-identity", "Load from IDENTITY.md."],
+  ['aipro agents set-identity --agent main --name "AIPro" --emoji "🦞"', "Set name + emoji."],
+  ["aipro agents set-identity --agent main --avatar avatars/aipro.png", "Set avatar path."],
   [
-    "aipro agents set-identity --identity-file ~/clawd/IDENTITY.md --agent main",
+    "aipro agents set-identity --workspace ~/.aipro/workspace --from-identity",
+    "Load from IDENTITY.md.",
+  ],
+  [
+    "aipro agents set-identity --identity-file ~/.aipro/workspace/IDENTITY.md --agent main",
     "Use a specific IDENTITY.md.",
   ],
 ])}

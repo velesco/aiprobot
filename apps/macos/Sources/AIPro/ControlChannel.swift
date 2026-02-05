@@ -1,5 +1,5 @@
-import AIProKit
-import AIProProtocol
+import AiproKit
+import AiproProtocol
 import Foundation
 import Observation
 import SwiftUI
@@ -20,7 +20,7 @@ struct ControlAgentEvent: Codable, Sendable, Identifiable {
     let seq: Int
     let stream: String
     let ts: Double
-    let data: [String: AIProProtocol.AnyCodable]
+    let data: [String: AiproProtocol.AnyCodable]
     let summary: String?
 }
 
@@ -76,7 +76,7 @@ final class ControlChannel {
     private(set) var lastPingMs: Double?
     private(set) var authSourceLabel: String?
 
-    private let logger = Logger(subsystem: "ro.aipro", category: "control")
+    private let logger = Logger(subsystem: "ai.aipro", category: "control")
 
     private var eventTask: Task<Void, Never>?
     private var recoveryTask: Task<Void, Never>?
@@ -163,8 +163,8 @@ final class ControlChannel {
         timeoutMs: Double? = nil) async throws -> Data
     {
         do {
-            let rawParams = params?.reduce(into: [String: AIProKit.AnyCodable]()) {
-                $0[$1.key] = AIProKit.AnyCodable($1.value.base)
+            let rawParams = params?.reduce(into: [String: AiproKit.AnyCodable]()) {
+                $0[$1.key] = AiproKit.AnyCodable($1.value.base)
             }
             let data = try await GatewayConnection.shared.request(
                 method: method,
@@ -194,9 +194,7 @@ final class ControlChannel {
                 ? "gateway.remote.token"
                 : "gateway.auth.token"
             return
-                "Gateway rejected token; set \(tokenKey) (or AIPRO_GATEWAY_TOKEN) " +
-                "or clear it on the gateway. " +
-                "Reason: \(reason)"
+                "Gateway rejected token; set \(tokenKey) or clear it on the gateway. Reason: \(reason)"
         }
 
         // Common misfire: we connected to the configured localhost port but it is occupied
@@ -400,20 +398,20 @@ final class ControlChannel {
     }
 
     private static func bridgeToProtocolArgs(
-        _ value: AIProProtocol.AnyCodable?) -> [String: AIProProtocol.AnyCodable]?
+        _ value: AiproProtocol.AnyCodable?) -> [String: AiproProtocol.AnyCodable]?
     {
         guard let value else { return nil }
-        if let dict = value.value as? [String: AIProProtocol.AnyCodable] {
+        if let dict = value.value as? [String: AiproProtocol.AnyCodable] {
             return dict
         }
-        if let dict = value.value as? [String: AIProKit.AnyCodable],
+        if let dict = value.value as? [String: AiproKit.AnyCodable],
            let data = try? JSONEncoder().encode(dict),
-           let decoded = try? JSONDecoder().decode([String: AIProProtocol.AnyCodable].self, from: data)
+           let decoded = try? JSONDecoder().decode([String: AiproProtocol.AnyCodable].self, from: data)
         {
             return decoded
         }
         if let data = try? JSONEncoder().encode(value),
-           let decoded = try? JSONDecoder().decode([String: AIProProtocol.AnyCodable].self, from: data)
+           let decoded = try? JSONDecoder().decode([String: AiproProtocol.AnyCodable].self, from: data)
         {
             return decoded
         }

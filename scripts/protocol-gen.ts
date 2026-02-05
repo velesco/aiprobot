@@ -14,7 +14,7 @@ async function writeJsonSchema() {
 
   const rootSchema = {
     $schema: "http://json-schema.org/draft-07/schema#",
-    $id: "https://aipro.dev/protocol.schema.json",
+    $id: "https://aipro.ro/protocol.schema.json",
     title: "AIPro Gateway Protocol",
     description: "Handshake, request/response, and event frames for the Gateway WebSocket.",
     oneOf: [

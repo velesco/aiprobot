@@ -194,7 +194,7 @@
           statusEl.style.display = 'none';
         }
 
-        window.__aipro = {
+        const api = {
           canvas,
           ctx,
           setDebugStatusEnabled,
@@ -217,6 +217,7 @@
             }
           }
         };
+        window.__aipro = api;
       })();
 
     </script>

@@ -4,7 +4,9 @@ read_when:
   - Pairing or reconnecting the iOS node
   - Running the iOS app from source
   - Debugging gateway discovery or canvas commands
+title: "iOS App"
 ---
+
 # iOS App (Node)
 
 Availability: internal preview. The iOS app is not publicly distributed yet.
@@ -20,27 +22,27 @@ Availability: internal preview. The iOS app is not publicly distributed yet.
 - Gateway running on another device (macOS, Linux, or Windows via WSL2).
 - Network path:
   - Same LAN via Bonjour, **or**
-  - Tailnet via unicast DNS-SD (`aipro.internal.`), **or**
+  - Tailnet via unicast DNS-SD (example domain: `aipro.internal.`), **or**
   - Manual host/port (fallback).
 
 ## Quick start (pair + connect)
 
-1) Start the Gateway:
+1. Start the Gateway:
 
 ```bash
 aipro gateway --port 18789
 ```
 
-2) In the iOS app, open Settings and pick a discovered gateway (or enable Manual Host and enter host/port).
+2. In the iOS app, open Settings and pick a discovered gateway (or enable Manual Host and enter host/port).
 
-3) Approve the pairing request on the gateway host:
+3. Approve the pairing request on the gateway host:
 
 ```bash
 aipro nodes pending
 aipro nodes approve <requestId>
 ```
 
-4) Verify connection:
+4. Verify connection:
 
 ```bash
 aipro nodes status
@@ -51,11 +53,11 @@ aipro gateway call node.list --params "{}"
 
 ### Bonjour (LAN)
 
-The Gateway advertises `_aipro._tcp` on `local.`. The iOS app lists these automatically.
+The Gateway advertises `_aipro-gw._tcp` on `local.`. The iOS app lists these automatically.
 
 ### Tailnet (cross-network)
 
-If mDNS is blocked, use a unicast DNS-SD zone (recommended domain: `aipro.internal.`) and Tailscale split DNS.
+If mDNS is blocked, use a unicast DNS-SD zone (choose a domain; example: `aipro.internal.`) and Tailscale split DNS.
 See [Bonjour](/gateway/bonjour) for the CoreDNS example.
 
 ### Manual host/port
@@ -71,6 +73,7 @@ aipro nodes invoke --node "iOS Node" --command canvas.navigate --params '{"url":
 ```
 
 Notes:
+
 - The Gateway canvas host serves `/__aipro__/canvas/` and `/__aipro__/a2ui/`.
 - The iOS node auto-navigates to A2UI on connect when a canvas host URL is advertised.
 - Return to the built-in scaffold with `canvas.navigate` and `{"url":""}`.

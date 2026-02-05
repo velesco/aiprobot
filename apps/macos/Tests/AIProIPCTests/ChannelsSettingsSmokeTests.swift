@@ -1,4 +1,4 @@
-import AIProProtocol
+import AiproProtocol
 import SwiftUI
 import Testing
 @testable import AIPro

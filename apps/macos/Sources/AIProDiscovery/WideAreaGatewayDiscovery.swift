@@ -1,4 +1,4 @@
-import AIProKit
+import AiproKit
 import Foundation
 
 struct WideAreaGatewayBeacon: Sendable, Equatable {
@@ -50,7 +50,7 @@ enum WideAreaGatewayDiscovery {
             return []
         }
 
-        let domain = AIProBonjour.wideAreaGatewayServiceDomain
+        guard let domain = AIProBonjour.wideAreaGatewayServiceDomain else { return [] }
         let domainTrimmed = domain.trimmingCharacters(in: CharacterSet(charactersIn: "."))
         let probeName = "_aipro-gw._tcp.\(domainTrimmed)"
         guard let ptrLines = context.dig(
@@ -154,7 +154,7 @@ enum WideAreaGatewayDiscovery {
         remaining: () -> TimeInterval,
         dig: @escaping @Sendable (_ args: [String], _ timeout: TimeInterval) -> String?) -> String?
     {
-        let domain = AIProBonjour.wideAreaGatewayServiceDomain
+        guard let domain = AIProBonjour.wideAreaGatewayServiceDomain else { return nil }
         let domainTrimmed = domain.trimmingCharacters(in: CharacterSet(charactersIn: "."))
         let probeName = "_aipro-gw._tcp.\(domainTrimmed)"
 
@@ -222,9 +222,9 @@ enum WideAreaGatewayDiscovery {
         process.executableURL = URL(fileURLWithPath: path)
         process.arguments = args
         let outPipe = Pipe()
-        let errPipe = Pipe()
         process.standardOutput = outPipe
-        process.standardError = errPipe
+        // Avoid stderr pipe backpressure; we don't consume it.
+        process.standardError = FileHandle.nullDevice
 
         do {
             try process.run()

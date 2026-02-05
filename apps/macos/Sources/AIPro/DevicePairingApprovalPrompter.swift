@@ -1,6 +1,6 @@
 import AppKit
-import AIProKit
-import AIProProtocol
+import AiproKit
+import AiproProtocol
 import Foundation
 import Observation
 import OSLog
@@ -10,7 +10,7 @@ import OSLog
 final class DevicePairingApprovalPrompter {
     static let shared = DevicePairingApprovalPrompter()
 
-    private let logger = Logger(subsystem: "ro.aipro", category: "device-pairing")
+    private let logger = Logger(subsystem: "ai.aipro", category: "device-pairing")
     private var task: Task<Void, Never>?
     private var isStopping = false
     private var isPresenting = false

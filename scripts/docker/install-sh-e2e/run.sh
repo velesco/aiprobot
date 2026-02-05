@@ -1,11 +1,11 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-INSTALL_URL="${AIPRO_INSTALL_URL:-https://aipro.ro/install.sh}"
-MODELS_MODE="${AIPRO_E2E_MODELS:-both}" # both|openai|anthropic
-INSTALL_TAG="${AIPRO_INSTALL_TAG:-latest}"
-E2E_PREVIOUS_VERSION="${AIPRO_INSTALL_E2E_PREVIOUS:-}"
-SKIP_PREVIOUS="${AIPRO_INSTALL_E2E_SKIP_PREVIOUS:-0}"
+INSTALL_URL="${AIPRO_INSTALL_URL:-${AIPRO_INSTALL_URL:-https://aipro.bot/install.sh}}"
+MODELS_MODE="${AIPRO_E2E_MODELS:-${AIPRO_E2E_MODELS:-both}}" # both|openai|anthropic
+INSTALL_TAG="${AIPRO_INSTALL_TAG:-${AIPRO_INSTALL_TAG:-latest}}"
+E2E_PREVIOUS_VERSION="${AIPRO_INSTALL_E2E_PREVIOUS:-${AIPRO_INSTALL_E2E_PREVIOUS:-}}"
+SKIP_PREVIOUS="${AIPRO_INSTALL_E2E_SKIP_PREVIOUS:-${AIPRO_INSTALL_E2E_SKIP_PREVIOUS:-0}}"
 OPENAI_API_KEY="${OPENAI_API_KEY:-}"
 ANTHROPIC_API_KEY="${ANTHROPIC_API_KEY:-}"
 ANTHROPIC_API_TOKEN="${ANTHROPIC_API_TOKEN:-}"
@@ -60,9 +60,9 @@ fi
 
 echo "==> Run official installer one-liner"
 if [[ "$INSTALL_TAG" == "beta" ]]; then
-  AIPRO_BETA=1 curl -fsSL "$INSTALL_URL" | bash
+  AIPRO_BETA=1 AIPRO_BETA=1 curl -fsSL "$INSTALL_URL" | bash
 elif [[ "$INSTALL_TAG" != "latest" ]]; then
-  AIPRO_VERSION="$INSTALL_TAG" curl -fsSL "$INSTALL_URL" | bash
+  AIPRO_VERSION="$INSTALL_TAG" AIPRO_VERSION="$INSTALL_TAG" curl -fsSL "$INSTALL_URL" | bash
 else
   curl -fsSL "$INSTALL_URL" | bash
 fi
@@ -521,11 +521,11 @@ run_profile() {
 }
 
 if [[ "$MODELS_MODE" == "openai" || "$MODELS_MODE" == "both" ]]; then
-  run_profile "e2e-openai" "18789" "/tmp/clawd-e2e-openai" "openai"
+  run_profile "e2e-openai" "18789" "/tmp/aipro-e2e-openai" "openai"
 fi
 
 if [[ "$MODELS_MODE" == "anthropic" || "$MODELS_MODE" == "both" ]]; then
-  run_profile "e2e-anthropic" "18799" "/tmp/clawd-e2e-anthropic" "anthropic"
+  run_profile "e2e-anthropic" "18799" "/tmp/aipro-e2e-anthropic" "anthropic"
 fi
 
 echo "OK"

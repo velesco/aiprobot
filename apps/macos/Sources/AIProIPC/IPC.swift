@@ -408,7 +408,10 @@ extension Request: Codable {
 }
 
 // Shared transport settings
-public let controlSocketPath = FileManager()
-    .homeDirectoryForCurrentUser
-    .appendingPathComponent("Library/Application Support/aipro/control.sock")
-    .path
+public let controlSocketPath: String = {
+    let home = FileManager().homeDirectoryForCurrentUser
+    let preferred = home
+        .appendingPathComponent("Library/Application Support/AIPro/control.sock")
+        .path
+    return preferred
+}()

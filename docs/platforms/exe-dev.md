@@ -3,6 +3,7 @@ summary: "Run AIPro Gateway on exe.dev (VM + HTTPS proxy) for remote access"
 read_when:
   - You want a cheap always-on Linux host for the Gateway
   - You want remote Control UI access without running your own VPS
+title: "exe.dev"
 ---
 
 # exe.dev
@@ -13,17 +14,16 @@ This page assumes exe.dev's default **exeuntu** image. If you picked a different
 
 ## Beginner quick path
 
-1) [https://exe.new/aipro](https://exe.new/aipro)
-2) Fill in your auth key/token as needed
-3) Click on "Agent" next to your VM, and wait...
-4) ???
-5) Profit
+1. [https://exe.new/aipro](https://exe.new/aipro)
+2. Fill in your auth key/token as needed
+3. Click on "Agent" next to your VM, and wait...
+4. ???
+5. Profit
 
 ## What you need
 
 - exe.dev account
 - `ssh exe.dev` access to [exe.dev](https://exe.dev) virtual machines (optional)
-
 
 ## Automated Install with Shelley
 
@@ -41,7 +41,7 @@ Set up AIPro (https://docs.aipro.ro/install) on this VM. Use the non-interactive
 From your device:
 
 ```bash
-ssh exe.dev new 
+ssh exe.dev new
 ```
 
 Then connect:
@@ -50,7 +50,7 @@ Then connect:
 ssh <vm-name>.exe.xyz
 ```
 
-Tip: keep this VM **stateful**. AIPro stores state under `~/.aipro/` and `~/clawd/`.
+Tip: keep this VM **stateful**. AIPro stores state under `~/.aipro/` and `~/.aipro/workspace/`.
 
 ## 2) Install prerequisites (on the VM)
 
@@ -103,15 +103,15 @@ server {
 
 ## 5) Access AIPro and grant privileges
 
-Access `https://<vm-name>.exe.xyz/?token=YOUR-TOKEN-FROM-TERMINAL`. Approve
-devices with `aipro devices list` and `aipro device approve`. When in doubt,
+Access `https://<vm-name>.exe.xyz/?token=YOUR-TOKEN-FROM-TERMINAL` (see the Control UI output from onboarding). Approve
+devices with `aipro devices list` and `aipro devices approve <requestId>`. When in doubt,
 use Shelley from your browser!
 
 ## Remote Access
 
 Remote access is handled by [exe.dev](https://exe.dev)'s authentication. By
 default, HTTP traffic from port 8000 is forwarded to `https://<vm-name>.exe.xyz`
-with email auth. 
+with email auth.
 
 ## Updating
 

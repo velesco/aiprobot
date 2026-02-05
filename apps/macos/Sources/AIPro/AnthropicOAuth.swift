@@ -58,7 +58,7 @@ enum AnthropicAuthResolver {
 }
 
 enum AnthropicOAuth {
-    private static let logger = Logger(subsystem: "ro.aipro", category: "anthropic-oauth")
+    private static let logger = Logger(subsystem: "ai.aipro", category: "anthropic-oauth")
 
     private static let clientId = "9d1c250a-e61b-44d9-88ed-5944d1962f5e"
     private static let authorizeURL = URL(string: "https://claude.ai/oauth/authorize")!
@@ -233,10 +233,10 @@ enum AIProOAuthStore {
             let expanded = NSString(string: override).expandingTildeInPath
             return URL(fileURLWithPath: expanded, isDirectory: true)
         }
-
-        return FileManager().homeDirectoryForCurrentUser
-            .appendingPathComponent(".aipro", isDirectory: true)
+        let home = FileManager().homeDirectoryForCurrentUser
+        let preferred = home.appendingPathComponent(".aipro", isDirectory: true)
             .appendingPathComponent("credentials", isDirectory: true)
+        return preferred
     }
 
     static func oauthURL() -> URL {

@@ -3,6 +3,7 @@ summary: "CLI reference for `aipro plugins` (list, install, enable/disable, doct
 read_when:
   - You want to install or manage in-process Gateway plugins
   - You want to debug plugin load failures
+title: "plugins"
 ---
 
 # `aipro plugins`
@@ -10,6 +11,7 @@ read_when:
 Manage Gateway plugins/extensions (loaded in-process).
 
 Related:
+
 - Plugin system: [Plugins](/plugin)
 - Plugin manifest + schema: [Plugin manifest](/plugins/manifest)
 - Security hardening: [Security](/gateway/security)

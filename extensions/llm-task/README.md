@@ -4,11 +4,11 @@ Adds an **optional** agent tool `llm-task` for running **JSON-only** LLM tasks
 (drafting, summarizing, classifying) with optional JSON Schema validation.
 
 Designed to be called from workflow engines (for example, Lobster via
-`clawd.invoke --each`) without adding new AIPro code per workflow.
+`aipro.invoke --each`) without adding new AIPro code per workflow.
 
 ## Enable
 
-1) Enable the plugin:
+1. Enable the plugin:
 
 ```json
 {
@@ -20,7 +20,7 @@ Designed to be called from workflow engines (for example, Lobster via
 }
 ```
 
-2) Allowlist the tool (it is registered with `optional: true`):
+2. Allowlist the tool (it is registered with `optional: true`):
 
 ```json
 {

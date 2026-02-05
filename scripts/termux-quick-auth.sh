@@ -5,7 +5,7 @@
 # One-tap: shows status toast
 # If expired: directly opens auth URL
 
-SERVER="${AIPRO_SERVER:-l36}"
+SERVER="${AIPRO_SERVER:-${AIPRO_SERVER:-l36}}"
 
 STATUS=$(ssh -o ConnectTimeout=5 "$SERVER" '$HOME/aipro/scripts/claude-auth-status.sh simple' 2>&1)
 
@@ -22,7 +22,7 @@ case "$STATUS" in
         termux-toast "Auth expired - opening console..."
         termux-open-url "https://console.anthropic.com/settings/api-keys"
         sleep 2
-        termux-notification -t "AIPro Re-Auth" -c "After getting key, run: ssh $SERVER '~/aipro/scripts/mobile-reauth.sh'" --id clawd-auth
+        termux-notification -t "AIPro Re-Auth" -c "After getting key, run: ssh $SERVER '~/aipro/scripts/mobile-reauth.sh'" --id aipro-auth
         ;;
     *)
         termux-toast "Connection error"

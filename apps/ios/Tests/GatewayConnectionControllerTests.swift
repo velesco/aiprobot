@@ -1,4 +1,4 @@
-import AIProKit
+import AiproKit
 import Foundation
 import Testing
 import UIKit

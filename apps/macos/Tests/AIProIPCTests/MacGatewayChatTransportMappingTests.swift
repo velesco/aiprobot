@@ -1,5 +1,5 @@
-import AIProChatUI
-import AIProProtocol
+import AiproChatUI
+import AiproProtocol
 import Testing
 @testable import AIPro
 
@@ -7,7 +7,7 @@ import Testing
     @Test func snapshotMapsToHealth() {
         let snapshot = Snapshot(
             presence: [],
-            health: AIProProtocol.AnyCodable(["ok": AIProProtocol.AnyCodable(false)]),
+            health: AiproProtocol.AnyCodable(["ok": AiproProtocol.AnyCodable(false)]),
             stateversion: StateVersion(presence: 1, health: 1),
             uptimems: 123,
             configpath: nil,
@@ -37,7 +37,7 @@ import Testing
         let frame = EventFrame(
             type: "event",
             event: "health",
-            payload: AIProProtocol.AnyCodable(["ok": AIProProtocol.AnyCodable(true)]),
+            payload: AiproProtocol.AnyCodable(["ok": AiproProtocol.AnyCodable(true)]),
             seq: 1,
             stateversion: nil)
 
@@ -60,10 +60,10 @@ import Testing
     }
 
     @Test func chatEventMapsToChat() {
-        let payload = AIProProtocol.AnyCodable([
-            "runId": AIProProtocol.AnyCodable("run-1"),
-            "sessionKey": AIProProtocol.AnyCodable("main"),
-            "state": AIProProtocol.AnyCodable("final"),
+        let payload = AiproProtocol.AnyCodable([
+            "runId": AiproProtocol.AnyCodable("run-1"),
+            "sessionKey": AiproProtocol.AnyCodable("main"),
+            "state": AiproProtocol.AnyCodable("final"),
         ])
         let frame = EventFrame(type: "event", event: "chat", payload: payload, seq: 1, stateversion: nil)
         let mapped = MacGatewayChatTransport.mapPushToTransportEvent(.event(frame))
@@ -82,7 +82,7 @@ import Testing
         let frame = EventFrame(
             type: "event",
             event: "unknown",
-            payload: AIProProtocol.AnyCodable(["a": AIProProtocol.AnyCodable(1)]),
+            payload: AiproProtocol.AnyCodable(["a": AiproProtocol.AnyCodable(1)]),
             seq: 1,
             stateversion: nil)
         let mapped = MacGatewayChatTransport.mapPushToTransportEvent(.event(frame))

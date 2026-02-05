@@ -1,5 +1,5 @@
-import AIProChatUI
-import AIProKit
+import AiproChatUI
+import AiproKit
 import SwiftUI
 
 struct ChatSheet: View {

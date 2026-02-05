@@ -1,18 +1,18 @@
-import AIProKit
-import AIProProtocol
+import AiproKit
+import AiproProtocol
 import Foundation
 import Observation
 import OSLog
 import SwiftUI
 
-private let onboardingWizardLogger = Logger(subsystem: "ro.aipro", category: "onboarding.wizard")
+private let onboardingWizardLogger = Logger(subsystem: "ai.aipro", category: "onboarding.wizard")
 
 // MARK: - Swift 6 AnyCodable Bridging Helpers
 
-// Bridge between AIProProtocol.AnyCodable and the local module to avoid
+// Bridge between AiproProtocol.AnyCodable and the local module to avoid
 // Swift 6 strict concurrency type conflicts.
 
-private typealias ProtocolAnyCodable = AIProProtocol.AnyCodable
+private typealias ProtocolAnyCodable = AiproProtocol.AnyCodable
 
 private func bridgeToLocal(_ value: ProtocolAnyCodable) -> AnyCodable {
     if let data = try? JSONEncoder().encode(value),

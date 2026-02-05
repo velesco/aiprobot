@@ -1,11 +1,12 @@
 import type { AIProPluginApi } from "../../src/plugins/types.js";
-
 import { createLobsterTool } from "./src/lobster-tool.js";
 
 export default function register(api: AIProPluginApi) {
   api.registerTool(
     (ctx) => {
-      if (ctx.sandboxed) return null;
+      if (ctx.sandboxed) {
+        return null;
+      }
       return createLobsterTool(api);
     },
     { optional: true },

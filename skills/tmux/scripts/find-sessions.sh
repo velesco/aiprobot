@@ -20,7 +20,7 @@ socket_name=""
 socket_path=""
 query=""
 scan_all=false
-socket_dir="${AIPRO_TMUX_SOCKET_DIR:-${TMPDIR:-/tmp}/aipro-tmux-sockets}"
+socket_dir="${AIPRO_TMUX_SOCKET_DIR:-${AIPRO_TMUX_SOCKET_DIR:-${TMPDIR:-/tmp}/aipro-tmux-sockets}}"
 
 while [[ $# -gt 0 ]]; do
   case "$1" in

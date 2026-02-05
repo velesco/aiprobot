@@ -2,9 +2,7 @@ import fs from "node:fs/promises";
 import os from "node:os";
 import path from "node:path";
 import { PassThrough } from "node:stream";
-
 import { describe, expect, it } from "vitest";
-
 import {
   installLaunchAgent,
   isLaunchAgentListed,
@@ -107,7 +105,7 @@ describe("launchd runtime parsing", () => {
 
 describe("launchctl list detection", () => {
   it("detects the resolved label in launchctl list", async () => {
-    await withLaunchctlStub({ listOutput: "123 0 ro.aipro.gateway\n" }, async ({ env }) => {
+    await withLaunchctlStub({ listOutput: "123 0 ai.aipro.gateway\n" }, async ({ env }) => {
       const listed = await isLaunchAgentListed({ env });
       expect(listed).toBe(true);
     });
@@ -133,7 +131,7 @@ describe("launchd bootstrap repair", () => {
         .map((line) => JSON.parse(line) as string[]);
 
       const domain = typeof process.getuid === "function" ? `gui/${process.getuid()}` : "gui/501";
-      const label = "ro.aipro.gateway";
+      const label = "ai.aipro.gateway";
       const plistPath = resolveLaunchAgentPlistPath(env);
 
       expect(calls).toContainEqual(["bootstrap", domain, plistPath]);
@@ -201,7 +199,7 @@ describe("launchd install", () => {
         .map((line) => JSON.parse(line) as string[]);
 
       const domain = typeof process.getuid === "function" ? `gui/${process.getuid()}` : "gui/501";
-      const label = "ro.aipro.gateway";
+      const label = "ai.aipro.gateway";
       const plistPath = resolveLaunchAgentPlistPath(env);
       const serviceId = `${domain}/${label}`;
 
@@ -231,21 +229,21 @@ describe("resolveLaunchAgentPlistPath", () => {
   it("uses default label when AIPRO_PROFILE is default", () => {
     const env = { HOME: "/Users/test", AIPRO_PROFILE: "default" };
     expect(resolveLaunchAgentPlistPath(env)).toBe(
-      "/Users/test/Library/LaunchAgents/ro.aipro.gateway.plist",
+      "/Users/test/Library/LaunchAgents/ai.aipro.gateway.plist",
     );
   });
 
   it("uses default label when AIPRO_PROFILE is unset", () => {
     const env = { HOME: "/Users/test" };
     expect(resolveLaunchAgentPlistPath(env)).toBe(
-      "/Users/test/Library/LaunchAgents/ro.aipro.gateway.plist",
+      "/Users/test/Library/LaunchAgents/ai.aipro.gateway.plist",
     );
   });
 
   it("uses profile-specific label when AIPRO_PROFILE is set to a custom value", () => {
     const env = { HOME: "/Users/test", AIPRO_PROFILE: "jbphoenix" };
     expect(resolveLaunchAgentPlistPath(env)).toBe(
-      "/Users/test/Library/LaunchAgents/ro.aipro.jbphoenix.plist",
+      "/Users/test/Library/LaunchAgents/ai.aipro.jbphoenix.plist",
     );
   });
 
@@ -277,28 +275,28 @@ describe("resolveLaunchAgentPlistPath", () => {
       AIPRO_LAUNCHD_LABEL: "   ",
     };
     expect(resolveLaunchAgentPlistPath(env)).toBe(
-      "/Users/test/Library/LaunchAgents/ro.aipro.myprofile.plist",
+      "/Users/test/Library/LaunchAgents/ai.aipro.myprofile.plist",
     );
   });
 
   it("handles case-insensitive 'Default' profile", () => {
     const env = { HOME: "/Users/test", AIPRO_PROFILE: "Default" };
     expect(resolveLaunchAgentPlistPath(env)).toBe(
-      "/Users/test/Library/LaunchAgents/ro.aipro.gateway.plist",
+      "/Users/test/Library/LaunchAgents/ai.aipro.gateway.plist",
     );
   });
 
   it("handles case-insensitive 'DEFAULT' profile", () => {
     const env = { HOME: "/Users/test", AIPRO_PROFILE: "DEFAULT" };
     expect(resolveLaunchAgentPlistPath(env)).toBe(
-      "/Users/test/Library/LaunchAgents/ro.aipro.gateway.plist",
+      "/Users/test/Library/LaunchAgents/ai.aipro.gateway.plist",
     );
   });
 
   it("trims whitespace from AIPRO_PROFILE", () => {
     const env = { HOME: "/Users/test", AIPRO_PROFILE: "  myprofile  " };
     expect(resolveLaunchAgentPlistPath(env)).toBe(
-      "/Users/test/Library/LaunchAgents/ro.aipro.myprofile.plist",
+      "/Users/test/Library/LaunchAgents/ai.aipro.myprofile.plist",
     );
   });
 });

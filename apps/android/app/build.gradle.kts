@@ -8,21 +8,21 @@ plugins {
 }
 
 android {
-  namespace = "ro.digiboss.android"
+  namespace = "ai.aipro.android"
   compileSdk = 36
 
   sourceSets {
     getByName("main") {
-      assets.srcDir(file("../../shared/DigibossKit/Sources/DigibossKit/Resources"))
+      assets.srcDir(file("../../shared/AiproKit/Sources/AiproKit/Resources"))
     }
   }
 
   defaultConfig {
-    applicationId = "ro.digiboss.android"
+    applicationId = "ai.aipro.android"
     minSdk = 31
     targetSdk = 36
-    versionCode = 202601260
-    versionName = "2026.1.27-beta.1"
+    versionCode = 202602030
+    versionName = "2026.2.4"
   }
 
   buildTypes {
@@ -65,7 +65,7 @@ androidComponents {
         val versionName = output.versionName.orNull ?: "0"
         val buildType = variant.buildType
 
-        val outputFileName = "digiboss-${versionName}-${buildType}.apk"
+        val outputFileName = "aipro-${versionName}-${buildType}.apk"
         output.outputFileName = outputFileName
       }
   }

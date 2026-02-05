@@ -1,4 +1,4 @@
-import AIProProtocol
+import AiproProtocol
 import Foundation
 import Testing
 @testable import AIPro
@@ -11,7 +11,7 @@ import Testing
             AppStateStore.shared.applyGlobalVoiceWakeTriggers(["before"])
         }
 
-        let payload = AIProProtocol.AnyCodable(["triggers": ["clawd", "computer"]])
+        let payload = AiproProtocol.AnyCodable(["triggers": ["aipro", "computer"]])
         let evt = EventFrame(
             type: "event",
             event: "voicewake.changed",
@@ -22,7 +22,7 @@ import Testing
         await VoiceWakeGlobalSettingsSync.shared.handle(push: .event(evt))
 
         let updated = await MainActor.run { AppStateStore.shared.swabbleTriggerWords }
-        #expect(updated == ["clawd", "computer"])
+        #expect(updated == ["aipro", "computer"])
 
         await MainActor.run {
             AppStateStore.shared.applyGlobalVoiceWakeTriggers(previous)
@@ -36,7 +36,7 @@ import Testing
             AppStateStore.shared.applyGlobalVoiceWakeTriggers(["before"])
         }
 
-        let payload = AIProProtocol.AnyCodable(["unexpected": 123])
+        let payload = AiproProtocol.AnyCodable(["unexpected": 123])
         let evt = EventFrame(
             type: "event",
             event: "voicewake.changed",

@@ -1,7 +1,7 @@
 import AppKit
 import ApplicationServices
 import AVFoundation
-import AIProIPC
+import AiproIPC
 import CoreGraphics
 import CoreLocation
 import Foundation
@@ -373,7 +373,7 @@ final class LocationPermissionRequester: NSObject, CLLocationManagerDelegate {
 }
 
 enum AppleScriptPermission {
-    private static let logger = Logger(subsystem: "ro.aipro", category: "AppleScriptPermission")
+    private static let logger = Logger(subsystem: "ai.aipro", category: "AppleScriptPermission")
 
     /// Sends a benign AppleScript to Terminal to verify Automation permission.
     @MainActor

@@ -1,4 +1,4 @@
-import AIProKit
+import AiproKit
 import Foundation
 import SwiftUI
 
@@ -459,7 +459,7 @@ struct ChatTypingIndicatorBubble: View {
         HStack(spacing: 10) {
             TypingDots()
             if self.style == .standard {
-                Text("Clawd is thinking…")
+                Text("AIPro is thinking…")
                     .font(.subheadline)
                     .foregroundStyle(.secondary)
                 Spacer()

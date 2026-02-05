@@ -19,7 +19,7 @@ final class VoiceSessionCoordinator {
         var autoSendDelay: TimeInterval?
     }
 
-    private let logger = Logger(subsystem: "ro.aipro", category: "voicewake.coordinator")
+    private let logger = Logger(subsystem: "ai.aipro", category: "voicewake.coordinator")
     private var session: Session?
 
     // MARK: - API

@@ -1,6 +1,5 @@
 import type { ChannelOnboardingAdapter, AIProConfig, WizardPrompter } from "aipro/plugin-sdk";
 import { DEFAULT_ACCOUNT_ID, normalizeAccountId } from "aipro/plugin-sdk";
-
 import {
   listMattermostAccountIds,
   resolveDefaultMattermostAccountId,

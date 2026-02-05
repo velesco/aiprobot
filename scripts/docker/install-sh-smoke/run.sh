@@ -1,19 +1,11 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-INSTALL_URL="${AIPRO_INSTALL_URL:-https://aipro.ro/install.sh}"
+INSTALL_URL="${AIPRO_INSTALL_URL:-https://aipro.bot/install.sh}"
 SMOKE_PREVIOUS_VERSION="${AIPRO_INSTALL_SMOKE_PREVIOUS:-}"
 SKIP_PREVIOUS="${AIPRO_INSTALL_SMOKE_SKIP_PREVIOUS:-0}"
 DEFAULT_PACKAGE="aipro"
-if [[ -z "${AIPRO_INSTALL_PACKAGE:-}" && "$INSTALL_URL" == *"clawd.bot"* ]]; then
-  DEFAULT_PACKAGE="aipro"
-fi
 PACKAGE_NAME="${AIPRO_INSTALL_PACKAGE:-$DEFAULT_PACKAGE}"
-if [[ "$PACKAGE_NAME" == "aipro" ]]; then
-  ALT_PACKAGE_NAME="aipro"
-else
-  ALT_PACKAGE_NAME="aipro"
-fi
 
 echo "==> Resolve npm versions"
 LATEST_VERSION="$(npm view "$PACKAGE_NAME" version)"
@@ -61,17 +53,11 @@ curl -fsSL "$INSTALL_URL" | bash
 echo "==> Verify installed version"
 CLI_NAME="$PACKAGE_NAME"
 if ! command -v "$CLI_NAME" >/dev/null 2>&1; then
-  if command -v "$ALT_PACKAGE_NAME" >/dev/null 2>&1; then
-    CLI_NAME="$ALT_PACKAGE_NAME"
-    LATEST_VERSION="$(npm view "$CLI_NAME" version)"
-    echo "==> Detected alternate CLI: $CLI_NAME"
-  else
-    echo "ERROR: neither $PACKAGE_NAME nor $ALT_PACKAGE_NAME is on PATH" >&2
-    exit 1
-  fi
+  echo "ERROR: $PACKAGE_NAME is not on PATH" >&2
+  exit 1
 fi
 if [[ -n "${AIPRO_INSTALL_LATEST_OUT:-}" ]]; then
-  printf "%s" "$LATEST_VERSION" > "$AIPRO_INSTALL_LATEST_OUT"
+  printf "%s" "$LATEST_VERSION" > "${AIPRO_INSTALL_LATEST_OUT:-}"
 fi
 INSTALLED_VERSION="$("$CLI_NAME" --version 2>/dev/null | head -n 1 | tr -d '\r')"
 echo "cli=$CLI_NAME installed=$INSTALLED_VERSION expected=$LATEST_VERSION"

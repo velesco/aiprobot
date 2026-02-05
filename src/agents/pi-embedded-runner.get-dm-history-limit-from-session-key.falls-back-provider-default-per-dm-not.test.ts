@@ -72,7 +72,9 @@ const _makeOpenAiConfig = (modelIds: string[]) =>
 const _ensureModels = (cfg: AIProConfig, agentDir: string) => ensureAIProModelsJson(cfg, agentDir);
 
 const _textFromContent = (content: unknown) => {
-  if (typeof content === "string") return content;
+  if (typeof content === "string") {
+    return content;
+  }
   if (Array.isArray(content) && content[0]?.type === "text") {
     return (content[0] as { text?: string }).text;
   }

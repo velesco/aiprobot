@@ -1,6 +1,5 @@
 import type { AIProPluginApi } from "aipro/plugin-sdk";
 import { emptyPluginConfigSchema } from "aipro/plugin-sdk";
-
 import { imessagePlugin } from "./src/channel.js";
 import { setIMessageRuntime } from "./src/runtime.js";
 

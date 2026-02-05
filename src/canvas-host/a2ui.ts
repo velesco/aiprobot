@@ -1,13 +1,14 @@
-import fs from "node:fs/promises";
 import type { IncomingMessage, ServerResponse } from "node:http";
+import fs from "node:fs/promises";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
-
 import { detectMime } from "../media/mime.js";
 
 export const A2UI_PATH = "/__aipro__/a2ui";
+
 export const CANVAS_HOST_PATH = "/__aipro__/canvas";
-export const CANVAS_WS_PATH = "/__aipro/ws";
+
+export const CANVAS_WS_PATH = "/__aipro__/ws";
 
 let cachedA2uiRootReal: string | null | undefined;
 let resolvingA2uiRoot: Promise<string | null> | null = null;
@@ -42,7 +43,9 @@ async function resolveA2uiRoot(): Promise<string | null> {
 }
 
 async function resolveA2uiRootReal(): Promise<string | null> {
-  if (cachedA2uiRootReal !== undefined) return cachedA2uiRootReal;
+  if (cachedA2uiRootReal !== undefined) {
+    return cachedA2uiRootReal;
+  }
   if (!resolvingA2uiRoot) {
     resolvingA2uiRoot = (async () => {
       const root = await resolveA2uiRoot();
@@ -62,7 +65,9 @@ function normalizeUrlPath(rawPath: string): string {
 async function resolveA2uiFilePath(rootReal: string, urlPath: string) {
   const normalized = normalizeUrlPath(urlPath);
   const rel = normalized.replace(/^\/+/, "");
-  if (rel.split("/").some((p) => p === "..")) return null;
+  if (rel.split("/").some((p) => p === "..")) {
+    return null;
+  }
 
   let candidate = path.join(rootReal, rel);
   if (normalized.endsWith("/")) {
@@ -81,9 +86,13 @@ async function resolveA2uiFilePath(rootReal: string, urlPath: string) {
   const rootPrefix = rootReal.endsWith(path.sep) ? rootReal : `${rootReal}${path.sep}`;
   try {
     const lstat = await fs.lstat(candidate);
-    if (lstat.isSymbolicLink()) return null;
+    if (lstat.isSymbolicLink()) {
+      return null;
+    }
     const real = await fs.realpath(candidate);
-    if (!real.startsWith(rootPrefix)) return null;
+    if (!real.startsWith(rootPrefix)) {
+      return null;
+    }
     return real;
   } catch {
     return null;
@@ -130,8 +139,6 @@ export function injectCanvasLiveReload(html: string): string {
   globalThis.AIPro.sendUserAction = sendUserAction;
   globalThis.aiproPostMessage = postToNode;
   globalThis.aiproSendUserAction = sendUserAction;
-  globalThis.aiproPostMessage = postToNode;
-  globalThis.aiproSendUserAction = sendUserAction;
 
   try {
     const proto = location.protocol === "https:" ? "wss" : "ws";
@@ -156,10 +163,14 @@ export async function handleA2uiHttpRequest(
   res: ServerResponse,
 ): Promise<boolean> {
   const urlRaw = req.url;
-  if (!urlRaw) return false;
+  if (!urlRaw) {
+    return false;
+  }
 
   const url = new URL(urlRaw, "http://localhost");
-  if (url.pathname !== A2UI_PATH && !url.pathname.startsWith(`${A2UI_PATH}/`)) {
+  const basePath =
+    url.pathname === A2UI_PATH || url.pathname.startsWith(`${A2UI_PATH}/`) ? A2UI_PATH : undefined;
+  if (!basePath) {
     return false;
   }
 
@@ -178,7 +189,7 @@ export async function handleA2uiHttpRequest(
     return true;
   }
 
-  const rel = url.pathname.slice(A2UI_PATH.length);
+  const rel = url.pathname.slice(basePath.length);
   const filePath = await resolveA2uiFilePath(a2uiRootReal, rel || "/");
   if (!filePath) {
     res.statusCode = 404;

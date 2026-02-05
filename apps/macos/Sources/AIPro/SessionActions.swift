@@ -66,8 +66,7 @@ enum SessionActions {
                 let dir = URL(fileURLWithPath: storePath).deletingLastPathComponent()
                 urls.append(dir.appendingPathComponent("\(sessionId).jsonl"))
             }
-            let home = FileManager().homeDirectoryForCurrentUser
-            urls.append(home.appendingPathComponent(".aipro/sessions/\(sessionId).jsonl"))
+            urls.append(AIProPaths.stateDirURL.appendingPathComponent("sessions/\(sessionId).jsonl"))
             return urls
         }()
 

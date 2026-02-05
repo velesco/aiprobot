@@ -18,7 +18,8 @@ extension CanvasWindowController {
 
         // Deep links: allow local Canvas content to invoke the agent without bouncing through NSWorkspace.
         if scheme == "aipro" {
-            if self.webView.url?.scheme == CanvasScheme.scheme {
+            if let currentScheme = self.webView.url?.scheme,
+               CanvasScheme.allSchemes.contains(currentScheme) {
                 Task { await DeepLinkHandler.shared.handle(url: url) }
             } else {
                 canvasWindowLogger
@@ -30,7 +31,7 @@ extension CanvasWindowController {
 
         // Keep web content inside the panel when reasonable.
         // `about:blank` and friends are common internal navigations for WKWebView; never send them to NSWorkspace.
-        if scheme == CanvasScheme.scheme
+        if CanvasScheme.allSchemes.contains(scheme ?? "")
             || scheme == "https"
             || scheme == "http"
             || scheme == "about"

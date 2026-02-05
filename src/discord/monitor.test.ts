@@ -1,5 +1,6 @@
 import type { Guild } from "@buape/carbon";
 import { describe, expect, it, vi } from "vitest";
+import { sleep } from "../utils.js";
 import {
   allowListMatches,
   buildDiscordMediaPayload,
@@ -88,7 +89,7 @@ describe("DiscordMessageListener", () => {
       {} as unknown as import("./monitor/listeners.js").DiscordMessageEvent,
       {} as unknown as import("@buape/carbon").Client,
     );
-    await new Promise((resolve) => setTimeout(resolve, 0));
+    await sleep(0);
 
     expect(logger.error).toHaveBeenCalledWith(expect.stringContaining("discord handler failed"));
   });
@@ -130,14 +131,14 @@ describe("DiscordMessageListener", () => {
 
 describe("discord allowlist helpers", () => {
   it("normalizes slugs", () => {
-    expect(normalizeDiscordSlug("Friends of Clawd")).toBe("friends-of-clawd");
+    expect(normalizeDiscordSlug("Friends of AIPro")).toBe("friends-of-aipro");
     expect(normalizeDiscordSlug("#General")).toBe("general");
     expect(normalizeDiscordSlug("Dev__Chat")).toBe("dev-chat");
   });
 
   it("matches ids or names", () => {
     const allow = normalizeDiscordAllowList(
-      ["123", "steipete", "Friends of Clawd"],
+      ["123", "steipete", "Friends of AIPro"],
       ["discord:", "user:", "guild:", "channel:"],
     );
     expect(allow).not.toBeNull();
@@ -146,34 +147,44 @@ describe("discord allowlist helpers", () => {
     }
     expect(allowListMatches(allow, { id: "123" })).toBe(true);
     expect(allowListMatches(allow, { name: "steipete" })).toBe(true);
-    expect(allowListMatches(allow, { name: "friends-of-clawd" })).toBe(true);
+    expect(allowListMatches(allow, { name: "friends-of-aipro" })).toBe(true);
     expect(allowListMatches(allow, { name: "other" })).toBe(false);
+  });
+
+  it("matches pk-prefixed allowlist entries", () => {
+    const allow = normalizeDiscordAllowList(["pk:member-123"], ["discord:", "user:", "pk:"]);
+    expect(allow).not.toBeNull();
+    if (!allow) {
+      throw new Error("Expected allow list to be normalized");
+    }
+    expect(allowListMatches(allow, { id: "member-123" })).toBe(true);
+    expect(allowListMatches(allow, { id: "member-999" })).toBe(false);
   });
 });
 
 describe("discord guild/channel resolution", () => {
   it("resolves guild entry by id", () => {
     const guildEntries = makeEntries({
-      "123": { slug: "friends-of-clawd" },
+      "123": { slug: "friends-of-aipro" },
     });
     const resolved = resolveDiscordGuildEntry({
-      guild: fakeGuild("123", "Friends of Clawd"),
+      guild: fakeGuild("123", "Friends of AIPro"),
       guildEntries,
     });
     expect(resolved?.id).toBe("123");
-    expect(resolved?.slug).toBe("friends-of-clawd");
+    expect(resolved?.slug).toBe("friends-of-aipro");
   });
 
   it("resolves guild entry by slug key", () => {
     const guildEntries = makeEntries({
-      "friends-of-clawd": { slug: "friends-of-clawd" },
+      "friends-of-aipro": { slug: "friends-of-aipro" },
     });
     const resolved = resolveDiscordGuildEntry({
-      guild: fakeGuild("123", "Friends of Clawd"),
+      guild: fakeGuild("123", "Friends of AIPro"),
       guildEntries,
     });
     expect(resolved?.id).toBe("123");
-    expect(resolved?.slug).toBe("friends-of-clawd");
+    expect(resolved?.slug).toBe("friends-of-aipro");
   });
 
   it("falls back to wildcard guild entry", () => {
@@ -181,7 +192,7 @@ describe("discord guild/channel resolution", () => {
       "*": { requireMention: false },
     });
     const resolved = resolveDiscordGuildEntry({
-      guild: fakeGuild("123", "Friends of Clawd"),
+      guild: fakeGuild("123", "Friends of AIPro"),
       guildEntries,
     });
     expect(resolved?.id).toBe("123");
@@ -547,15 +558,15 @@ describe("discord group DM gating", () => {
   it("matches group DM allowlist", () => {
     expect(
       resolveGroupDmAllow({
-        channels: ["clawd-dm"],
+        channels: ["aipro-dm"],
         channelId: "1",
-        channelName: "Clawd DM",
-        channelSlug: "clawd-dm",
+        channelName: "AIPro DM",
+        channelSlug: "aipro-dm",
       }),
     ).toBe(true);
     expect(
       resolveGroupDmAllow({
-        channels: ["clawd-dm"],
+        channels: ["aipro-dm"],
         channelId: "1",
         channelName: "Other",
         channelSlug: "other",

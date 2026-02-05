@@ -1,7 +1,7 @@
 import AppKit
-import AIProDiscovery
-import AIProIPC
-import AIProKit
+import AiproDiscovery
+import AiproIPC
+import AiproKit
 import Observation
 import SwiftUI
 

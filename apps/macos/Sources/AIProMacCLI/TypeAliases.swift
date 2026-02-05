@@ -1,5 +1,5 @@
-import AIProKit
-import AIProProtocol
+import AiproKit
+import AiproProtocol
 
-typealias ProtoAnyCodable = AIProProtocol.AnyCodable
-typealias KitAnyCodable = AIProKit.AnyCodable
+typealias ProtoAnyCodable = AiproProtocol.AnyCodable
+typealias KitAnyCodable = AiproKit.AnyCodable

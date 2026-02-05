@@ -1,4 +1,4 @@
-import AIProProtocol
+import AiproProtocol
 import Observation
 import SwiftUI
 
@@ -239,6 +239,8 @@ private struct SkillRow: View {
             "Workspace"
         case "aipro-extra":
             "Extra"
+        case "aipro-plugin":
+            "Plugin"
         default:
             self.skill.source
         }

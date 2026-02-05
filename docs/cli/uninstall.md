@@ -3,6 +3,7 @@ summary: "CLI reference for `aipro uninstall` (remove gateway service + local da
 read_when:
   - You want to remove the gateway service and/or local state
   - You want a dry-run first
+title: "uninstall"
 ---
 
 # `aipro uninstall`
@@ -14,4 +15,3 @@ aipro uninstall
 aipro uninstall --all --yes
 aipro uninstall --dry-run
 ```
-

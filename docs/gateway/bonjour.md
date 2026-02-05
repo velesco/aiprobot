@@ -3,7 +3,9 @@ summary: "Bonjour/mDNS discovery + debugging (Gateway beacons, clients, and comm
 read_when:
   - Debugging Bonjour discovery issues on macOS/iOS
   - Changing mDNS service types, TXT records, or discovery UX
+title: "Bonjour Discovery"
 ---
+
 # Bonjour / mDNS discovery
 
 AIPro uses Bonjour (mDNS / DNS‑SD) as a **LAN‑only convenience** to discover
@@ -18,21 +20,21 @@ boundary. You can keep the same discovery UX by switching to **unicast DNS‑SD*
 
 High‑level steps:
 
-1) Run a DNS server on the gateway host (reachable over Tailnet).
-2) Publish DNS‑SD records for `_aipro-gw._tcp` under a dedicated zone
+1. Run a DNS server on the gateway host (reachable over Tailnet).
+2. Publish DNS‑SD records for `_aipro-gw._tcp` under a dedicated zone
    (example: `aipro.internal.`).
-3) Configure Tailscale **split DNS** so `aipro.internal` resolves via that
+3. Configure Tailscale **split DNS** so your chosen domain resolves via that
    DNS server for clients (including iOS).
 
-AIPro standardizes on `aipro.internal.` for this mode. iOS/Android nodes
-browse both `local.` and `aipro.internal.` automatically.
+AIPro supports any discovery domain; `aipro.internal.` is just an example.
+iOS/Android nodes browse both `local.` and your configured wide‑area domain.
 
 ### Gateway config (recommended)
 
 ```json5
 {
   gateway: { bind: "tailnet" }, // tailnet-only (recommended)
-  discovery: { wideArea: { enabled: true } } // enables aipro.internal DNS-SD publishing
+  discovery: { wideArea: { enabled: true } }, // enables wide-area DNS-SD publishing
 }
 ```
 
@@ -43,8 +45,9 @@ aipro dns setup --apply
 ```
 
 This installs CoreDNS and configures it to:
+
 - listen on port 53 only on the gateway’s Tailscale interfaces
-- serve `aipro.internal.` from `~/.aipro/dns/aipro.internal.db`
+- serve your chosen domain (example: `aipro.internal.`) from `~/.aipro/dns/<domain>.db`
 
 Validate from a tailnet‑connected machine:
 
@@ -58,10 +61,10 @@ dig @<TAILNET_IPV4> -p 53 _aipro-gw._tcp.aipro.internal PTR +short
 In the Tailscale admin console:
 
 - Add a nameserver pointing at the gateway’s tailnet IP (UDP/TCP 53).
-- Add split DNS so the domain `aipro.internal` uses that nameserver.
+- Add split DNS so your discovery domain uses that nameserver.
 
 Once clients accept tailnet DNS, iOS nodes can browse
-`_aipro-gw._tcp` in `aipro.internal.` without multicast.
+`_aipro-gw._tcp` in your discovery domain without multicast.
 
 ### Gateway listener security (recommended)
 
@@ -69,6 +72,7 @@ The Gateway WS port (default `18789`) binds to loopback by default. For LAN/tail
 access, bind explicitly and keep auth enabled.
 
 For tailnet‑only setups:
+
 - Set `gateway.bind: "tailnet"` in `~/.aipro/aipro.json`.
 - Restart the Gateway (or restart the macOS menubar app).
 
@@ -126,6 +130,7 @@ The Gateway writes a rolling log file (printed on startup as
 The iOS node uses `NWBrowser` to discover `_aipro-gw._tcp`.
 
 To capture logs:
+
 - Settings → Gateway → Advanced → **Discovery Debug Logs**
 - Settings → Gateway → Advanced → **Discovery Logs** → reproduce → **Copy**
 
@@ -150,11 +155,11 @@ sequences (e.g. spaces become `\032`).
 
 ## Disabling / configuration
 
-- `AIPRO_DISABLE_BONJOUR=1` disables advertising.
+- `AIPRO_DISABLE_BONJOUR=1` disables advertising (legacy: `AIPRO_DISABLE_BONJOUR`).
 - `gateway.bind` in `~/.aipro/aipro.json` controls the Gateway bind mode.
-- `AIPRO_SSH_PORT` overrides the SSH port advertised in TXT.
-- `AIPRO_TAILNET_DNS` publishes a MagicDNS hint in TXT.
-- `AIPRO_CLI_PATH` overrides the advertised CLI path.
+- `AIPRO_SSH_PORT` overrides the SSH port advertised in TXT (legacy: `AIPRO_SSH_PORT`).
+- `AIPRO_TAILNET_DNS` publishes a MagicDNS hint in TXT (legacy: `AIPRO_TAILNET_DNS`).
+- `AIPRO_CLI_PATH` overrides the advertised CLI path (legacy: `AIPRO_CLI_PATH`).
 
 ## Related docs
 

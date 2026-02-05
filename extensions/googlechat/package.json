@@ -1,8 +1,17 @@
 {
   "name": "@aipro/googlechat",
-  "version": "2026.1.27-beta.1",
-  "type": "module",
+  "version": "2026.2.4",
   "description": "AIPro Google Chat channel plugin",
+  "type": "module",
+  "dependencies": {
+    "google-auth-library": "^10.5.0"
+  },
+  "devDependencies": {
+    "aipro": "workspace:*"
+  },
+  "peerDependencies": {
+    "aipro": ">=2026.1.26"
+  },
   "aipro": {
     "extensions": [
       "./index.ts"
@@ -26,14 +35,5 @@
       "localPath": "extensions/googlechat",
       "defaultChoice": "npm"
     }
-  },
-  "dependencies": {
-    "google-auth-library": "^10.5.0"
-  },
-  "devDependencies": {
-    "aipro": "workspace:*"
-  },
-  "peerDependencies": {
-    "aipro": ">=2026.1.26"
   }
 }

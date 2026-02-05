@@ -1,11 +1,12 @@
 import AppKit
-import AIProIPC
-import AIProKit
+import AiproIPC
+import AiproKit
 import Foundation
 import WebKit
 
 final class CanvasA2UIActionMessageHandler: NSObject, WKScriptMessageHandler {
     static let messageName = "aiproCanvasA2UIAction"
+    static let allMessageNames = [messageName]
 
     private let sessionKey: String
 
@@ -15,11 +16,11 @@ final class CanvasA2UIActionMessageHandler: NSObject, WKScriptMessageHandler {
     }
 
     func userContentController(_: WKUserContentController, didReceive message: WKScriptMessage) {
-        guard message.name == Self.messageName else { return }
+        guard Self.allMessageNames.contains(message.name) else { return }
 
         // Only accept actions from local Canvas content (not arbitrary web pages).
         guard let webView = message.webView, let url = webView.url else { return }
-        if url.scheme == CanvasScheme.scheme {
+        if let scheme = url.scheme, CanvasScheme.allSchemes.contains(scheme) {
             // ok
         } else if Self.isLocalNetworkCanvasURL(url) {
             // ok
@@ -144,5 +145,5 @@ final class CanvasA2UIActionMessageHandler: NSObject, WKScriptMessageHandler {
         return false
     }
 
-    // Formatting helpers live in AIProKit (`AIProCanvasA2UIAction`).
+    // Formatting helpers live in AiproKit (`AIProCanvasA2UIAction`).
 }

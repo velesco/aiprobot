@@ -10,9 +10,9 @@
  * - Registry integration
  */
 
+import type { AIProConfig } from "aipro/plugin-sdk";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { sendMessageTwitchInternal } from "./send.js";
-import type { AIProConfig } from "aipro/plugin-sdk";
 
 // Mock dependencies
 vi.mock("./config.js", () => ({

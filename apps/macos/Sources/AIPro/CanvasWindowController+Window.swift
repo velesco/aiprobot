@@ -1,5 +1,5 @@
 import AppKit
-import AIProIPC
+import AiproIPC
 
 extension CanvasWindowController {
     // MARK: - Window

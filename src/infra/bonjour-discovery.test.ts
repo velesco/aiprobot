@@ -1,8 +1,8 @@
 import { describe, expect, it, vi } from "vitest";
-
 import type { runCommandWithTimeout } from "../process/exec.js";
 import { discoverGatewayBeacons } from "./bonjour-discovery.js";
-import { WIDE_AREA_DISCOVERY_DOMAIN } from "./widearea-dns.js";
+
+const WIDE_AREA_DOMAIN = "aipro.internal.";
 
 describe("bonjour-discovery", () => {
   it("discovers beacons on darwin across local + wide-area domains", async () => {
@@ -27,12 +27,9 @@ describe("bonjour-discovery", () => {
             killed: false,
           };
         }
-        if (domain === WIDE_AREA_DISCOVERY_DOMAIN) {
+        if (domain === WIDE_AREA_DOMAIN) {
           return {
-            stdout: [
-              `Add 2 3 ${WIDE_AREA_DISCOVERY_DOMAIN} _aipro-gw._tcp. Tailnet Gateway`,
-              "",
-            ].join("\n"),
+            stdout: [`Add 2 3 ${WIDE_AREA_DOMAIN} _aipro-gw._tcp. Tailnet Gateway`, ""].join("\n"),
             stderr: "",
             code: 0,
             signal: null,
@@ -82,6 +79,7 @@ describe("bonjour-discovery", () => {
     const beacons = await discoverGatewayBeacons({
       platform: "darwin",
       timeoutMs: 1234,
+      wideAreaDomain: WIDE_AREA_DOMAIN,
       run: run as unknown as typeof runCommandWithTimeout,
     });
 
@@ -95,19 +93,21 @@ describe("bonjour-discovery", () => {
       ]),
     );
     expect(beacons.map((b) => b.domain)).toEqual(
-      expect.arrayContaining(["local.", WIDE_AREA_DISCOVERY_DOMAIN]),
+      expect.arrayContaining(["local.", WIDE_AREA_DOMAIN]),
     );
 
     const browseCalls = calls.filter((c) => c.argv[0] === "dns-sd" && c.argv[1] === "-B");
     expect(browseCalls.map((c) => c.argv[3])).toEqual(
-      expect.arrayContaining(["local.", WIDE_AREA_DISCOVERY_DOMAIN]),
+      expect.arrayContaining(["local.", WIDE_AREA_DOMAIN]),
     );
     expect(browseCalls.every((c) => c.timeoutMs === 1234)).toBe(true);
   });
 
   it("decodes dns-sd octal escapes in TXT displayName", async () => {
     const run = vi.fn(async (argv: string[], options: { timeoutMs: number }) => {
-      if (options.timeoutMs < 0) throw new Error("invalid timeout");
+      if (options.timeoutMs < 0) {
+        throw new Error("invalid timeout");
+      }
 
       const domain = argv[3] ?? "";
       if (argv[0] === "dns-sd" && argv[1] === "-B" && domain === "local.") {
@@ -164,7 +164,7 @@ describe("bonjour-discovery", () => {
 
   it("falls back to tailnet DNS probing for wide-area when split DNS is not configured", async () => {
     const calls: Array<{ argv: string[]; timeoutMs: number }> = [];
-    const zone = WIDE_AREA_DISCOVERY_DOMAIN.replace(/\.$/, "");
+    const zone = WIDE_AREA_DOMAIN.replace(/\.$/, "");
     const serviceBase = `_aipro-gw._tcp.${zone}`;
     const studioService = `studio-gateway.${serviceBase}`;
 
@@ -248,13 +248,14 @@ describe("bonjour-discovery", () => {
     const beacons = await discoverGatewayBeacons({
       platform: "darwin",
       timeoutMs: 1200,
-      domains: [WIDE_AREA_DISCOVERY_DOMAIN],
+      domains: [WIDE_AREA_DOMAIN],
+      wideAreaDomain: WIDE_AREA_DOMAIN,
       run: run as unknown as typeof runCommandWithTimeout,
     });
 
     expect(beacons).toEqual([
       expect.objectContaining({
-        domain: WIDE_AREA_DISCOVERY_DOMAIN,
+        domain: WIDE_AREA_DOMAIN,
         instanceName: "studio-gateway",
         displayName: "Studio",
         host: `studio.${zone}`,

@@ -3,6 +3,7 @@ summary: "Install AIPro (recommended installer, global install, or from source)"
 read_when:
   - Installing AIPro
   - You want to install from GitHub
+title: "Install"
 ---
 
 # Install
@@ -73,11 +74,14 @@ SHARP_IGNORE_GLOBAL_LIBVIPS=1 npm install -g aipro@latest
 
 If you see `sharp: Please add node-gyp to your dependencies`, either install build tooling (macOS: Xcode CLT + `npm install -g node-gyp`) or use the `SHARP_IGNORE_GLOBAL_LIBVIPS=1` workaround above to skip the native build.
 
-Or:
+Or with pnpm:
 
 ```bash
 pnpm add -g aipro@latest
+pnpm approve-builds -g                # approve aipro, node-llama-cpp, sharp, etc.
 ```
+
+pnpm requires explicit approval for packages with build scripts. After the first install shows the "Ignored build scripts" warning, run `pnpm approve-builds -g` and select the listed packages.
 
 Then:
 

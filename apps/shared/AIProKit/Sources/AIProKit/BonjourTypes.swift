@@ -4,12 +4,25 @@ public enum AIProBonjour {
     // v0: internal-only, subject to rename.
     public static let gatewayServiceType = "_aipro-gw._tcp"
     public static let gatewayServiceDomain = "local."
-    public static let wideAreaGatewayServiceDomain = "aipro.internal."
+    public static var wideAreaGatewayServiceDomain: String? {
+        let env = ProcessInfo.processInfo.environment
+        return resolveWideAreaDomain(env["AIPRO_WIDE_AREA_DOMAIN"])
+    }
 
-    public static let gatewayServiceDomains = [
-        gatewayServiceDomain,
-        wideAreaGatewayServiceDomain,
-    ]
+    public static var gatewayServiceDomains: [String] {
+        var domains = [gatewayServiceDomain]
+        if let wideArea = wideAreaGatewayServiceDomain {
+            domains.append(wideArea)
+        }
+        return domains
+    }
+
+    private static func resolveWideAreaDomain(_ raw: String?) -> String? {
+        let trimmed = (raw ?? "").trimmingCharacters(in: .whitespacesAndNewlines)
+        if trimmed.isEmpty { return nil }
+        let normalized = normalizeServiceDomain(trimmed)
+        return normalized == gatewayServiceDomain ? nil : normalized
+    }
 
     public static func normalizeServiceDomain(_ raw: String?) -> String {
         let trimmed = (raw ?? "").trimmingCharacters(in: .whitespacesAndNewlines)

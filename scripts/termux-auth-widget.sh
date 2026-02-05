@@ -6,7 +6,7 @@
 # It's designed for quick one-tap checking from phone home screen.
 
 # Server hostname (via Tailscale or SSH config)
-SERVER="${AIPRO_SERVER:-l36}"
+SERVER="${AIPRO_SERVER:-${AIPRO_SERVER:-l36}}"
 
 # Check auth status
 termux-toast "Checking AIPro auth..."
@@ -24,7 +24,7 @@ case "$STATUS" in
         termux-toast "Auth OK (${HOURS}h left)"
         ;;
 
-    CLAUDE_EXPIRING|AIPRO_EXPIRING)
+    CLAUDE_EXPIRING|AIPRO_EXPIRING|AIPRO_EXPIRING)
         termux-vibrate -d 100
 
         # Ask if user wants to re-auth now
@@ -51,7 +51,7 @@ case "$STATUS" in
         esac
         ;;
 
-    CLAUDE_EXPIRED|AIPRO_EXPIRED)
+    CLAUDE_EXPIRED|AIPRO_EXPIRED|AIPRO_EXPIRED)
         termux-vibrate -d 300
 
         CHOICE=$(termux-dialog radio -t "Auth Expired!" -v "Re-auth now,Dismiss")

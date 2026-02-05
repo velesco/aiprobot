@@ -9,7 +9,7 @@ APP_PROCESS_PATTERN="AIPro.app/Contents/MacOS/AIPro"
 DEBUG_PROCESS_PATTERN="${ROOT_DIR}/apps/macos/.build/debug/AIPro"
 LOCAL_PROCESS_PATTERN="${ROOT_DIR}/apps/macos/.build-local/debug/AIPro"
 RELEASE_PROCESS_PATTERN="${ROOT_DIR}/apps/macos/.build/release/AIPro"
-LAUNCH_AGENT="${HOME}/Library/LaunchAgents/bot.molt.mac.plist"
+LAUNCH_AGENT="${HOME}/Library/LaunchAgents/ai.aipro.mac.plist"
 LOCK_KEY="$(printf '%s' "${ROOT_DIR}" | shasum -a 256 | cut -c1-8)"
 LOCK_DIR="${TMPDIR:-/tmp}/aipro-restart-${LOCK_KEY}"
 LOCK_PID_FILE="${LOCK_DIR}/pid"
@@ -25,7 +25,7 @@ ATTACH_ONLY=1
 log()  { printf '%s\n' "$*"; }
 fail() { printf 'ERROR: %s\n' "$*" >&2; exit 1; }
 
-# Ensure local node binaries (rolldown, tsc, pnpm) are discoverable for the steps below.
+# Ensure local node binaries (rolldown, pnpm) are discoverable for the steps below.
 export PATH="${ROOT_DIR}/node_modules/.bin:${PATH}"
 
 run_step() {
@@ -145,7 +145,7 @@ kill_all_aipro() {
 }
 
 stop_launch_agent() {
-  launchctl bootout gui/"$UID"/bot.molt.mac 2>/dev/null || true
+  launchctl bootout gui/"$UID"/ai.aipro.mac 2>/dev/null || true
 }
 
 # 1) Kill all running instances first.

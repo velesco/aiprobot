@@ -1,18 +1,19 @@
 import type { OAuthCredentials } from "@mariozechner/pi-ai";
-
 import type { AIProConfig } from "../../config/config.js";
 
 export type ApiKeyCredential = {
   type: "api_key";
   provider: string;
-  key: string;
+  key?: string;
   email?: string;
+  /** Optional provider-specific metadata (e.g., account IDs, gateway IDs). */
+  metadata?: Record<string, string>;
 };
 
 export type TokenCredential = {
   /**
    * Static bearer-style token (often OAuth access token / PAT).
-   * Not refreshable by aipro (unlike `type: "oauth"`).
+   * Not refreshable by AIPro (unlike `type: "oauth"`).
    */
   type: "token";
   provider: string;

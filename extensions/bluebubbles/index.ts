@@ -1,6 +1,5 @@
 import type { AIProPluginApi } from "aipro/plugin-sdk";
 import { emptyPluginConfigSchema } from "aipro/plugin-sdk";
-
 import { bluebubblesPlugin } from "./src/channel.js";
 import { handleBlueBubblesWebhookRequest } from "./src/monitor.js";
 import { setBlueBubblesRuntime } from "./src/runtime.js";

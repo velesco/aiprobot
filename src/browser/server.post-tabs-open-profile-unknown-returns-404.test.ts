@@ -1,6 +1,5 @@
 import { type AddressInfo, createServer } from "node:net";
 import { fetch as realFetch } from "undici";
-
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 
 let testPort = 0;
@@ -72,7 +71,9 @@ function makeProc(pid = 123) {
       return undefined;
     },
     emitExit: () => {
-      for (const cb of handlers.get("exit") ?? []) cb(0);
+      for (const cb of handlers.get("exit") ?? []) {
+        cb(0);
+      }
     },
     kill: () => {
       return true;
@@ -92,9 +93,9 @@ vi.mock("../config/config.js", async (importOriginal) => {
         color: "#FF4500",
         attachOnly: cfgAttachOnly,
         headless: true,
-        defaultProfile: "clawd",
+        defaultProfile: "aipro",
         profiles: {
-          clawd: { cdpPort: testPort + 1, color: "#FF4500" },
+          aipro: { cdpPort: testPort + 1, color: "#FF4500" },
         },
       },
     }),
@@ -106,20 +107,20 @@ const launchCalls = vi.hoisted(() => [] as Array<{ port: number }>);
 vi.mock("./chrome.js", () => ({
   isChromeCdpReady: vi.fn(async () => reachable),
   isChromeReachable: vi.fn(async () => reachable),
-  launchClawdChrome: vi.fn(async (_resolved: unknown, profile: { cdpPort: number }) => {
+  launchAIProChrome: vi.fn(async (_resolved: unknown, profile: { cdpPort: number }) => {
     launchCalls.push({ port: profile.cdpPort });
     reachable = true;
     return {
       pid: 123,
       exe: { kind: "chrome", path: "/fake/chrome" },
-      userDataDir: "/tmp/clawd",
+      userDataDir: "/tmp/aipro",
       cdpPort: profile.cdpPort,
       startedAt: Date.now(),
       proc,
     };
   }),
-  resolveClawdUserDataDir: vi.fn(() => "/tmp/clawd"),
-  stopClawdChrome: vi.fn(async () => {
+  resolveAIProUserDataDir: vi.fn(() => "/tmp/aipro"),
+  stopAIProChrome: vi.fn(async () => {
     reachable = false;
   }),
 }));
@@ -162,7 +163,9 @@ async function getFreePort(): Promise<number> {
         s.close((err) => (err ? reject(err) : resolve(assigned)));
       });
     });
-    if (port < 65535) return port;
+    if (port < 65535) {
+      return port;
+    }
   }
 }
 
@@ -188,12 +191,18 @@ describe("browser control server", () => {
     createTargetId = null;
 
     cdpMocks.createTargetViaCdp.mockImplementation(async () => {
-      if (createTargetId) return { targetId: createTargetId };
+      if (createTargetId) {
+        return { targetId: createTargetId };
+      }
       throw new Error("cdp disabled");
     });
 
-    for (const fn of Object.values(pwMocks)) fn.mockClear();
-    for (const fn of Object.values(cdpMocks)) fn.mockClear();
+    for (const fn of Object.values(pwMocks)) {
+      fn.mockClear();
+    }
+    for (const fn of Object.values(cdpMocks)) {
+      fn.mockClear();
+    }
 
     testPort = await getFreePort();
     _cdpBaseUrl = `http://127.0.0.1:${testPort + 1}`;
@@ -207,7 +216,9 @@ describe("browser control server", () => {
       vi.fn(async (url: string, init?: RequestInit) => {
         const u = String(url);
         if (u.includes("/json/list")) {
-          if (!reachable) return makeResponse([]);
+          if (!reachable) {
+            return makeResponse([]);
+          }
           return makeResponse([
             {
               id: "abcd1234",
@@ -240,8 +251,12 @@ describe("browser control server", () => {
             type: "page",
           });
         }
-        if (u.includes("/json/activate/")) return makeResponse("ok");
-        if (u.includes("/json/close/")) return makeResponse("ok");
+        if (u.includes("/json/activate/")) {
+          return makeResponse("ok");
+        }
+        if (u.includes("/json/close/")) {
+          return makeResponse("ok");
+        }
         return makeResponse({}, { ok: false, status: 500, text: "unexpected" });
       }),
     );
@@ -280,8 +295,12 @@ describe("profile CRUD endpoints", () => {
     reachable = false;
     cfgAttachOnly = false;
 
-    for (const fn of Object.values(pwMocks)) fn.mockClear();
-    for (const fn of Object.values(cdpMocks)) fn.mockClear();
+    for (const fn of Object.values(pwMocks)) {
+      fn.mockClear();
+    }
+    for (const fn of Object.values(cdpMocks)) {
+      fn.mockClear();
+    }
 
     testPort = await getFreePort();
     _cdpBaseUrl = `http://127.0.0.1:${testPort + 1}`;
@@ -295,7 +314,9 @@ describe("profile CRUD endpoints", () => {
       "fetch",
       vi.fn(async (url: string) => {
         const u = String(url);
-        if (u.includes("/json/list")) return makeResponse([]);
+        if (u.includes("/json/list")) {
+          return makeResponse([]);
+        }
         return makeResponse({}, { ok: false, status: 500, text: "unexpected" });
       }),
     );
@@ -348,11 +369,11 @@ describe("profile CRUD endpoints", () => {
     await startBrowserControlServerFromConfig();
     const base = `http://127.0.0.1:${testPort}`;
 
-    // "clawd" already exists as the default profile
+    // "aipro" already exists as the default profile
     const result = await realFetch(`${base}/profiles/create`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ name: "clawd" }),
+      body: JSON.stringify({ name: "aipro" }),
     });
     expect(result.status).toBe(409);
     const body = (await result.json()) as { error: string };
@@ -413,8 +434,8 @@ describe("profile CRUD endpoints", () => {
     await startBrowserControlServerFromConfig();
     const base = `http://127.0.0.1:${testPort}`;
 
-    // clawd is the default profile
-    const result = await realFetch(`${base}/profiles/clawd`, {
+    // aipro is the default profile
+    const result = await realFetch(`${base}/profiles/aipro`, {
       method: "DELETE",
     });
     expect(result.status).toBe(400);

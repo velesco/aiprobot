@@ -9,9 +9,9 @@
  * - Abort signal handling
  */
 
+import type { AIProConfig } from "aipro/plugin-sdk";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { twitchOutbound } from "./outbound.js";
-import type { AIProConfig } from "aipro/plugin-sdk";
 
 // Mock dependencies
 vi.mock("./config.js", () => ({

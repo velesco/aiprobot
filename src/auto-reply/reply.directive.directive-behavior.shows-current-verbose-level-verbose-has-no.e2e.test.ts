@@ -71,7 +71,7 @@ describe("directive behavior", () => {
           agents: {
             defaults: {
               model: "anthropic/claude-opus-4-5",
-              workspace: path.join(home, "clawd"),
+              workspace: path.join(home, "aipro"),
               verboseDefault: "on",
             },
           },
@@ -96,7 +96,7 @@ describe("directive behavior", () => {
           agents: {
             defaults: {
               model: "anthropic/claude-opus-4-5",
-              workspace: path.join(home, "clawd"),
+              workspace: path.join(home, "aipro"),
             },
           },
           session: { store: path.join(home, "sessions.json") },
@@ -127,7 +127,7 @@ describe("directive behavior", () => {
           agents: {
             defaults: {
               model: "anthropic/claude-opus-4-5",
-              workspace: path.join(home, "clawd"),
+              workspace: path.join(home, "aipro"),
               elevatedDefault: "on",
             },
           },
@@ -163,7 +163,7 @@ describe("directive behavior", () => {
           agents: {
             defaults: {
               model: "anthropic/claude-opus-4-5",
-              workspace: path.join(home, "clawd"),
+              workspace: path.join(home, "aipro"),
             },
           },
           tools: {
@@ -207,7 +207,7 @@ describe("directive behavior", () => {
           agents: {
             defaults: {
               model: "anthropic/claude-opus-4-5",
-              workspace: path.join(home, "clawd"),
+              workspace: path.join(home, "aipro"),
               elevatedDefault: "on",
             },
           },
@@ -256,7 +256,7 @@ describe("directive behavior", () => {
           agents: {
             defaults: {
               model: "anthropic/claude-opus-4-5",
-              workspace: path.join(home, "clawd"),
+              workspace: path.join(home, "aipro"),
               elevatedDefault: "on",
             },
           },

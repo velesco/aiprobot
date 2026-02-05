@@ -1,6 +1,6 @@
 import AVFoundation
-import AIProIPC
-import AIProKit
+import AiproIPC
+import AiproKit
 import CoreGraphics
 import Foundation
 import OSLog
@@ -36,7 +36,7 @@ actor CameraCaptureService {
         }
     }
 
-    private let logger = Logger(subsystem: "ro.aipro", category: "camera")
+    private let logger = Logger(subsystem: "ai.aipro", category: "camera")
 
     func listDevices() -> [CameraDeviceInfo] {
         Self.availableCameras().map { device in

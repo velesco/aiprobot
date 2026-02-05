@@ -1,4 +1,4 @@
-import AIProKit
+import AiproKit
 import Foundation
 import Network
 import Observation
@@ -104,7 +104,7 @@ final class GatewayDiscoveryModel {
             }
 
             self.browsers[domain] = browser
-            browser.start(queue: DispatchQueue(label: "ro.aipro.ios.gateway-discovery.\(domain)"))
+            browser.start(queue: DispatchQueue(label: "bot.molt.ios.gateway-discovery.\(domain)"))
         }
     }
 

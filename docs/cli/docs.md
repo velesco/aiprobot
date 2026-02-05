@@ -2,6 +2,7 @@
 summary: "CLI reference for `aipro docs` (search the live docs index)"
 read_when:
   - You want to search the live AIPro docs from the terminal
+title: "docs"
 ---
 
 # `aipro docs`
@@ -12,4 +13,3 @@ Search the live docs index.
 aipro docs browser extension
 aipro docs sandbox allowHostControl
 ```
-

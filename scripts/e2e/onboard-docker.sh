@@ -280,7 +280,7 @@ TRASH
       --skip-health
 
     # Assert config + workspace scaffolding.
-    workspace_dir="$HOME/clawd"
+    workspace_dir="$HOME/.aipro/workspace"
     config_path="$HOME/.aipro/aipro.json"
     sessions_dir="$HOME/.aipro/agents/main/sessions"
 

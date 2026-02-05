@@ -38,9 +38,7 @@ enum DebugActions {
 
     @MainActor
     static func openConfigFolder() {
-        let url = FileManager()
-            .homeDirectoryForCurrentUser
-            .appendingPathComponent(".aipro", isDirectory: true)
+        let url = AIProPaths.stateDirURL
         NSWorkspace.shared.activateFileViewerSelecting([url])
     }
 
@@ -195,8 +193,7 @@ enum DebugActions {
     @MainActor
     private static func resolveSessionStorePath() -> String {
         let defaultPath = SessionLoader.defaultStorePath
-        let configURL = FileManager().homeDirectoryForCurrentUser
-            .appendingPathComponent(".aipro/aipro.json")
+        let configURL = AIProPaths.configURL
         guard
             let data = try? Data(contentsOf: configURL),
             let parsed = try? JSONSerialization.jsonObject(with: data) as? [String: Any],

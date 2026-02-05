@@ -1,10 +1,10 @@
-// Default service labels
-export const GATEWAY_LAUNCH_AGENT_LABEL = "ro.aipro.gateway";
+// Default service labels (canonical + legacy compatibility)
+export const GATEWAY_LAUNCH_AGENT_LABEL = "ai.aipro.gateway";
 export const GATEWAY_SYSTEMD_SERVICE_NAME = "aipro-gateway";
 export const GATEWAY_WINDOWS_TASK_NAME = "AIPro Gateway";
 export const GATEWAY_SERVICE_MARKER = "aipro";
 export const GATEWAY_SERVICE_KIND = "gateway";
-export const NODE_LAUNCH_AGENT_LABEL = "ro.aipro.node";
+export const NODE_LAUNCH_AGENT_LABEL = "ai.aipro.node";
 export const NODE_SYSTEMD_SERVICE_NAME = "aipro-node";
 export const NODE_WINDOWS_TASK_NAME = "AIPro Node";
 export const NODE_SERVICE_MARKER = "aipro";
@@ -16,7 +16,9 @@ export const LEGACY_GATEWAY_WINDOWS_TASK_NAMES: string[] = [];
 
 export function normalizeGatewayProfile(profile?: string): string | null {
   const trimmed = profile?.trim();
-  if (!trimmed || trimmed.toLowerCase() === "default") return null;
+  if (!trimmed || trimmed.toLowerCase() === "default") {
+    return null;
+  }
   return trimmed;
 }
 
@@ -30,22 +32,27 @@ export function resolveGatewayLaunchAgentLabel(profile?: string): string {
   if (!normalized) {
     return GATEWAY_LAUNCH_AGENT_LABEL;
   }
-  return `ro.aipro.${normalized}`;
+  return `ai.aipro.${normalized}`;
 }
 
-export function resolveLegacyGatewayLaunchAgentLabels(_profile?: string): string[] {
-  return [...LEGACY_GATEWAY_LAUNCH_AGENT_LABELS];
+export function resolveLegacyGatewayLaunchAgentLabels(profile?: string): string[] {
+  void profile;
+  return [];
 }
 
 export function resolveGatewaySystemdServiceName(profile?: string): string {
   const suffix = resolveGatewayProfileSuffix(profile);
-  if (!suffix) return GATEWAY_SYSTEMD_SERVICE_NAME;
+  if (!suffix) {
+    return GATEWAY_SYSTEMD_SERVICE_NAME;
+  }
   return `aipro-gateway${suffix}`;
 }
 
 export function resolveGatewayWindowsTaskName(profile?: string): string {
   const normalized = normalizeGatewayProfile(profile);
-  if (!normalized) return GATEWAY_WINDOWS_TASK_NAME;
+  if (!normalized) {
+    return GATEWAY_WINDOWS_TASK_NAME;
+  }
   return `AIPro Gateway (${normalized})`;
 }
 
@@ -56,9 +63,15 @@ export function formatGatewayServiceDescription(params?: {
   const profile = normalizeGatewayProfile(params?.profile);
   const version = params?.version?.trim();
   const parts: string[] = [];
-  if (profile) parts.push(`profile: ${profile}`);
-  if (version) parts.push(`v${version}`);
-  if (parts.length === 0) return "AIPro Gateway";
+  if (profile) {
+    parts.push(`profile: ${profile}`);
+  }
+  if (version) {
+    parts.push(`v${version}`);
+  }
+  if (parts.length === 0) {
+    return "AIPro Gateway";
+  }
   return `AIPro Gateway (${parts.join(", ")})`;
 }
 
@@ -76,6 +89,8 @@ export function resolveNodeWindowsTaskName(): string {
 
 export function formatNodeServiceDescription(params?: { version?: string }): string {
   const version = params?.version?.trim();
-  if (!version) return "AIPro Node Host";
+  if (!version) {
+    return "AIPro Node Host";
+  }
   return `AIPro Node Host (v${version})`;
 }

@@ -1,5 +1,4 @@
 import { afterEach, describe, expect, it, vi } from "vitest";
-
 import type { AIProConfig } from "../config/config.js";
 import { createExecApprovalForwarder } from "./exec-approval-forwarder.js";
 

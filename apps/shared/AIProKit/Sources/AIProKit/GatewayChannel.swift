@@ -1,4 +1,4 @@
-import AIProProtocol
+import AiproProtocol
 import Foundation
 import OSLog
 
@@ -102,14 +102,14 @@ public enum GatewayAuthSource: String, Sendable {
 }
 
 // Avoid ambiguity with the app's own AnyCodable type.
-private typealias ProtoAnyCodable = AIProProtocol.AnyCodable
+private typealias ProtoAnyCodable = AiproProtocol.AnyCodable
 
 private enum ConnectChallengeError: Error {
     case timeout
 }
 
 public actor GatewayChannelActor {
-    private let logger = Logger(subsystem: "ro.aipro", category: "gateway")
+    private let logger = Logger(subsystem: "ai.aipro", category: "gateway")
     private var task: WebSocketTaskBox?
     private var pending: [String: CheckedContinuation<GatewayFrame, Error>] = [:]
     private var connected = false
@@ -416,7 +416,9 @@ public actor GatewayChannelActor {
             guard let self else { return }
             await self.watchTicks()
         }
-        await self.pushHandler?(.snapshot(ok))
+        if let pushHandler = self.pushHandler {
+            Task { await pushHandler(.snapshot(ok)) }
+        }
     }
 
     private func listen() {

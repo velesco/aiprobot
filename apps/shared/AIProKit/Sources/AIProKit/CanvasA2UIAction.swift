@@ -94,6 +94,11 @@ public enum AIProCanvasA2UIAction: Sendable {
             }
             return "{\"id\":\"\(actionId)\",\"ok\":\(ok ? "true" : "false"),\"error\":\"\"}"
         }()
-        return "window.dispatchEvent(new CustomEvent('aipro:a2ui-action-status', { detail: \(json) }));"
+        return """
+        (() => {
+          const detail = \(json);
+          window.dispatchEvent(new CustomEvent('aipro:a2ui-action-status', { detail }));
+        })();
+        """
     }
 }

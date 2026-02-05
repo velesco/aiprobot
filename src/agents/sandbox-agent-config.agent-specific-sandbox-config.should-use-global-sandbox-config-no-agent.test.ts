@@ -1,6 +1,9 @@
 import { EventEmitter } from "node:events";
+import fs from "node:fs/promises";
+import os from "node:os";
+import path from "node:path";
 import { Readable } from "node:stream";
-import { beforeEach, describe, expect, it, vi } from "vitest";
+import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import type { AIProConfig } from "../config/config.js";
 
 // We need to test the internal defaultSandboxConfig function, but it's not exported.
@@ -46,8 +49,27 @@ vi.mock("node:child_process", async (importOriginal) => {
 });
 
 describe("Agent-specific sandbox config", () => {
-  beforeEach(() => {
+  let previousStateDir: string | undefined;
+  let tempStateDir: string | undefined;
+
+  beforeEach(async () => {
     spawnCalls.length = 0;
+    previousStateDir = process.env.AIPRO_STATE_DIR;
+    tempStateDir = await fs.mkdtemp(path.join(os.tmpdir(), "aipro-test-state-"));
+    process.env.AIPRO_STATE_DIR = tempStateDir;
+    vi.resetModules();
+  });
+
+  afterEach(async () => {
+    if (tempStateDir) {
+      await fs.rm(tempStateDir, { recursive: true, force: true });
+    }
+    if (previousStateDir === undefined) {
+      delete process.env.AIPRO_STATE_DIR;
+    } else {
+      process.env.AIPRO_STATE_DIR = previousStateDir;
+    }
+    tempStateDir = undefined;
   });
 
   it(
@@ -67,7 +89,7 @@ describe("Agent-specific sandbox config", () => {
           list: [
             {
               id: "main",
-              workspace: "~/clawd",
+              workspace: "~/aipro",
             },
           ],
         },
@@ -100,7 +122,7 @@ describe("Agent-specific sandbox config", () => {
         list: [
           {
             id: "work",
-            workspace: "~/clawd-work",
+            workspace: "~/aipro-work",
             sandbox: {
               mode: "all",
               scope: "agent",
@@ -148,7 +170,7 @@ describe("Agent-specific sandbox config", () => {
         list: [
           {
             id: "work",
-            workspace: "~/clawd-work",
+            workspace: "~/aipro-work",
             sandbox: {
               mode: "all",
               scope: "shared",

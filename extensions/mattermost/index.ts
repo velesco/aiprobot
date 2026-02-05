@@ -1,6 +1,5 @@
 import type { AIProPluginApi } from "aipro/plugin-sdk";
 import { emptyPluginConfigSchema } from "aipro/plugin-sdk";
-
 import { mattermostPlugin } from "./src/channel.js";
 import { setMattermostRuntime } from "./src/runtime.js";
 

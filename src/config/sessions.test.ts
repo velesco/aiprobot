@@ -2,7 +2,7 @@ import fs from "node:fs/promises";
 import os from "node:os";
 import path from "node:path";
 import { describe, expect, it } from "vitest";
-
+import { sleep } from "../utils.js";
 import {
   buildGroupDisplayName,
   deriveSessionKey,
@@ -56,11 +56,11 @@ describe("sessions", () => {
       buildGroupDisplayName({
         provider: "discord",
         groupChannel: "#general",
-        space: "friends-of-clawd",
+        space: "friends-of-aipro",
         id: "123",
         key: "discord:group:123",
       }),
-    ).toBe("discord:friends-of-clawd#general");
+    ).toBe("discord:friends-of-aipro#general");
   });
 
   it("collapses direct chats to main by default", () => {
@@ -429,7 +429,6 @@ describe("sessions", () => {
       "utf-8",
     );
 
-    const sleep = (ms: number) => new Promise((r) => setTimeout(r, ms));
     await Promise.all([
       updateSessionStoreEntry({
         storePath,

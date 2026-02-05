@@ -3,6 +3,7 @@ summary: "CLI reference for `aipro skills` (list/info/check) and skill eligibili
 read_when:
   - You want to see which skills are available and ready to run
   - You want to debug missing binaries/env/config for skills
+title: "skills"
 ---
 
 # `aipro skills`
@@ -10,9 +11,10 @@ read_when:
 Inspect skills (bundled + workspace + managed overrides) and see what’s eligible vs missing requirements.
 
 Related:
+
 - Skills system: [Skills](/tools/skills)
 - Skills config: [Skills config](/tools/skills-config)
-- ClawdHub installs: [ClawdHub](/tools/clawdhub)
+- ClawHub installs: [ClawHub](/tools/clawhub)
 
 ## Commands
 
@@ -22,4 +24,3 @@ aipro skills list --eligible
 aipro skills info <name>
 aipro skills check
 ```
-

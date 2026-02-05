@@ -1,7 +1,7 @@
 import Foundation
 import Testing
-@testable import AIProKit
-import AIProProtocol
+@testable import AiproKit
+import AiproProtocol
 
 struct GatewayNodeSessionTests {
     @Test

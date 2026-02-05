@@ -62,7 +62,7 @@ describe("docker-setup.sh", () => {
       DOCKER_STUB_LOG: logPath,
       AIPRO_GATEWAY_TOKEN: "test-token",
       AIPRO_CONFIG_DIR: join(rootDir, "config"),
-      AIPRO_WORKSPACE_DIR: join(rootDir, "clawd"),
+      AIPRO_WORKSPACE_DIR: join(rootDir, "aipro"),
     };
     delete env.AIPRO_DOCKER_APT_PACKAGES;
     delete env.AIPRO_EXTRA_MOUNTS;
@@ -113,7 +113,7 @@ describe("docker-setup.sh", () => {
       AIPRO_DOCKER_APT_PACKAGES: "ffmpeg build-essential",
       AIPRO_GATEWAY_TOKEN: "test-token",
       AIPRO_CONFIG_DIR: join(rootDir, "config"),
-      AIPRO_WORKSPACE_DIR: join(rootDir, "clawd"),
+      AIPRO_WORKSPACE_DIR: join(rootDir, "aipro"),
       AIPRO_EXTRA_MOUNTS: "",
       AIPRO_HOME_VOLUME: "",
     };

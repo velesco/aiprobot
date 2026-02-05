@@ -1,5 +1,5 @@
 import Testing
-@testable import AIProChatUI
+@testable import AiproChatUI
 
 @Suite("ChatMarkdownPreprocessor")
 struct ChatMarkdownPreprocessorTests {

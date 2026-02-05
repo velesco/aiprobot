@@ -1,5 +1,5 @@
 import AppKit
-import AIProProtocol
+import AiproProtocol
 import Foundation
 import Testing
 
@@ -7,7 +7,7 @@ import Testing
 
 @Suite(.serialized)
 struct LowCoverageHelperTests {
-    private typealias ProtoAnyCodable = AIProProtocol.AnyCodable
+    private typealias ProtoAnyCodable = AiproProtocol.AnyCodable
 
     @Test func anyCodableHelperAccessors() throws {
         let payload: [String: ProtoAnyCodable] = [

@@ -16,18 +16,20 @@ public struct DeviceIdentity: Codable, Sendable {
 }
 
 enum DeviceIdentityPaths {
-    private static let stateDirEnv = "AIPRO_STATE_DIR"
+    private static let stateDirEnv = ["AIPRO_STATE_DIR"]
 
     static func stateDirURL() -> URL {
-        if let raw = getenv(self.stateDirEnv) {
-            let value = String(cString: raw).trimmingCharacters(in: .whitespacesAndNewlines)
-            if !value.isEmpty {
-                return URL(fileURLWithPath: value, isDirectory: true)
+        for key in self.stateDirEnv {
+            if let raw = getenv(key) {
+                let value = String(cString: raw).trimmingCharacters(in: .whitespacesAndNewlines)
+                if !value.isEmpty {
+                    return URL(fileURLWithPath: value, isDirectory: true)
+                }
             }
         }
 
         if let appSupport = FileManager.default.urls(for: .applicationSupportDirectory, in: .userDomainMask).first {
-            return appSupport.appendingPathComponent("aipro", isDirectory: true)
+            return appSupport.appendingPathComponent("AIPro", isDirectory: true)
         }
 
         return FileManager.default.temporaryDirectory.appendingPathComponent("aipro", isDirectory: true)

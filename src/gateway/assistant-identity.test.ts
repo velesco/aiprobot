@@ -1,5 +1,4 @@
 import { describe, expect, it } from "vitest";
-
 import type { AIProConfig } from "../config/config.js";
 import { DEFAULT_ASSISTANT_IDENTITY, resolveAssistantIdentity } from "./assistant-identity.js";
 
@@ -34,11 +33,11 @@ describe("resolveAssistantIdentity avatar normalization", () => {
     const cfg: AIProConfig = {
       ui: {
         assistant: {
-          avatar: "avatars/clawd.png",
+          avatar: "avatars/aipro.png",
         },
       },
     };
 
-    expect(resolveAssistantIdentity({ cfg, workspaceDir: "" }).avatar).toBe("avatars/clawd.png");
+    expect(resolveAssistantIdentity({ cfg, workspaceDir: "" }).avatar).toBe("avatars/aipro.png");
   });
 });

@@ -5,7 +5,7 @@ Adds the `lobster` agent tool as an **optional** plugin tool.
 ## What this is
 
 - Lobster is a standalone workflow shell (typed JSON-first pipelines + approvals/resume).
-- This plugin integrates Lobster with AIPro *without core changes*.
+- This plugin integrates Lobster with AIPro _without core changes_.
 
 ## Enable
 
@@ -30,9 +30,9 @@ Enable it in an agent allowlist:
 }
 ```
 
-## Using `clawd.invoke` (Lobster → AIPro tools)
+## Using `aipro.invoke` (Lobster → AIPro tools)
 
-Some Lobster pipelines may include a `clawd.invoke` step to call back into AIPro tools/plugins (for example: `gog` for Google Workspace, `gh` for GitHub, `message.send`, etc.).
+Some Lobster pipelines may include a `aipro.invoke` step to call back into AIPro tools/plugins (for example: `gog` for Google Workspace, `gh` for GitHub, `message.send`, etc.).
 
 For this to work, the AIPro Gateway must expose the tool bridge endpoint and the target tool must be allowed by policy:
 
@@ -42,7 +42,7 @@ For this to work, the AIPro Gateway must expose the tool bridge endpoint and the
 
 ### Allowlisting recommended
 
-To avoid letting workflows call arbitrary tools, set a tight allowlist on the agent that will be used by `clawd.invoke`.
+To avoid letting workflows call arbitrary tools, set a tight allowlist on the agent that will be used by `aipro.invoke`.
 
 Example (allow only a small set of tools):
 
@@ -53,22 +53,17 @@ Example (allow only a small set of tools):
       {
         "id": "main",
         "tools": {
-          "allow": [
-            "lobster",
-            "web_fetch",
-            "web_search",
-            "gog",
-            "gh"
-          ],
-          "deny": ["gateway"]
-        }
-      }
-    ]
-  }
+          "allow": ["lobster", "web_fetch", "web_search", "gog", "gh"],
+          "deny": ["gateway"],
+        },
+      },
+    ],
+  },
 }
 ```
 
 Notes:
+
 - If `tools.allow` is omitted or empty, it behaves like "allow everything (except denied)". For a real allowlist, set a **non-empty** `allow`.
 - Tool names depend on which plugins you have installed/enabled.
 

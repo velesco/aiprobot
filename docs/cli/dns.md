@@ -2,7 +2,8 @@
 summary: "CLI reference for `aipro dns` (wide-area discovery helpers)"
 read_when:
   - You want wide-area discovery (DNS-SD) via Tailscale + CoreDNS
-  - You’re setting up split DNS for aipro.internal
+  - You’re setting up split DNS for a custom discovery domain (example: aipro.internal)
+title: "dns"
 ---
 
 # `aipro dns`
@@ -10,6 +11,7 @@ read_when:
 DNS helpers for wide-area discovery (Tailscale + CoreDNS). Currently focused on macOS + Homebrew CoreDNS.
 
 Related:
+
 - Gateway discovery: [Discovery](/gateway/discovery)
 - Wide-area discovery config: [Configuration](/gateway/configuration)
 
@@ -19,4 +21,3 @@ Related:
 aipro dns setup
 aipro dns setup --apply
 ```
-

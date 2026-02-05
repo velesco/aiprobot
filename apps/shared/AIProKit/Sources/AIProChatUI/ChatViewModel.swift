@@ -1,4 +1,4 @@
-import AIProKit
+import AiproKit
 import Foundation
 import Observation
 import OSLog
@@ -10,7 +10,7 @@ import AppKit
 import UIKit
 #endif
 
-private let chatUILogger = Logger(subsystem: "ro.aipro", category: "AIProChatUI")
+private let chatUILogger = Logger(subsystem: "ai.aipro", category: "AiproChatUI")
 
 @MainActor
 @Observable

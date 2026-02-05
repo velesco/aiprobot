@@ -2,17 +2,21 @@
 summary: "Runbook for the Gateway service, lifecycle, and operations"
 read_when:
   - Running or debugging the gateway process
+title: "Gateway Runbook"
 ---
+
 # Gateway service runbook
 
 Last updated: 2025-12-09
 
 ## What it is
+
 - The always-on process that owns the single Baileys/Telegram connection and the control/event plane.
 - Replaces the legacy `gateway` command. CLI entry point: `aipro gateway`.
 - Runs until stopped; exits non-zero on fatal errors so the supervisor restarts it.
 
 ## How to run (local)
+
 ```bash
 aipro gateway --port 18789
 # for full debug/trace logs in stdio:
@@ -22,6 +26,7 @@ aipro gateway --force
 # dev loop (auto-reload on TS changes):
 pnpm gateway:watch
 ```
+
 - Config hot reload watches `~/.aipro/aipro.json` (or `AIPRO_CONFIG_PATH`).
   - Default mode: `gateway.reload.mode="hybrid"` (hot-apply safe changes, restart on critical).
   - Hot reload uses in-process restart via **SIGUSR1** when needed.
@@ -31,7 +36,7 @@ pnpm gateway:watch
   - OpenAI Chat Completions (HTTP): [`/v1/chat/completions`](/gateway/openai-http-api).
   - OpenResponses (HTTP): [`/v1/responses`](/gateway/openresponses-http-api).
   - Tools Invoke (HTTP): [`/tools/invoke`](/gateway/tools-invoke-http-api).
-- Starts a Canvas file server by default on `canvasHost.port` (default `18793`), serving `http://<gateway-host>:18793/__aipro__/canvas/` from `~/clawd/canvas`. Disable with `canvasHost.enabled=false` or `AIPRO_SKIP_CANVAS_HOST=1`.
+- Starts a Canvas file server by default on `canvasHost.port` (default `18793`), serving `http://<gateway-host>:18793/__aipro__/canvas/` from `~/.aipro/workspace/canvas`. Disable with `canvasHost.enabled=false` or `AIPRO_SKIP_CANVAS_HOST=1`.
 - Logs to stdout; use launchd/systemd to keep it alive and rotate logs.
 - Pass `--verbose` to mirror debug logging (handshakes, req/res, events) from the log file into stdio when troubleshooting.
 - `--force` uses `lsof` to find listeners on the chosen port, sends SIGTERM, logs what it killed, then starts the gateway (fails fast if `lsof` is missing).
@@ -42,6 +47,7 @@ pnpm gateway:watch
 - Port precedence: `--port` > `AIPRO_GATEWAY_PORT` > `gateway.port` > default `18789`.
 
 ## Remote access
+
 - Tailscale/VPN preferred; otherwise SSH tunnel:
   ```bash
   ssh -N -L 18789:127.0.0.1:18789 user@host
@@ -56,11 +62,13 @@ Usually unnecessary: one Gateway can serve multiple messaging channels and agent
 Supported if you isolate state + config and use unique ports. Full guide: [Multiple gateways](/gateway/multiple-gateways).
 
 Service names are profile-aware:
+
 - macOS: `bot.molt.<profile>` (legacy `com.aipro.*` may still exist)
 - Linux: `aipro-gateway-<profile>.service`
 - Windows: `AIPro Gateway (<profile>)`
 
 Install metadata is embedded in the service config:
+
 - `AIPRO_SERVICE_MARKER=aipro`
 - `AIPRO_SERVICE_KIND=gateway`
 - `AIPRO_SERVICE_VERSION=<version>`
@@ -80,20 +88,23 @@ aipro --dev health
 ```
 
 Defaults (can be overridden via env/flags/config):
+
 - `AIPRO_STATE_DIR=~/.aipro-dev`
 - `AIPRO_CONFIG_PATH=~/.aipro-dev/aipro.json`
 - `AIPRO_GATEWAY_PORT=19001` (Gateway WS + HTTP)
 - browser control service port = `19003` (derived: `gateway.port+2`, loopback only)
 - `canvasHost.port=19005` (derived: `gateway.port+4`)
-- `agents.defaults.workspace` default becomes `~/clawd-dev` when you run `setup`/`onboard` under `--dev`.
+- `agents.defaults.workspace` default becomes `~/.aipro/workspace-dev` when you run `setup`/`onboard` under `--dev`.
 
 Derived ports (rules of thumb):
+
 - Base port = `gateway.port` (or `AIPRO_GATEWAY_PORT` / `--port`)
 - browser control service port = base + 2 (loopback only)
 - `canvasHost.port = base + 4` (or `AIPRO_CANVAS_HOST_PORT` / config override)
 - Browser profile CDP ports auto-allocate from `browser.controlPort + 9 .. + 108` (persisted per profile).
 
 Checklist per instance:
+
 - unique `gateway.port`
 - unique `AIPRO_CONFIG_PATH`
 - unique `AIPRO_STATE_DIR`
@@ -101,18 +112,21 @@ Checklist per instance:
 - separate WhatsApp numbers (if using WA)
 
 Service install per profile:
+
 ```bash
 aipro --profile main gateway install
 aipro --profile rescue gateway install
 ```
 
 Example:
+
 ```bash
 AIPRO_CONFIG_PATH=~/.aipro/a.json AIPRO_STATE_DIR=~/.aipro-a aipro gateway --port 19001
 AIPRO_CONFIG_PATH=~/.aipro/b.json AIPRO_STATE_DIR=~/.aipro-b aipro gateway --port 19002
 ```
 
 ## Protocol (operator view)
+
 - Full docs: [Gateway protocol](/gateway/protocol) and [Bridge protocol (legacy)](/gateway/bridge-protocol).
 - Mandatory first frame from client: `req {type:"req", id, method:"connect", params:{minProtocol,maxProtocol,client:{id,displayName?,version,platform,deviceFamily?,modelIdentifier?,mode,instanceId?}, caps, auth?, locale?, userAgent? } }`.
 - Gateway replies `res {type:"res", id, ok:true, payload:hello-ok }` (or `ok:false` with an error, then closes).
@@ -123,6 +137,7 @@ AIPRO_CONFIG_PATH=~/.aipro/b.json AIPRO_STATE_DIR=~/.aipro-b aipro gateway --por
 - `agent` responses are two-stage: first `res` ack `{runId,status:"accepted"}`, then a final `res` `{runId,status:"ok"|"error",summary}` after the run finishes; streamed output arrives as `event:"agent"`.
 
 ## Methods (initial set)
+
 - `health` — full health snapshot (same shape as `aipro health --json`).
 - `status` — short summary.
 - `system-presence` — current presence list.
@@ -137,17 +152,20 @@ AIPRO_CONFIG_PATH=~/.aipro/b.json AIPRO_STATE_DIR=~/.aipro-b aipro gateway --por
 See also: [Presence](/concepts/presence) for how presence is produced/deduped and why a stable `client.instanceId` matters.
 
 ## Events
+
 - `agent` — streamed tool/output events from the agent run (seq-tagged).
 - `presence` — presence updates (deltas with stateVersion) pushed to all connected clients.
 - `tick` — periodic keepalive/no-op to confirm liveness.
 - `shutdown` — Gateway is exiting; payload includes `reason` and optional `restartExpectedMs`. Clients should reconnect.
 
 ## WebChat integration
+
 - WebChat is a native SwiftUI UI that talks directly to the Gateway WebSocket for history, sends, abort, and events.
 - Remote use goes through the same SSH/Tailscale tunnel; if a gateway token is configured, the client includes it during `connect`.
 - macOS app connects via a single WS (shared connection); it hydrates presence from the initial snapshot and listens for `presence` events to update the UI.
 
 ## Typing and validation
+
 - Server validates every inbound frame with AJV against JSON Schema emitted from the protocol definitions.
 - Clients (TS/Swift) consume generated types (TS directly; Swift via the repo’s generator).
 - Protocol definitions are the source of truth; regenerate schema/models with:
@@ -155,10 +173,12 @@ See also: [Presence](/concepts/presence) for how presence is produced/deduped an
   - `pnpm protocol:gen:swift`
 
 ## Connection snapshot
+
 - `hello-ok` includes a `snapshot` with `presence`, `health`, `stateVersion`, and `uptimeMs` plus `policy {maxPayload,maxBufferedBytes,tickIntervalMs}` so clients can render immediately without extra requests.
 - `health`/`system-presence` remain available for manual refresh, but are not required at connect time.
 
 ## Error codes (res.error shape)
+
 - Errors use `{ code, message, details?, retryable?, retryAfterMs? }`.
 - Standard codes:
   - `NOT_LINKED` — WhatsApp not authenticated.
@@ -167,13 +187,16 @@ See also: [Presence](/concepts/presence) for how presence is produced/deduped an
   - `UNAVAILABLE` — Gateway is shutting down or a dependency is unavailable.
 
 ## Keepalive behavior
+
 - `tick` events (or WS ping/pong) are emitted periodically so clients know the Gateway is alive even when no traffic occurs.
 - Send/agent acknowledgements remain separate responses; do not overload ticks for sends.
 
 ## Replay / gaps
+
 - Events are not replayed. Clients detect seq gaps and should refresh (`health` + `system-presence`) before continuing. WebChat and macOS clients now auto-refresh on gap.
 
 ## Supervision (macOS example)
+
 - Use launchd to keep the service alive:
   - Program: path to `aipro`
   - Arguments: `gateway`
@@ -198,6 +221,7 @@ aipro logs --follow
 ```
 
 Notes:
+
 - `gateway status` probes the Gateway RPC by default using the service’s resolved port/config (override with `--url`).
 - `gateway status --deep` adds system-level scans (LaunchDaemons/system units).
 - `gateway status --no-probe` skips the RPC probe (useful when networking is down).
@@ -212,6 +236,7 @@ Notes:
 - `gateway install` is a no-op when already installed; use `aipro gateway install --force` to reinstall (profile/env/path changes).
 
 Bundled mac app:
+
 - AIPro.app can bundle a Node-based gateway relay and install a per-user LaunchAgent labeled
   `bot.molt.gateway` (or `bot.molt.<profile>`; legacy `com.aipro.*` labels still unload cleanly).
 - To stop it cleanly, use `aipro gateway stop` (or `launchctl bootout gui/$UID/bot.molt.gateway`).
@@ -220,6 +245,7 @@ Bundled mac app:
   - Replace the label with `bot.molt.<profile>` when running a named profile.
 
 ## Supervision (systemd user unit)
+
 AIPro installs a **systemd user service** by default on Linux/WSL2. We
 recommend user services for single-user machines (simpler env, per-user config).
 Use a **system service** for multi-user or always-on servers (no lingering
@@ -229,6 +255,7 @@ required, shared supervision).
 unit and can update it to match the current recommended defaults.
 
 Create `~/.config/systemd/user/aipro-gateway[-<profile>].service`:
+
 ```
 [Unit]
 Description=AIPro Gateway (profile: <profile>, v<version>)
@@ -245,12 +272,16 @@ WorkingDirectory=/home/youruser
 [Install]
 WantedBy=default.target
 ```
+
 Enable lingering (required so the user service survives logout/idle):
+
 ```
 sudo loginctl enable-linger youruser
 ```
+
 Onboarding runs this on Linux/WSL2 (may prompt for sudo; writes `/var/lib/systemd/linger`).
 Then enable the service:
+
 ```
 systemctl --user enable --now aipro-gateway[-<profile>].service
 ```
@@ -259,6 +290,7 @@ systemctl --user enable --now aipro-gateway[-<profile>].service
 install a systemd **system** unit instead of a user unit (no lingering needed).
 Create `/etc/systemd/system/aipro-gateway[-<profile>].service` (copy the unit above,
 switch `WantedBy=multi-user.target`, set `User=` + `WorkingDirectory=`), then:
+
 ```
 sudo systemctl daemon-reload
 sudo systemctl enable --now aipro-gateway[-<profile>].service
@@ -269,17 +301,20 @@ sudo systemctl enable --now aipro-gateway[-<profile>].service
 Windows installs should use **WSL2** and follow the Linux systemd section above.
 
 ## Operational checks
+
 - Liveness: open WS and send `req:connect` → expect `res` with `payload.type="hello-ok"` (with snapshot).
 - Readiness: call `health` → expect `ok: true` and a linked channel in `linkChannel` (when applicable).
 - Debug: subscribe to `tick` and `presence` events; ensure `status` shows linked/auth age; presence entries show Gateway host and connected clients.
 
 ## Safety guarantees
+
 - Assume one Gateway per host by default; if you run multiple profiles, isolate ports/state and target the right instance.
 - No fallback to direct Baileys connections; if the Gateway is down, sends fail fast.
 - Non-connect first frames or malformed JSON are rejected and the socket is closed.
 - Graceful shutdown: emit `shutdown` event before closing; clients must handle close + reconnect.
 
 ## CLI helpers
+
 - `aipro gateway health|status` — request health/status over the Gateway WS.
 - `aipro message send --target <num> --message "hi" [--media ...]` — send via Gateway (idempotent for WhatsApp).
 - `aipro agent --message "hi" --to <num>` — run an agent turn (waits for final by default).
@@ -288,5 +323,6 @@ Windows installs should use **WSL2** and follow the Linux systemd section above.
 - Gateway helper subcommands assume a running gateway on `--url`; they no longer auto-spawn one.
 
 ## Migration guidance
+
 - Retire uses of `aipro gateway` and the legacy TCP control port.
 - Update clients to speak the WS protocol with mandatory connect and structured presence.

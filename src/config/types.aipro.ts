@@ -12,6 +12,7 @@ import type {
   TalkConfig,
 } from "./types.gateway.js";
 import type { HooksConfig } from "./types.hooks.js";
+import type { MemoryConfig } from "./types.memory.js";
 import type {
   AudioConfig,
   BroadcastConfig,
@@ -26,7 +27,7 @@ import type { ToolsConfig } from "./types.tools.js";
 
 export type AIProConfig = {
   meta?: {
-    /** Last aipro version that wrote this config. */
+    /** Last AIPro version that wrote this config. */
     lastTouchedVersion?: string;
     /** ISO timestamp when this config was last written. */
     lastTouchedAt?: string;
@@ -95,6 +96,7 @@ export type AIProConfig = {
   canvasHost?: CanvasHostConfig;
   talk?: TalkConfig;
   gateway?: GatewayConfig;
+  memory?: MemoryConfig;
 };
 
 export type ConfigValidationIssue = {

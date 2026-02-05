@@ -1,4 +1,4 @@
-import AIProProtocol
+import AiproProtocol
 import Testing
 @testable import AIPro
 
@@ -8,7 +8,7 @@ import Testing
     func presenceEventPayloadDecodesViaJSONEncoder() {
         // Build a payload that mirrors the gateway's presence event shape:
         // { "presence": [ PresenceEntry ] }
-        let entry: [String: AIProProtocol.AnyCodable] = [
+        let entry: [String: AiproProtocol.AnyCodable] = [
             "host": .init("gw"),
             "ip": .init("10.0.0.1"),
             "version": .init("2.0.0"),
@@ -18,10 +18,10 @@ import Testing
             "text": .init("Gateway node"),
             "ts": .init(1_730_000_000),
         ]
-        let payloadMap: [String: AIProProtocol.AnyCodable] = [
-            "presence": .init([AIProProtocol.AnyCodable(entry)]),
+        let payloadMap: [String: AiproProtocol.AnyCodable] = [
+            "presence": .init([AiproProtocol.AnyCodable(entry)]),
         ]
-        let payload = AIProProtocol.AnyCodable(payloadMap)
+        let payload = AiproProtocol.AnyCodable(payloadMap)
 
         let store = InstancesStore(isPreview: true)
         store.handlePresenceEventPayload(payload)

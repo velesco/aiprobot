@@ -6,7 +6,8 @@
 termux-toast "Syncing AIPro auth..."
 
 # Run sync on l36 server
-RESULT=$(ssh l36 '/home/admin/aipro/scripts/sync-claude-code-auth.sh' 2>&1)
+SERVER="${AIPRO_SERVER:-${AIPRO_SERVER:-l36}}"
+RESULT=$(ssh "$SERVER" '/home/admin/aipro/scripts/sync-claude-code-auth.sh' 2>&1)
 EXIT_CODE=$?
 
 if [ $EXIT_CODE -eq 0 ]; then
@@ -17,7 +18,7 @@ if [ $EXIT_CODE -eq 0 ]; then
     termux-toast "AIPro synced! Expires:${EXPIRY}"
 
     # Optional: restart aipro service
-    ssh l36 'systemctl --user restart aipro' 2>/dev/null
+    ssh "$SERVER" 'systemctl --user restart aipro' 2>/dev/null
 else
     termux-vibrate -d 300
     termux-toast "Sync failed: ${RESULT}"

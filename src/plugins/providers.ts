@@ -1,6 +1,6 @@
+import type { ProviderPlugin } from "./types.js";
 import { createSubsystemLogger } from "../logging/subsystem.js";
 import { loadAIProPlugins, type PluginLoadOptions } from "./loader.js";
-import type { ProviderPlugin } from "./types.js";
 
 const log = createSubsystemLogger("plugins");
 

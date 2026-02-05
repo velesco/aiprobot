@@ -1,5 +1,5 @@
-import AIProIPC
-import AIProKit
+import AiproIPC
+import AiproKit
 import CoreLocation
 import SwiftUI
 

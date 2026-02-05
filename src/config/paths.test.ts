@@ -2,7 +2,6 @@ import fs from "node:fs/promises";
 import os from "node:os";
 import path from "node:path";
 import { describe, expect, it, vi } from "vitest";
-
 import {
   resolveDefaultConfigCandidates,
   resolveConfigPath,
@@ -37,19 +36,36 @@ describe("oauth paths", () => {
 });
 
 describe("state + config path candidates", () => {
-  it("respects AIPRO_STATE_DIR env var", () => {
+  it("uses AIPRO_STATE_DIR when set", () => {
     const env = {
-      AIPRO_STATE_DIR: "/custom/state",
+      AIPRO_STATE_DIR: "/new/state",
     } as NodeJS.ProcessEnv;
 
-    expect(resolveStateDir(env, () => "/home/test")).toBe(path.resolve("/custom/state"));
+    expect(resolveStateDir(env, () => "/home/test")).toBe(path.resolve("/new/state"));
   });
 
-  it("returns default config candidate", () => {
+  it("orders default config candidates in a stable order", () => {
     const home = "/home/test";
     const candidates = resolveDefaultConfigCandidates({} as NodeJS.ProcessEnv, () => home);
-    expect(candidates[0]).toBe(path.join(home, ".aipro", "aipro.json"));
-    expect(candidates.length).toBe(1);
+    const expected = [
+      path.join(home, ".aipro", "aipro.json"),
+      path.join(home, ".aipro", "aipro.json"),
+      path.join(home, ".aipro", "aipro.json"),
+      path.join(home, ".aipro", "moldbot.json"),
+      path.join(home, ".aipro", "aipro.json"),
+      path.join(home, ".aipro", "aipro.json"),
+      path.join(home, ".aipro", "aipro.json"),
+      path.join(home, ".aipro", "moldbot.json"),
+      path.join(home, ".aipro", "aipro.json"),
+      path.join(home, ".aipro", "aipro.json"),
+      path.join(home, ".aipro", "aipro.json"),
+      path.join(home, ".aipro", "moldbot.json"),
+      path.join(home, ".moldbot", "aipro.json"),
+      path.join(home, ".moldbot", "aipro.json"),
+      path.join(home, ".moldbot", "aipro.json"),
+      path.join(home, ".moldbot", "moldbot.json"),
+    ];
+    expect(candidates).toEqual(expected);
   });
 
   it("prefers ~/.aipro when it exists and legacy dir is missing", async () => {
@@ -64,7 +80,7 @@ describe("state + config path candidates", () => {
     }
   });
 
-  it("CONFIG_PATH prefers existing legacy filename when present", async () => {
+  it("CONFIG_PATH prefers existing config when present", async () => {
     const root = await fs.mkdtemp(path.join(os.tmpdir(), "aipro-config-"));
     const previousHome = process.env.HOME;
     const previousUserProfile = process.env.USERPROFILE;
@@ -97,16 +113,41 @@ describe("state + config path candidates", () => {
       } else {
         process.env.HOME = previousHome;
       }
-      if (previousUserProfile === undefined) delete process.env.USERPROFILE;
-      else process.env.USERPROFILE = previousUserProfile;
-      if (previousHomeDrive === undefined) delete process.env.HOMEDRIVE;
-      else process.env.HOMEDRIVE = previousHomeDrive;
-      if (previousHomePath === undefined) delete process.env.HOMEPATH;
-      else process.env.HOMEPATH = previousHomePath;
-      if (previousAIProConfig === undefined) delete process.env.AIPRO_CONFIG_PATH;
-      else process.env.AIPRO_CONFIG_PATH = previousAIProConfig;
-      if (previousAIProState === undefined) delete process.env.AIPRO_STATE_DIR;
-      else process.env.AIPRO_STATE_DIR = previousAIProState;
+      if (previousUserProfile === undefined) {
+        delete process.env.USERPROFILE;
+      } else {
+        process.env.USERPROFILE = previousUserProfile;
+      }
+      if (previousHomeDrive === undefined) {
+        delete process.env.HOMEDRIVE;
+      } else {
+        process.env.HOMEDRIVE = previousHomeDrive;
+      }
+      if (previousHomePath === undefined) {
+        delete process.env.HOMEPATH;
+      } else {
+        process.env.HOMEPATH = previousHomePath;
+      }
+      if (previousAIProConfig === undefined) {
+        delete process.env.AIPRO_CONFIG_PATH;
+      } else {
+        process.env.AIPRO_CONFIG_PATH = previousAIProConfig;
+      }
+      if (previousAIProConfig === undefined) {
+        delete process.env.AIPRO_CONFIG_PATH;
+      } else {
+        process.env.AIPRO_CONFIG_PATH = previousAIProConfig;
+      }
+      if (previousAIProState === undefined) {
+        delete process.env.AIPRO_STATE_DIR;
+      } else {
+        process.env.AIPRO_STATE_DIR = previousAIProState;
+      }
+      if (previousAIProState === undefined) {
+        delete process.env.AIPRO_STATE_DIR;
+      } else {
+        process.env.AIPRO_STATE_DIR = previousAIProState;
+      }
       await fs.rm(root, { recursive: true, force: true });
       vi.resetModules();
     }
