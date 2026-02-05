@@ -72,21 +72,6 @@ export async function noteMacLaunchctlGatewayEnvOverrides(
   }
 
   const getenv = deps?.getenv ?? launchctlGetenv;
-  const deprecatedLaunchctlEntries = [
-    ["AIPRO_GATEWAY_TOKEN", await getenv("AIPRO_GATEWAY_TOKEN")],
-    ["AIPRO_GATEWAY_PASSWORD", await getenv("AIPRO_GATEWAY_PASSWORD")],
-    ["AIPRO_GATEWAY_TOKEN", await getenv("AIPRO_GATEWAY_TOKEN")],
-    ["AIPRO_GATEWAY_PASSWORD", await getenv("AIPRO_GATEWAY_PASSWORD")],
-  ].filter((entry): entry is [string, string] => Boolean(entry[1]?.trim()));
-  if (deprecatedLaunchctlEntries.length > 0) {
-    const lines = [
-      "- Deprecated launchctl environment variables detected (ignored).",
-      ...deprecatedLaunchctlEntries.map(
-        ([key]) => `- \`${key}\` is set; use \`AIPRO_${key.slice(key.indexOf("_") + 1)}\` instead.`,
-      ),
-    ];
-    (deps?.noteFn ?? note)(lines.join("\n"), "Gateway (macOS)");
-  }
 
   const tokenEntries = [["AIPRO_GATEWAY_TOKEN", await getenv("AIPRO_GATEWAY_TOKEN")]] as const;
   const passwordEntries = [
