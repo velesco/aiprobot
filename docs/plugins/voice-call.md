@@ -1,14 +1,14 @@
 ---
 summary: "Voice Call plugin: outbound + inbound calls via Twilio/Telnyx/Plivo (plugin install + config + CLI)"
 read_when:
-  - You want to place an outbound voice call from OpenClaw
+  - You want to place an outbound voice call from AIPro
   - You are configuring or developing the voice-call plugin
 title: "Voice Call Plugin"
 ---
 
 # Voice Call (plugin)
 
-Voice calls for OpenClaw via a plugin. Supports outbound notifications and
+Voice calls for AIPro via a plugin. Supports outbound notifications and
 multi-turn conversations with inbound policies.
 
 Current providers:
@@ -23,7 +23,7 @@ Quick mental model:
 - Install plugin
 - Restart Gateway
 - Configure under `plugins.entries.voice-call.config`
-- Use `openclaw voicecall ...` or the `voice_call` tool
+- Use `aipro voicecall ...` or the `voice_call` tool
 
 ## Where it runs (local vs remote)
 
@@ -36,7 +36,7 @@ If you use a remote Gateway, install/configure the plugin on the **machine runni
 ### Option A: install from npm (recommended)
 
 ```bash
-openclaw plugins install @openclaw/voice-call
+aipro plugins install @aipro/voice-call
 ```
 
 Restart the Gateway afterwards.
@@ -44,7 +44,7 @@ Restart the Gateway afterwards.
 ### Option B: install from a local folder (dev, no copying)
 
 ```bash
-openclaw plugins install ./extensions/voice-call
+aipro plugins install ./extensions/voice-call
 cd ./extensions/voice-call && pnpm install
 ```
 
@@ -252,13 +252,13 @@ Auto-responses use the agent system. Tune with:
 ## CLI
 
 ```bash
-openclaw voicecall call --to "+15555550123" --message "Hello from OpenClaw"
-openclaw voicecall continue --call-id <id> --message "Any questions?"
-openclaw voicecall speak --call-id <id> --message "One moment"
-openclaw voicecall end --call-id <id>
-openclaw voicecall status --call-id <id>
-openclaw voicecall tail
-openclaw voicecall expose --mode funnel
+aipro voicecall call --to "+15555550123" --message "Hello from AIPro"
+aipro voicecall continue --call-id <id> --message "Any questions?"
+aipro voicecall speak --call-id <id> --message "One moment"
+aipro voicecall end --call-id <id>
+aipro voicecall status --call-id <id>
+aipro voicecall tail
+aipro voicecall expose --mode funnel
 ```
 
 ## Agent tool

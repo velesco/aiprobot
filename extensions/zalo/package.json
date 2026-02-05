@@ -1,16 +1,16 @@
 {
-  "name": "@openclaw/zalo",
+  "name": "@aipro/zalo",
   "version": "2026.2.4",
-  "description": "OpenClaw Zalo channel plugin",
+  "description": "AIPro Zalo channel plugin",
   "type": "module",
   "dependencies": {
-    "openclaw": "workspace:*",
+    "aipro": "workspace:*",
     "undici": "7.20.0"
   },
   "devDependencies": {
-    "openclaw": "workspace:*"
+    "aipro": "workspace:*"
   },
-  "openclaw": {
+  "aipro": {
     "extensions": [
       "./index.ts"
     ],
@@ -28,7 +28,7 @@
       "quickstartAllowFrom": true
     },
     "install": {
-      "npmSpec": "@openclaw/zalo",
+      "npmSpec": "@aipro/zalo",
       "localPath": "extensions/zalo",
       "defaultChoice": "npm"
     }

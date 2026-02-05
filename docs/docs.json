@@ -1,6 +1,6 @@
 {
   "$schema": "https://mintlify.com/docs.json",
-  "name": "OpenClaw",
+  "name": "AIPro",
   "theme": "mint",
   "icons": {
     "library": "lucide"
@@ -27,12 +27,12 @@
     "links": [
       {
         "label": "GitHub",
-        "href": "https://github.com/openclaw/openclaw",
+        "href": "https://github.com/aipro/aipro",
         "icon": "github"
       },
       {
         "label": "Releases",
-        "href": "https://github.com/openclaw/openclaw/releases",
+        "href": "https://github.com/aipro/aipro/releases",
         "icon": "package"
       }
     ]
@@ -256,15 +256,15 @@
     },
     {
       "source": "/clawd",
-      "destination": "/start/openclaw"
+      "destination": "/start/aipro"
     },
     {
       "source": "/start/clawd",
-      "destination": "/start/openclaw"
+      "destination": "/start/aipro"
     },
     {
       "source": "/start/clawd/",
-      "destination": "/start/openclaw"
+      "destination": "/start/aipro"
     },
     {
       "source": "/clawhub",
@@ -754,7 +754,7 @@
                   "start/setup",
                   "start/onboarding",
                   "start/pairing",
-                  "start/openclaw",
+                  "start/aipro",
                   "start/hubs",
                   "start/docs-directory"
                 ]
@@ -1192,7 +1192,7 @@
                   "zh-CN/start/setup",
                   "zh-CN/start/onboarding",
                   "zh-CN/start/pairing",
-                  "zh-CN/start/openclaw",
+                  "zh-CN/start/aipro",
                   "zh-CN/start/hubs"
                 ]
               },

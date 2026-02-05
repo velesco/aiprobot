@@ -1,4 +1,4 @@
-import type { OpenClawConfig } from "../config/config.js";
+import type { AIProConfig } from "../config/config.js";
 import type { RuntimeEnv } from "../runtime.js";
 import { resolveGatewayPort } from "../config/config.js";
 import { findTailscaleBinary } from "../infra/tailscale.js";
@@ -10,10 +10,10 @@ import { guardCancel, normalizeGatewayTokenInput, randomToken } from "./onboard-
 type GatewayAuthChoice = "token" | "password";
 
 export async function promptGatewayConfig(
-  cfg: OpenClawConfig,
+  cfg: AIProConfig,
   runtime: RuntimeEnv,
 ): Promise<{
-  config: OpenClawConfig;
+  config: AIProConfig;
   port: number;
   token?: string;
 }> {
@@ -144,9 +144,7 @@ export async function promptGatewayConfig(
   let tailscaleResetOnExit = false;
   if (tailscaleMode !== "off") {
     note(
-      ["Docs:", "https://docs.openclaw.ai/gateway/tailscale", "https://docs.openclaw.ai/web"].join(
-        "\n",
-      ),
+      ["Docs:", "https://docs.aipro.ro/gateway/tailscale", "https://docs.aipro.ro/web"].join("\n"),
       "Tailscale",
     );
     tailscaleResetOnExit = Boolean(

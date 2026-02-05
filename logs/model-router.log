@@ -1,0 +1,2 @@
+{"timestamp":"2026-02-02T11:01:05.983Z","message":"Compression needed","contextLength":50000,"clientId":"+40729229599"}
+{"timestamp":"2026-02-02T11:01:07.032Z","message":"Compression complete","originalTokens":12500,"compressedTokens":41,"ratio":"0.3%","duration":1048}

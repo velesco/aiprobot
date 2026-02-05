@@ -1,12 +1,12 @@
 {
-  "name": "@openclaw/telegram",
+  "name": "@aipro/telegram",
   "version": "2026.2.4",
-  "description": "OpenClaw Telegram channel plugin",
+  "description": "AIPro Telegram channel plugin",
   "type": "module",
   "devDependencies": {
-    "openclaw": "workspace:*"
+    "aipro": "workspace:*"
   },
-  "openclaw": {
+  "aipro": {
     "extensions": [
       "./index.ts"
     ]

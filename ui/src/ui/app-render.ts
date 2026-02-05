@@ -3,7 +3,7 @@ import type { AppViewState } from "./app-view-state.ts";
 import { parseAgentSessionKey } from "../../../src/routing/session-key.js";
 import { ChatHost, refreshChatAvatar } from "./app-chat.ts";
 import { renderChatControls, renderTab, renderThemeToggle } from "./app-render.helpers.ts";
-import { OpenClawApp } from "./app.ts";
+import { AIProApp } from "./app.ts";
 import { loadAgentFileContent, loadAgentFiles, saveAgentFile } from "./controllers/agent-files.ts";
 import { loadAgentIdentities, loadAgentIdentity } from "./controllers/agent-identity.ts";
 import { loadAgentSkills } from "./controllers/agent-skills.ts";
@@ -147,10 +147,10 @@ export function renderApp(state: AppViewState) {
           </button>
           <div class="brand">
             <div class="brand-logo">
-              <img src="${logoHref}" alt="OpenClaw" />
+              <img src="${logoHref}" alt="AIPro" />
             </div>
             <div class="brand-text">
-              <div class="brand-title">OPENCLAW</div>
+              <div class="brand-title">AIPRO</div>
               <div class="brand-sub">Gateway Dashboard</div>
             </div>
           </div>
@@ -198,7 +198,7 @@ export function renderApp(state: AppViewState) {
           <div class="nav-group__items">
             <a
               class="nav-item nav-item--external"
-              href="https://docs.openclaw.ai"
+              href="https://docs.aipro.ro"
               target="_blank"
               rel="noreferrer"
               title="Docs (opens in new tab)"
@@ -239,7 +239,7 @@ export function renderApp(state: AppViewState) {
                 onSessionKeyChange: (next) => {
                   state.sessionKey = next;
                   state.chatMessage = "";
-                  (state as unknown as OpenClawApp).resetToolStream();
+                  (state as unknown as AIProApp).resetToolStream();
                   state.applySettings({
                     ...state.settings,
                     sessionKey: next,
@@ -920,10 +920,10 @@ export function renderApp(state: AppViewState) {
                   state.chatAttachments = [];
                   state.chatStream = null;
                   state.chatRunId = null;
-                  (state as unknown as OpenClawApp).chatStreamStartedAt = null;
+                  (state as unknown as AIProApp).chatStreamStartedAt = null;
                   state.chatQueue = [];
-                  (state as unknown as OpenClawApp).resetToolStream();
-                  (state as unknown as OpenClawApp).resetChatScroll();
+                  (state as unknown as AIProApp).resetToolStream();
+                  (state as unknown as AIProApp).resetChatScroll();
                   state.applySettings({
                     ...state.settings,
                     sessionKey: next,
@@ -965,28 +965,28 @@ export function renderApp(state: AppViewState) {
                     chatFocusMode: !state.settings.chatFocusMode,
                   });
                 },
-                onChatScroll: (event) => (state as unknown as OpenClawApp).handleChatScroll(event),
+                onChatScroll: (event) => (state as unknown as AIProApp).handleChatScroll(event),
                 onDraftChange: (next) => (state.chatMessage = next),
                 attachments: state.chatAttachments,
                 onAttachmentsChange: (next) => (state.chatAttachments = next),
-                onSend: () => (state as unknown as OpenClawApp).handleSendChat(),
+                onSend: () => (state as unknown as AIProApp).handleSendChat(),
                 canAbort: Boolean(state.chatRunId),
-                onAbort: () => void (state as unknown as OpenClawApp).handleAbortChat(),
-                onQueueRemove: (id) => (state as unknown as OpenClawApp).removeQueuedMessage(id),
+                onAbort: () => void (state as unknown as AIProApp).handleAbortChat(),
+                onQueueRemove: (id) => (state as unknown as AIProApp).removeQueuedMessage(id),
                 onNewSession: () =>
-                  (state as unknown as OpenClawApp).handleSendChat("/new", { restoreDraft: true }),
+                  (state as unknown as AIProApp).handleSendChat("/new", { restoreDraft: true }),
                 showNewMessages: state.chatNewMessagesBelow,
                 onScrollToBottom: () => state.scrollToBottom(),
                 // Sidebar props for tool output viewing
-                sidebarOpen: (state as unknown as OpenClawApp).sidebarOpen,
-                sidebarContent: (state as unknown as OpenClawApp).sidebarContent,
-                sidebarError: (state as unknown as OpenClawApp).sidebarError,
-                splitRatio: (state as unknown as OpenClawApp).splitRatio,
+                sidebarOpen: (state as unknown as AIProApp).sidebarOpen,
+                sidebarContent: (state as unknown as AIProApp).sidebarContent,
+                sidebarError: (state as unknown as AIProApp).sidebarError,
+                splitRatio: (state as unknown as AIProApp).splitRatio,
                 onOpenSidebar: (content: string) =>
-                  (state as unknown as OpenClawApp).handleOpenSidebar(content),
-                onCloseSidebar: () => (state as unknown as OpenClawApp).handleCloseSidebar(),
+                  (state as unknown as AIProApp).handleOpenSidebar(content),
+                onCloseSidebar: () => (state as unknown as AIProApp).handleCloseSidebar(),
                 onSplitRatioChange: (ratio: number) =>
-                  (state as unknown as OpenClawApp).handleSplitRatioChange(ratio),
+                  (state as unknown as AIProApp).handleSplitRatioChange(ratio),
                 assistantName: state.assistantName,
                 assistantAvatar: state.assistantAvatar,
               })
@@ -1011,27 +1011,27 @@ export function renderApp(state: AppViewState) {
                 formMode: state.configFormMode,
                 formValue: state.configForm,
                 originalValue: state.configFormOriginal,
-                searchQuery: (state as unknown as OpenClawApp).configSearchQuery,
-                activeSection: (state as unknown as OpenClawApp).configActiveSection,
-                activeSubsection: (state as unknown as OpenClawApp).configActiveSubsection,
+                searchQuery: (state as unknown as AIProApp).configSearchQuery,
+                activeSection: (state as unknown as AIProApp).configActiveSection,
+                activeSubsection: (state as unknown as AIProApp).configActiveSubsection,
                 onRawChange: (next) => {
                   state.configRaw = next;
                 },
                 onFormModeChange: (mode) => (state.configFormMode = mode),
                 onFormPatch: (path, value) =>
-                  updateConfigFormValue(state as unknown as OpenClawApp, path, value),
+                  updateConfigFormValue(state as unknown as AIProApp, path, value),
                 onSearchChange: (query) =>
-                  ((state as unknown as OpenClawApp).configSearchQuery = query),
+                  ((state as unknown as AIProApp).configSearchQuery = query),
                 onSectionChange: (section) => {
-                  (state as unknown as OpenClawApp).configActiveSection = section;
-                  (state as unknown as OpenClawApp).configActiveSubsection = null;
+                  (state as unknown as AIProApp).configActiveSection = section;
+                  (state as unknown as AIProApp).configActiveSubsection = null;
                 },
                 onSubsectionChange: (section) =>
-                  ((state as unknown as OpenClawApp).configActiveSubsection = section),
-                onReload: () => loadConfig(state as unknown as OpenClawApp),
-                onSave: () => saveConfig(state as unknown as OpenClawApp),
-                onApply: () => applyConfig(state as unknown as OpenClawApp),
-                onUpdate: () => runUpdate(state as unknown as OpenClawApp),
+                  ((state as unknown as AIProApp).configActiveSubsection = section),
+                onReload: () => loadConfig(state as unknown as AIProApp),
+                onSave: () => saveConfig(state as unknown as AIProApp),
+                onApply: () => applyConfig(state as unknown as AIProApp),
+                onUpdate: () => runUpdate(state as unknown as AIProApp),
               })
             : nothing
         }
@@ -1074,9 +1074,8 @@ export function renderApp(state: AppViewState) {
                 },
                 onToggleAutoFollow: (next) => (state.logsAutoFollow = next),
                 onRefresh: () => loadLogs(state as unknown as LogsState, { reset: true }),
-                onExport: (lines, label) =>
-                  (state as unknown as OpenClawApp).exportLogs(lines, label),
-                onScroll: (event) => (state as unknown as OpenClawApp).handleLogsScroll(event),
+                onExport: (lines, label) => (state as unknown as AIProApp).exportLogs(lines, label),
+                onScroll: (event) => (state as unknown as AIProApp).handleLogsScroll(event),
               })
             : nothing
         }

@@ -1,4 +1,4 @@
-# OpenClaw (iOS)
+# AIPro (iOS)
 
 Internal-only SwiftUI app scaffold.
 
@@ -11,11 +11,11 @@ brew install swiftformat swiftlint
 ```bash
 cd apps/ios
 xcodegen generate
-open OpenClaw.xcodeproj
+open AIPro.xcodeproj
 ```
 
 ## Shared packages
-- `../shared/OpenClawKit` — shared types/constants used by iOS (and later macOS bridge + gateway routing).
+- `../shared/AiproKit` — shared types/constants used by iOS (and later macOS bridge + gateway routing).
 
 ## fastlane
 ```bash

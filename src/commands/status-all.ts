@@ -10,8 +10,8 @@ import { resolveGatewayService } from "../daemon/service.js";
 import { buildGatewayConnectionDetails, callGateway } from "../gateway/call.js";
 import { normalizeControlUiBasePath } from "../gateway/control-ui-shared.js";
 import { probeGateway } from "../gateway/probe.js";
+import { resolveAIProPackageRoot } from "../infra/aipro-root.js";
 import { collectChannelStatusIssues } from "../infra/channels-status-issues.js";
-import { resolveOpenClawPackageRoot } from "../infra/openclaw-root.js";
 import { resolveOsSummary } from "../infra/os-summary.js";
 import { inspectPortUsage } from "../infra/ports.js";
 import { readRestartSentinel } from "../infra/restart-sentinel.js";
@@ -81,7 +81,7 @@ export async function statusAllCommand(
     progress.tick();
 
     progress.setLabel("Checking for updates…");
-    const root = await resolveOpenClawPackageRoot({
+    const root = await resolveAIProPackageRoot({
       moduleUrl: import.meta.url,
       argv1: process.argv[1],
       cwd: process.cwd(),
@@ -138,10 +138,10 @@ export async function statusAllCommand(
           ? typeof remote?.token === "string" && remote.token.trim()
             ? remote.token.trim()
             : undefined
-          : process.env.OPENCLAW_GATEWAY_TOKEN?.trim() ||
+          : process.env.AIPRO_GATEWAY_TOKEN?.trim() ||
             (typeof authToken === "string" && authToken.trim() ? authToken.trim() : undefined);
       const password =
-        process.env.OPENCLAW_GATEWAY_PASSWORD?.trim() ||
+        process.env.AIPRO_GATEWAY_PASSWORD?.trim() ||
         (mode === "remote"
           ? typeof remote?.password === "string" && remote.password.trim()
             ? remote.password.trim()
@@ -403,7 +403,7 @@ export async function statusAllCommand(
         Item: "Gateway",
         Value: `${gatewayMode}${remoteUrlMissing ? " (remote.url missing)" : ""} · ${gatewayTarget} (${connection.urlSource}) · ${gatewayStatus}${gatewayAuth}`,
       },
-      { Item: "Security", Value: `Run: ${formatCliCommand("openclaw security audit --deep")}` },
+      { Item: "Security", Value: `Run: ${formatCliCommand("aipro security audit --deep")}` },
       gatewaySelfLine
         ? { Item: "Gateway self", Value: gatewaySelfLine }
         : { Item: "Gateway self", Value: "unknown" },

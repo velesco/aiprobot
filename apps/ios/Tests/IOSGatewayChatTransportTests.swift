@@ -1,6 +1,6 @@
-import OpenClawKit
+import AiproKit
 import Testing
-@testable import OpenClaw
+@testable import AIPro
 
 @Suite struct IOSGatewayChatTransportTests {
     @Test func requestsFailFastWhenGatewayNotConnected() async {

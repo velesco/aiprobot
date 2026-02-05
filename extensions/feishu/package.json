@@ -1,12 +1,12 @@
 {
-  "name": "@openclaw/feishu",
+  "name": "@aipro/feishu",
   "version": "2026.2.4",
-  "description": "OpenClaw Feishu channel plugin",
+  "description": "AIPro Feishu channel plugin",
   "type": "module",
   "devDependencies": {
-    "openclaw": "workspace:*"
+    "aipro": "workspace:*"
   },
-  "openclaw": {
+  "aipro": {
     "extensions": [
       "./index.ts"
     ],
@@ -25,7 +25,7 @@
       "quickstartAllowFrom": true
     },
     "install": {
-      "npmSpec": "@openclaw/feishu",
+      "npmSpec": "@aipro/feishu",
       "localPath": "extensions/feishu",
       "defaultChoice": "npm"
     }

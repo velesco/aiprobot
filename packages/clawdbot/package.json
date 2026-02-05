@@ -1,16 +1,16 @@
 {
-  "name": "clawdbot",
+  "name": "aipro",
   "version": "2026.1.27-beta.1",
-  "description": "Compatibility shim that forwards to openclaw",
+  "description": "Compatibility shim that forwards to aipro",
   "bin": {
-    "clawdbot": "./bin/clawdbot.js"
+    "aipro": "./bin/aipro.js"
   },
   "type": "module",
   "exports": {
     ".": "./index.js",
-    "./cli-entry": "./bin/clawdbot.js"
+    "./cli-entry": "./bin/aipro.js"
   },
   "dependencies": {
-    "openclaw": "workspace:*"
+    "aipro": "workspace:*"
   }
 }

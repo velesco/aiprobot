@@ -1,4 +1,4 @@
-import type { OpenClawConfig } from "../config/config.js";
+import type { AIProConfig } from "../config/config.js";
 import {
   buildCloudflareAiGatewayModelDefinition,
   resolveCloudflareAiGatewayBaseUrl,
@@ -32,7 +32,7 @@ import {
   MOONSHOT_DEFAULT_MODEL_REF,
 } from "./onboard-auth.models.js";
 
-export function applyZaiConfig(cfg: OpenClawConfig): OpenClawConfig {
+export function applyZaiConfig(cfg: AIProConfig): AIProConfig {
   const models = { ...cfg.agents?.defaults?.models };
   models[ZAI_DEFAULT_MODEL_REF] = {
     ...models[ZAI_DEFAULT_MODEL_REF],
@@ -60,7 +60,7 @@ export function applyZaiConfig(cfg: OpenClawConfig): OpenClawConfig {
   };
 }
 
-export function applyOpenrouterProviderConfig(cfg: OpenClawConfig): OpenClawConfig {
+export function applyOpenrouterProviderConfig(cfg: AIProConfig): AIProConfig {
   const models = { ...cfg.agents?.defaults?.models };
   models[OPENROUTER_DEFAULT_MODEL_REF] = {
     ...models[OPENROUTER_DEFAULT_MODEL_REF],
@@ -79,7 +79,7 @@ export function applyOpenrouterProviderConfig(cfg: OpenClawConfig): OpenClawConf
   };
 }
 
-export function applyVercelAiGatewayProviderConfig(cfg: OpenClawConfig): OpenClawConfig {
+export function applyVercelAiGatewayProviderConfig(cfg: AIProConfig): AIProConfig {
   const models = { ...cfg.agents?.defaults?.models };
   models[VERCEL_AI_GATEWAY_DEFAULT_MODEL_REF] = {
     ...models[VERCEL_AI_GATEWAY_DEFAULT_MODEL_REF],
@@ -99,9 +99,9 @@ export function applyVercelAiGatewayProviderConfig(cfg: OpenClawConfig): OpenCla
 }
 
 export function applyCloudflareAiGatewayProviderConfig(
-  cfg: OpenClawConfig,
+  cfg: AIProConfig,
   params?: { accountId?: string; gatewayId?: string },
-): OpenClawConfig {
+): AIProConfig {
   const models = { ...cfg.agents?.defaults?.models };
   models[CLOUDFLARE_AI_GATEWAY_DEFAULT_MODEL_REF] = {
     ...models[CLOUDFLARE_AI_GATEWAY_DEFAULT_MODEL_REF],
@@ -165,7 +165,7 @@ export function applyCloudflareAiGatewayProviderConfig(
   };
 }
 
-export function applyVercelAiGatewayConfig(cfg: OpenClawConfig): OpenClawConfig {
+export function applyVercelAiGatewayConfig(cfg: AIProConfig): AIProConfig {
   const next = applyVercelAiGatewayProviderConfig(cfg);
   const existingModel = next.agents?.defaults?.model;
   return {
@@ -188,9 +188,9 @@ export function applyVercelAiGatewayConfig(cfg: OpenClawConfig): OpenClawConfig 
 }
 
 export function applyCloudflareAiGatewayConfig(
-  cfg: OpenClawConfig,
+  cfg: AIProConfig,
   params?: { accountId?: string; gatewayId?: string },
-): OpenClawConfig {
+): AIProConfig {
   const next = applyCloudflareAiGatewayProviderConfig(cfg, params);
   const existingModel = next.agents?.defaults?.model;
   return {
@@ -212,7 +212,7 @@ export function applyCloudflareAiGatewayConfig(
   };
 }
 
-export function applyOpenrouterConfig(cfg: OpenClawConfig): OpenClawConfig {
+export function applyOpenrouterConfig(cfg: AIProConfig): AIProConfig {
   const next = applyOpenrouterProviderConfig(cfg);
   const existingModel = next.agents?.defaults?.model;
   return {
@@ -234,18 +234,15 @@ export function applyOpenrouterConfig(cfg: OpenClawConfig): OpenClawConfig {
   };
 }
 
-export function applyMoonshotProviderConfig(cfg: OpenClawConfig): OpenClawConfig {
+export function applyMoonshotProviderConfig(cfg: AIProConfig): AIProConfig {
   return applyMoonshotProviderConfigWithBaseUrl(cfg, MOONSHOT_BASE_URL);
 }
 
-export function applyMoonshotProviderConfigCn(cfg: OpenClawConfig): OpenClawConfig {
+export function applyMoonshotProviderConfigCn(cfg: AIProConfig): AIProConfig {
   return applyMoonshotProviderConfigWithBaseUrl(cfg, MOONSHOT_CN_BASE_URL);
 }
 
-function applyMoonshotProviderConfigWithBaseUrl(
-  cfg: OpenClawConfig,
-  baseUrl: string,
-): OpenClawConfig {
+function applyMoonshotProviderConfigWithBaseUrl(cfg: AIProConfig, baseUrl: string): AIProConfig {
   const models = { ...cfg.agents?.defaults?.models };
   models[MOONSHOT_DEFAULT_MODEL_REF] = {
     ...models[MOONSHOT_DEFAULT_MODEL_REF],
@@ -288,7 +285,7 @@ function applyMoonshotProviderConfigWithBaseUrl(
   };
 }
 
-export function applyMoonshotConfig(cfg: OpenClawConfig): OpenClawConfig {
+export function applyMoonshotConfig(cfg: AIProConfig): AIProConfig {
   const next = applyMoonshotProviderConfig(cfg);
   const existingModel = next.agents?.defaults?.model;
   return {
@@ -310,7 +307,7 @@ export function applyMoonshotConfig(cfg: OpenClawConfig): OpenClawConfig {
   };
 }
 
-export function applyMoonshotConfigCn(cfg: OpenClawConfig): OpenClawConfig {
+export function applyMoonshotConfigCn(cfg: AIProConfig): AIProConfig {
   const next = applyMoonshotProviderConfigCn(cfg);
   const existingModel = next.agents?.defaults?.model;
   return {
@@ -332,7 +329,7 @@ export function applyMoonshotConfigCn(cfg: OpenClawConfig): OpenClawConfig {
   };
 }
 
-export function applyKimiCodeProviderConfig(cfg: OpenClawConfig): OpenClawConfig {
+export function applyKimiCodeProviderConfig(cfg: AIProConfig): AIProConfig {
   const models = { ...cfg.agents?.defaults?.models };
   models[KIMI_CODING_MODEL_REF] = {
     ...models[KIMI_CODING_MODEL_REF],
@@ -351,7 +348,7 @@ export function applyKimiCodeProviderConfig(cfg: OpenClawConfig): OpenClawConfig
   };
 }
 
-export function applyKimiCodeConfig(cfg: OpenClawConfig): OpenClawConfig {
+export function applyKimiCodeConfig(cfg: AIProConfig): AIProConfig {
   const next = applyKimiCodeProviderConfig(cfg);
   const existingModel = next.agents?.defaults?.model;
   return {
@@ -373,7 +370,7 @@ export function applyKimiCodeConfig(cfg: OpenClawConfig): OpenClawConfig {
   };
 }
 
-export function applySyntheticProviderConfig(cfg: OpenClawConfig): OpenClawConfig {
+export function applySyntheticProviderConfig(cfg: AIProConfig): AIProConfig {
   const models = { ...cfg.agents?.defaults?.models };
   models[SYNTHETIC_DEFAULT_MODEL_REF] = {
     ...models[SYNTHETIC_DEFAULT_MODEL_REF],
@@ -420,7 +417,7 @@ export function applySyntheticProviderConfig(cfg: OpenClawConfig): OpenClawConfi
   };
 }
 
-export function applySyntheticConfig(cfg: OpenClawConfig): OpenClawConfig {
+export function applySyntheticConfig(cfg: AIProConfig): AIProConfig {
   const next = applySyntheticProviderConfig(cfg);
   const existingModel = next.agents?.defaults?.model;
   return {
@@ -442,7 +439,7 @@ export function applySyntheticConfig(cfg: OpenClawConfig): OpenClawConfig {
   };
 }
 
-export function applyXiaomiProviderConfig(cfg: OpenClawConfig): OpenClawConfig {
+export function applyXiaomiProviderConfig(cfg: AIProConfig): AIProConfig {
   const models = { ...cfg.agents?.defaults?.models };
   models[XIAOMI_DEFAULT_MODEL_REF] = {
     ...models[XIAOMI_DEFAULT_MODEL_REF],
@@ -491,7 +488,7 @@ export function applyXiaomiProviderConfig(cfg: OpenClawConfig): OpenClawConfig {
   };
 }
 
-export function applyXiaomiConfig(cfg: OpenClawConfig): OpenClawConfig {
+export function applyXiaomiConfig(cfg: AIProConfig): AIProConfig {
   const next = applyXiaomiProviderConfig(cfg);
   const existingModel = next.agents?.defaults?.model;
   return {
@@ -517,7 +514,7 @@ export function applyXiaomiConfig(cfg: OpenClawConfig): OpenClawConfig {
  * Apply Venice provider configuration without changing the default model.
  * Registers Venice models and sets up the provider, but preserves existing model selection.
  */
-export function applyVeniceProviderConfig(cfg: OpenClawConfig): OpenClawConfig {
+export function applyVeniceProviderConfig(cfg: AIProConfig): AIProConfig {
   const models = { ...cfg.agents?.defaults?.models };
   models[VENICE_DEFAULT_MODEL_REF] = {
     ...models[VENICE_DEFAULT_MODEL_REF],
@@ -566,7 +563,7 @@ export function applyVeniceProviderConfig(cfg: OpenClawConfig): OpenClawConfig {
  * Apply Venice provider configuration AND set Venice as the default model.
  * Use this when Venice is the primary provider choice during onboarding.
  */
-export function applyVeniceConfig(cfg: OpenClawConfig): OpenClawConfig {
+export function applyVeniceConfig(cfg: AIProConfig): AIProConfig {
   const next = applyVeniceProviderConfig(cfg);
   const existingModel = next.agents?.defaults?.model;
   return {
@@ -589,7 +586,7 @@ export function applyVeniceConfig(cfg: OpenClawConfig): OpenClawConfig {
 }
 
 export function applyAuthProfileConfig(
-  cfg: OpenClawConfig,
+  cfg: AIProConfig,
   params: {
     profileId: string;
     provider: string;
@@ -597,7 +594,7 @@ export function applyAuthProfileConfig(
     email?: string;
     preferProfileFirst?: boolean;
   },
-): OpenClawConfig {
+): AIProConfig {
   const profiles = {
     ...cfg.auth?.profiles,
     [params.profileId]: {

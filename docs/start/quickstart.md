@@ -1,12 +1,12 @@
 ---
-summary: "Install OpenClaw, onboard the Gateway, and pair your first channel."
+summary: "Install AIPro, onboard the Gateway, and pair your first channel."
 read_when:
   - You want the fastest path from install to a working Gateway
 title: "Quick start"
 ---
 
 <Note>
-OpenClaw requires Node 22 or newer.
+AIPro requires Node 22 or newer.
 </Note>
 
 ## Install
@@ -14,12 +14,12 @@ OpenClaw requires Node 22 or newer.
 <Tabs>
   <Tab title="npm">
     ```bash
-    npm install -g openclaw@latest
+    npm install -g aipro@latest
     ```
   </Tab>
   <Tab title="pnpm">
     ```bash
-    pnpm add -g openclaw@latest
+    pnpm add -g aipro@latest
     ```
   </Tab>
 </Tabs>
@@ -29,47 +29,47 @@ OpenClaw requires Node 22 or newer.
 <Steps>
   <Step title="Onboard and install the service">
     ```bash
-    openclaw onboard --install-daemon
+    aipro onboard --install-daemon
     ```
   </Step>
   <Step title="Pair WhatsApp">
     ```bash
-    openclaw channels login
+    aipro channels login
     ```
   </Step>
   <Step title="Start the Gateway">
     ```bash
-    openclaw gateway --port 18789
+    aipro gateway --port 18789
     ```
   </Step>
 </Steps>
 
-After onboarding, the Gateway runs via the user service. You can still run it manually with `openclaw gateway`.
+After onboarding, the Gateway runs via the user service. You can still run it manually with `aipro gateway`.
 
 <Info>
 Switching between npm and git installs later is easy. Install the other flavor and run
-`openclaw doctor` to update the gateway service entrypoint.
+`aipro doctor` to update the gateway service entrypoint.
 </Info>
 
 ## From source (development)
 
 ```bash
-git clone https://github.com/openclaw/openclaw.git
-cd openclaw
+git clone https://github.com/aipro/aipro.git
+cd aipro
 pnpm install
 pnpm ui:build # auto-installs UI deps on first run
 pnpm build
-openclaw onboard --install-daemon
+aipro onboard --install-daemon
 ```
 
-If you do not have a global install yet, run onboarding via `pnpm openclaw ...` from the repo.
+If you do not have a global install yet, run onboarding via `pnpm aipro ...` from the repo.
 
 ## Multi instance quickstart (optional)
 
 ```bash
-OPENCLAW_CONFIG_PATH=~/.openclaw/a.json \
-OPENCLAW_STATE_DIR=~/.openclaw-a \
-openclaw gateway --port 19001
+AIPRO_CONFIG_PATH=~/.aipro/a.json \
+AIPRO_STATE_DIR=~/.aipro-a \
+aipro gateway --port 19001
 ```
 
 ## Send a test message
@@ -77,5 +77,5 @@ openclaw gateway --port 19001
 Requires a running Gateway.
 
 ```bash
-openclaw message send --target +15555550123 --message "Hello from OpenClaw"
+aipro message send --target +15555550123 --message "Hello from AIPro"
 ```

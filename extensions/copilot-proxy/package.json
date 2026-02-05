@@ -1,12 +1,12 @@
 {
-  "name": "@openclaw/copilot-proxy",
+  "name": "@aipro/copilot-proxy",
   "version": "2026.2.4",
-  "description": "OpenClaw Copilot Proxy provider plugin",
+  "description": "AIPro Copilot Proxy provider plugin",
   "type": "module",
   "devDependencies": {
-    "openclaw": "workspace:*"
+    "aipro": "workspace:*"
   },
-  "openclaw": {
+  "aipro": {
     "extensions": [
       "./index.ts"
     ]

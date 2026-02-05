@@ -1,12 +1,12 @@
 {
-  "name": "@openclaw/minimax-portal-auth",
+  "name": "@aipro/minimax-portal-auth",
   "version": "2026.2.4",
-  "description": "OpenClaw MiniMax Portal OAuth provider plugin",
+  "description": "AIPro MiniMax Portal OAuth provider plugin",
   "type": "module",
   "devDependencies": {
-    "openclaw": "workspace:*"
+    "aipro": "workspace:*"
   },
-  "openclaw": {
+  "aipro": {
     "extensions": [
       "./index.ts"
     ]

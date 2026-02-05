@@ -1,6 +1,6 @@
-# @openclaw/voice-call
+# @aipro/voice-call
 
-Official Voice Call plugin for **OpenClaw**.
+Official Voice Call plugin for **AIPro**.
 
 Providers:
 
@@ -9,15 +9,15 @@ Providers:
 - **Plivo** (Voice API + XML transfer + GetInput speech)
 - **Mock** (dev/no network)
 
-Docs: `https://docs.openclaw.ai/plugins/voice-call`
-Plugin system: `https://docs.openclaw.ai/plugin`
+Docs: `https://docs.aipro.ro/plugins/voice-call`
+Plugin system: `https://docs.aipro.ro/plugin`
 
 ## Install (local dev)
 
-### Option A: install via OpenClaw (recommended)
+### Option A: install via AIPro (recommended)
 
 ```bash
-openclaw plugins install @openclaw/voice-call
+aipro plugins install @aipro/voice-call
 ```
 
 Restart the Gateway afterwards.
@@ -25,9 +25,9 @@ Restart the Gateway afterwards.
 ### Option B: copy into your global extensions folder (dev)
 
 ```bash
-mkdir -p ~/.openclaw/extensions
-cp -R extensions/voice-call ~/.openclaw/extensions/voice-call
-cd ~/.openclaw/extensions/voice-call && pnpm install
+mkdir -p ~/.aipro/extensions
+cp -R extensions/voice-call ~/.aipro/extensions/voice-call
+cd ~/.aipro/extensions/voice-call && pnpm install
 ```
 
 ## Config
@@ -103,13 +103,13 @@ Notes:
 ## CLI
 
 ```bash
-openclaw voicecall call --to "+15555550123" --message "Hello from OpenClaw"
-openclaw voicecall continue --call-id <id> --message "Any questions?"
-openclaw voicecall speak --call-id <id> --message "One moment"
-openclaw voicecall end --call-id <id>
-openclaw voicecall status --call-id <id>
-openclaw voicecall tail
-openclaw voicecall expose --mode funnel
+aipro voicecall call --to "+15555550123" --message "Hello from AIPro"
+aipro voicecall continue --call-id <id> --message "Any questions?"
+aipro voicecall speak --call-id <id> --message "One moment"
+aipro voicecall end --call-id <id>
+aipro voicecall status --call-id <id>
+aipro voicecall tail
+aipro voicecall expose --mode funnel
 ```
 
 ## Tool

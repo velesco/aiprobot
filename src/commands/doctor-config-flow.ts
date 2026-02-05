@@ -1,11 +1,11 @@
 import type { ZodIssue } from "zod";
 import fs from "node:fs/promises";
 import path from "node:path";
-import type { OpenClawConfig } from "../config/config.js";
+import type { AIProConfig } from "../config/config.js";
 import type { DoctorOptions } from "./doctor-prompter.js";
 import { formatCliCommand } from "../cli/command-format.js";
 import {
-  OpenClawSchema,
+  AIProSchema,
   CONFIG_PATH,
   migrateLegacyConfig,
   readConfigFileSnapshot,
@@ -73,11 +73,11 @@ function resolvePathTarget(root: unknown, path: Array<string | number>): unknown
   return current;
 }
 
-function stripUnknownConfigKeys(config: OpenClawConfig): {
-  config: OpenClawConfig;
+function stripUnknownConfigKeys(config: AIProConfig): {
+  config: AIProConfig;
   removed: string[];
 } {
-  const parsed = OpenClawSchema.safeParse(config);
+  const parsed = AIProSchema.safeParse(config);
   if (parsed.success) {
     return { config, removed: [] };
   }
@@ -109,7 +109,7 @@ function stripUnknownConfigKeys(config: OpenClawConfig): {
   return { config: next, removed };
 }
 
-function noteOpencodeProviderOverrides(cfg: OpenClawConfig) {
+function noteOpencodeProviderOverrides(cfg: AIProConfig) {
   const providers = cfg.models?.providers;
   if (!providers) {
     return;
@@ -153,8 +153,8 @@ async function maybeMigrateLegacyConfig(): Promise<string[]> {
     return changes;
   }
 
-  const targetDir = path.join(home, ".openclaw");
-  const targetPath = path.join(targetDir, "openclaw.json");
+  const targetDir = path.join(home, ".aipro");
+  const targetPath = path.join(targetDir, "aipro.json");
   try {
     await fs.access(targetPath);
     return changes;
@@ -163,8 +163,8 @@ async function maybeMigrateLegacyConfig(): Promise<string[]> {
   }
 
   const legacyCandidates = [
-    path.join(home, ".clawdbot", "clawdbot.json"),
-    path.join(home, ".moltbot", "moltbot.json"),
+    path.join(home, ".aipro", "aipro.json"),
+    path.join(home, ".aipro", "aipro.json"),
     path.join(home, ".moldbot", "moldbot.json"),
   ];
 
@@ -213,7 +213,7 @@ export async function loadAndMaybeMigrateDoctorConfig(params: {
 
   let snapshot = await readConfigFileSnapshot();
   const baseCfg = snapshot.config ?? {};
-  let cfg: OpenClawConfig = baseCfg;
+  let cfg: AIProConfig = baseCfg;
   let candidate = structuredClone(baseCfg);
   let pendingChanges = false;
   let shouldWriteConfig = false;
@@ -246,9 +246,7 @@ export async function loadAndMaybeMigrateDoctorConfig(params: {
         cfg = migrated;
       }
     } else {
-      fixHints.push(
-        `Run "${formatCliCommand("openclaw doctor --fix")}" to apply legacy migrations.`,
-      );
+      fixHints.push(`Run "${formatCliCommand("aipro doctor --fix")}" to apply legacy migrations.`);
     }
   }
 
@@ -260,7 +258,7 @@ export async function loadAndMaybeMigrateDoctorConfig(params: {
     if (shouldRepair) {
       cfg = normalized.config;
     } else {
-      fixHints.push(`Run "${formatCliCommand("openclaw doctor --fix")}" to apply these changes.`);
+      fixHints.push(`Run "${formatCliCommand("aipro doctor --fix")}" to apply these changes.`);
     }
   }
 
@@ -272,7 +270,7 @@ export async function loadAndMaybeMigrateDoctorConfig(params: {
     if (shouldRepair) {
       cfg = autoEnable.config;
     } else {
-      fixHints.push(`Run "${formatCliCommand("openclaw doctor --fix")}" to apply these changes.`);
+      fixHints.push(`Run "${formatCliCommand("aipro doctor --fix")}" to apply these changes.`);
     }
   }
 
@@ -286,7 +284,7 @@ export async function loadAndMaybeMigrateDoctorConfig(params: {
       note(lines, "Doctor changes");
     } else {
       note(lines, "Unknown config keys");
-      fixHints.push('Run "openclaw doctor --fix" to remove these keys.');
+      fixHints.push('Run "aipro doctor --fix" to remove these keys.');
     }
   }
 
